@@ -1,38 +1,43 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { appStore } from '../state/store';
-import { markNow, scenarioNow } from '../logic/mark';
+import { useUI } from '../state/ui';
+import { useClock } from '../state/clock';
+import { markNow } from '../logic/mark';
+import { bedtimeOf, withFreeTime } from '../logic/ring';
+import { pickFree } from '../logic/freeTime';
 import { fmtClock } from '../lib/time';
+import { MoodGlyph } from './DayRing';
 import type { View } from '../state/view';
 
-export function WristDevice({ v }: { v: View }) {
-  const [msg, setMsg] = useState<string | null>(null);
-  useEffect(() => { if (!msg) return; const t = setTimeout(() => setMsg(null), 4000); return () => clearTimeout(t); }, [msg]);
-  const mark = () => { appStore.getState().add({ type: 'mark', ...markNow(v) }); setMsg('Marked. It will be waiting tonight.'); };
-  const next = v.reminders.find(r => r.on && r.atMin !== undefined);
+/** The wrist device as two buttons: one for a high moment, one for a low moment. In free time it offers things to do. */
+export function WristDock({ v }: { v: View }) {
+  const ui = useUI();
+  const now = useClock(15000);
+  const [open, setOpen] = useState(false);
+  const rec = v.scenario.days[v.day - 1];
+  const all = withFreeTime(v.blocksToday, rec.wakeMin, bedtimeOf(v.scenario, v.day), v.day);
+  const free = all.find(b => b.kind === 'free' && b.startMin <= now && now < b.endMin);
+  const ideas = free ? pickFree(free.endMin - now, v.scenario.profile) : [];
+  const press = (mood: 'high' | 'low') => {
+    const m = markNow(v, mood);
+    appStore.getState().add({ type: 'mark', ...m });
+    ui.showToast(`Marked a ${mood} moment at ${fmtClock(m.min)}${m.blockLabel ? `, during ${m.blockLabel}` : ''}. It will be waiting tonight.`);
+  };
   return (
-    <div className="wrist" aria-label="Wrist device">
-      <div className="wrist-strap" />
-      <button className="wrist-face" onClick={mark} aria-label="Wrist face. Press to mark a moment">
-        <span className="w-time num">{fmtClock(scenarioNow())}</span>
-        <span className="w-main" aria-live="polite">{msg ?? 'Press to mark a moment'}</span>
-        {!msg && <span className="w-hint">{next ? `Next: ${fmtClock(next.atMin!)} ${next.wristLabel.toLowerCase()}` : 'Hold for something to do'}</span>}
-      </button>
-      <button className="wrist-btn" aria-label="Wrist button" onClick={mark} />
-      <div className="wrist-strap" />
+    <div className="wrist-dock" role="group" aria-label="Wrist">
+      {open && free && (
+        <div className="wrist-pop panel panel--tight">
+          <div className="t-head">{`Free until ${fmtClock(free.endMin)}`}</div>
+          <p className="t-small">From your own list, sized to the time you have.</p>
+          <div className="btn-row">{ideas.map(i => (
+            <button key={i.label} className="btn btn--sm" onClick={() => { appStore.getState().add({ type: 'activity', key: i.label === 'Greenhouse time' ? 'greenhouse' : 'other', label: i.label }); setOpen(false); ui.showToast(`${i.label}, ${i.minutes} minutes. Logged as done.`); }}>
+              {`${i.label} · ${i.minutes} min`}</button>))}</div>
+        </div>
+      )}
+      <span className="wrist-label t-label">Wrist</span>
+      <button className="wrist-mood" onClick={() => press('high')} aria-label="High moment"><MoodGlyph mood="high" /><span>High</span></button>
+      <button className="wrist-mood" onClick={() => press('low')} aria-label="Low moment"><MoodGlyph mood="low" /><span>Low</span></button>
+      {free && <button className="wrist-mood wrist-free" aria-expanded={open} onClick={() => setOpen(o => !o)}>Free time</button>}
     </div>
-  );
-}
-
-export function WristInline({ v }: { v: View }) {
-  const next = v.reminders.find(r => r.on && r.atMin !== undefined);
-  return (
-    <section className="panel panel--tight wrist-panel" aria-label="Your wrist">
-      <div className="wrist-copy">
-        <div className="t-head">Your wrist</div>
-        <div className="t-body">Press when something stirs a feeling. The time and what you were doing are kept for tonight.</div>
-        {next && <div className="t-small">{`Next buzz: ${fmtClock(next.atMin!)}, ${next.wristLabel.toLowerCase()}. A rule you set.`}</div>}
-      </div>
-      <WristDevice v={v} />
-    </section>
   );
 }

@@ -23,7 +23,8 @@ const p = raw as unknown as {
   };
   dayPartFelt: { days: number[]; morning: string[]; afternoon: string[]; evening: string[] };
   day112BlockFelt: Record<string, 'good' | 'mixed' | 'hard' | null>;
-  markedMoments: { day: number; min: number }[];
+  markedMoments: { day: number; min: number; mood: 'high' | 'low' }[];
+  moodMarks: { perDayByWeek: Record<string, [number, number]>; branchA: Record<string, [number, number]>; branchB: Record<string, [number, number]> };
   lightOnNights: { week16: number };
   anchorEntries: AnchorEntry[];
   profile: Profile;

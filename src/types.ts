@@ -8,14 +8,16 @@ export interface Segment { id: string; day: number; text: string; category: stri
   felt: Felt|null; feltBy: 'tool'|'you'; origin: DataTag; }
 export interface Entry { id: string; day: number; segments: Segment[]; origin: DataTag; }
 
-export type BlockKind = 'sleep'|'work'|'gym'|'call'|'dinner'|'greenhouse';
+export type BlockKind = 'sleep'|'work'|'gym'|'call'|'dinner'|'greenhouse'|'meal'|'free';
+export type Mood = 'high'|'low';
+export interface MoodMark { min: number; blockLabel: string|null; mood: Mood; }
 export interface Block { id: string; day: number; kind: BlockKind; label: string;
   startMin: number; endMin: number;            // minutes from 00:00 of `day`; sleep start may be negative
   source: 'wearable'|'timeline'|'messages'|'you'; felt: Felt|null; safetyCritical?: boolean; }
 
 export interface DayRecord { day: number; week: number; dayIndex: number;   // dayIndex 1..7
   onsetMin: number; wakeMin: number; sleepMin: number; blocks: Block[];
-  marks: { min: number; blockLabel: string|null }[];
+  marks: MoodMark[];
   dials: { stress: number; sleepiness: number }; }
 
 export interface CheckSession { id: string; day: number; slot: 'am'|'pm'; trials: number;

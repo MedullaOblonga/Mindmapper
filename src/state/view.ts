@@ -8,14 +8,14 @@ import { pastMidnightRun } from '../logic/signs';
 import { T } from '../logic/thresholds';
 import { median } from '../lib/stats';
 import { weekOf } from '../lib/time';
-import type { Branch, Card, CardKind, CheckSession, Entry, Group, LedgerKey, Resolution, Scenario, ShareLogEntry } from '../types';
+import type { Block, MoodMark, Branch, Card, CardKind, CheckSession, Entry, Group, LedgerKey, Resolution, Scenario, ShareLogEntry } from '../types';
 import type { AppEvent } from './events';
 
 export interface ReminderView { id: string; text: string; wristLabel: string; buzz: ('short' | 'long')[]; on: boolean; oneOff: boolean; atMin?: number; }
 export interface View { day: number; week: number; branch: Branch; scenario: Scenario; entries: Entry[]; checks: CheckSession[];
   openCards: Card[]; raisedCards: Card[]; resolutions: Resolution[]; skippedThisWeek: number; shareLog: ShareLogEntry[];
   lineCrossed: { day: number; message: string } | null; flags: LedgerFlags; reminders: ReminderView[];
-  marksToday: { min: number; blockLabel: string | null }[]; entryToday: Entry | null;
+  marksToday: MoodMark[]; entryToday: Entry | null; blocksToday: Block[];
   movedUsual: CardContext['movedUsual']; ignoreNights: number[]; events: AppEvent[]; }
 
 type Resolve = Extract<AppEvent, { type: 'resolve' }>;
@@ -180,10 +180,29 @@ export function buildView(day: number, events: AppEvent[], override: Branch | nu
       buzz: e.buzz ?? ['short'], on: e.on ?? true, oneOff: e.reminderId.startsWith('once-') });
   }
 
-  const today = s.days[day - 1];
-  const marksToday = [...today.marks, ...evs.filter(e => e.type === 'mark' && e.day === day).map(e => ({ min: (e as { min: number }).min, blockLabel: (e as { blockLabel: string | null }).blockLabel }))];
+  const marksToday = marksFor(s, evs, day);
+  const blocksToday = blocksFor(s, evs, day);
   const entryToday = [...entries].reverse().find(e => e.day === day) ?? null;
 
   return { day, week: weekOf(day), branch, scenario: s, entries, checks, openCards, raisedCards, resolutions, skippedThisWeek, shareLog,
-    lineCrossed, flags, reminders, marksToday, entryToday, movedUsual: fxAll.movedUsual, ignoreNights: fxAll.ignoreNights, events: evs };
+    lineCrossed, flags, reminders, marksToday, entryToday, blocksToday, movedUsual: fxAll.movedUsual, ignoreNights: fxAll.ignoreNights, events: evs };
+}
+
+/** Wrist presses on a day: simulated ones plus the astronaut's own. */
+export function marksFor(s: Scenario, evs: AppEvent[], day: number): MoodMark[] {
+  const own = evs.flatMap(e => (e.type === 'mark' && e.day === day ? [{ min: e.min, blockLabel: e.blockLabel, mood: e.mood ?? 'low' }] : []));
+  return [...(s.days[day - 1]?.marks ?? []), ...own].sort((a, b) => a.min - b.min);
+}
+/** The day's blocks with the astronaut's felt taps and added blocks applied. */
+export function blocksFor(s: Scenario, evs: AppEvent[], day: number): Block[] {
+  const base = (s.days[day - 1]?.blocks ?? []).map(b => ({ ...b }));
+  for (const e of evs) if (e.type === 'block-add' && e.block.day === day) base.push({ ...e.block });
+  for (const e of evs) if (e.type === 'block-felt') { const b = base.find(x => x.id === e.blockId); if (b) b.felt = e.felt; }
+  return base.sort((a, b) => (a.kind === 'sleep' ? -1 : b.kind === 'sleep' ? 1 : a.startMin - b.startMin));
+}
+/** High and low presses per week. */
+export function moodWeek(s: Scenario, evs: AppEvent[], week: number, upToDay: number): { high: number; low: number; days: number } {
+  let high = 0, low = 0, days = 0;
+  for (let d = 7 * week - 6; d <= Math.min(7 * week, upToDay); d++) { days++; for (const m of marksFor(s, evs, d)) m.mood === 'high' ? high++ : low++; }
+  return { high, low, days };
 }

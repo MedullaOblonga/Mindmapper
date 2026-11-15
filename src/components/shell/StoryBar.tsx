@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { params } from '../../data/params';
 import { useApp, appStore } from '../../state/store';
 import type { Branch } from '../../types';
+import { useClockStore } from '../../state/clock';
 
 const DEFAULT_CAPTION = 'Simulated mission. Use the chapters, or step a day at a time.';
 
@@ -19,6 +20,7 @@ function useHoldRepeat(step: () => void) {
 }
 
 export function StoryBar({ branch }: { branch: Branch }) {
+  const atBunk = useClockStore(s => s.atBunk);
   const day = useApp(s => s.day), hidden = useApp(s => s.storyHidden), override = useApp(s => s.branchOverride);
   const nav = useNavigate();
   const st = appStore.getState();
@@ -48,6 +50,8 @@ export function StoryBar({ branch }: { branch: Branch }) {
         <button className="btn btn--sm" aria-label="Previous day" disabled={day <= 1} {...prev}>‹</button>
         <span className="t-small num story-day" aria-live="polite">Day {day}</span>
         <button className="btn btn--sm" aria-label="Next day" disabled={day >= params.mission.lastDay} {...next}>›</button>
+        <button className="btn btn--sm" aria-pressed={atBunk} title="Simulate arriving at your bunk at 23:00"
+          onClick={() => { const c = useClockStore.getState(); if (atBunk) { c.setAtBunk(false); c.setOverride(null); } else { c.setOverride(23 * 60); c.setAtBunk(true); } }}>At the bunk</button>
         <button className="btn btn--sm btn--quiet" onClick={() => st.setStoryHidden(true)} aria-expanded="true">Hide</button>
       </span>
       <p className="story-caption">{caption}{override && ch?.id !== 'followed' ? ` Story branch forced: ${override === 'A' ? 'you acted' : 'you did not'}.` : ''}</p>

@@ -10,6 +10,8 @@ import { TalkSheet } from '../cards/TalkSheet';
 import { Toast } from '../ui';
 import { useView } from '../../state/useView';
 import { useUI } from '../../state/ui';
+import { BedtimeLight } from './BedtimeLight';
+import { WristDock } from '../Wrist';
 
 export function Footer() {
   return <div className="t-foot page-foot">Sample data for illustration. Names are placeholders.</div>;
@@ -36,6 +38,7 @@ export function Shell({ children }: { children: ReactNode }) {
   if (loc.pathname.startsWith('/check')) return <>{children}<Overlays /></>;
   return (
     <div className="app">
+      <BedtimeLight v={v} />
       <TopBar day={v.day} shared={v.shareLog.length} onOpenLog={() => ui.openShareLog(true)} />
       <StoryBar branch={v.branch} />
       <Rail dot={v.openCards.length > 0} />
@@ -43,6 +46,7 @@ export function Shell({ children }: { children: ReactNode }) {
         {children}
         <Footer />
       </main>
+      <WristDock v={v} />
       <Overlays />
     </div>
   );

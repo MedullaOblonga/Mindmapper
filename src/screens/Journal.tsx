@@ -8,7 +8,9 @@ import { GROUPS, groupDef, groupShort } from '../data/topics';
 import { params } from '../data/params';
 import { Mark, MarkLegend, Tag, cssVars, topicVar } from '../components/ui';
 import { canListen, listen } from '../lib/speech';
-import type { Entry, Felt, Group, Segment } from '../types';
+import type { Entry, Felt, Group, MoodMark, Segment } from '../types';
+import { DayBuilder } from '../components/DayBuilder';
+import { MoodGlyph } from '../components/DayRing';
 
 interface JournalState { prefill?: string; focus?: boolean; filter?: { group: Group; ids: string[]; from: number; to: number; topic: string } }
 const FELTS: { f: Felt; label: string }[] = [{ f: 'good', label: 'Good' }, { f: 'mixed', label: 'Mixed' }, { f: 'hard', label: 'Hard' }];
@@ -65,19 +67,21 @@ function TaggedEntry({ entry }: { entry: Entry }) {
   );
 }
 
-function Composer({ day, marks, initial, focus }: { day: number; marks: { min: number; blockLabel: string | null }[]; initial: string; focus: boolean }) {
-  const [text, setText] = useState(initial);
+export interface ComposerApi { insert: (s: string) => void }
+function Composer({ day, marks, text, setText, focus, apiRef }: { day: number; marks: MoodMark[]; text: string; setText: (t: string | ((p: string) => string)) => void; focus: boolean; apiRef: React.MutableRefObject<ComposerApi | null> }) {
   const [listening, setListening] = useState(false);
   const ta = useRef<HTMLTextAreaElement>(null);
   const stopRef = useRef<(() => void) | null>(null);
   useEffect(() => { if (focus) { const t = ta.current!; t.focus(); t.setSelectionRange(t.value.length, t.value.length); } }, [focus]);
   useEffect(() => () => stopRef.current?.(), []);
-  const insert = (s: string) => {
+  const insert = (str: string) => {
     const t = ta.current; const a = t?.selectionStart ?? text.length, b = t?.selectionEnd ?? text.length;
-    const next = text.slice(0, a) + s + text.slice(b);
-    setText(next);
-    requestAnimationFrame(() => { if (t) { t.focus(); t.setSelectionRange(a + s.length, a + s.length); } });
+    const sep = a > 0 && !/\s$/.test(text.slice(0, a)) ? '\n' : '';
+    setText(text.slice(0, a) + sep + str + text.slice(b));
+    const pos = a + sep.length + str.length;
+    requestAnimationFrame(() => { if (t) { t.focus(); t.setSelectionRange(pos, pos); if (typeof t.scrollIntoView === 'function') t.scrollIntoView({ block: 'center', behavior: 'smooth' }); } });
   };
+  apiRef.current = { insert };
   const save = () => {
     const id = `u${day}-${Date.now().toString(36)}`;
     const segments = tagEntry(text, day, id);
@@ -96,8 +100,8 @@ function Composer({ day, marks, initial, focus }: { day: number; marks: { min: n
       {marks.length > 0 && (
         <div className="btn-row">
           {marks.map((m, i) => (
-            <button key={i} className="btn btn--sm" onClick={() => insert(`At ${fmtClock(m.min)}${m.blockLabel ? `, during ${m.blockLabel}` : ''}: `)}>
-              {`${fmtClock(m.min)}${m.blockLabel ? ` · ${m.blockLabel}` : ''}`}</button>
+            <button key={i} className="btn btn--sm" onClick={() => insert(`At ${fmtClock(m.min)}${m.blockLabel ? `, during ${m.blockLabel}` : ''} (${m.mood}): `)}>
+              <MoodGlyph mood={m.mood} />{`${fmtClock(m.min)}${m.blockLabel ? ` · ${m.blockLabel}` : ''}`}</button>
           ))}
         </div>
       )}
@@ -141,16 +145,13 @@ function Earlier({ entries, day, filter, clearFilter }: { entries: Entry[]; day:
       <div className="earlier">
         {list.length === 0 && <p className="t-small">No entries yet.</p>}
         {list.slice(0, 40).map(([d, segs]) => (
-          <div key={d} className="earlier-day">
-            <div className="t-label">{`Day ${d}`}</div>
-            {segs.map(s => (
-              <div key={s.id} className="earlier-line">
-                <i className="swatch" style={{ background: topicVar(s.group) }} aria-label={groupShort(s.group)} />
-                <span className="t-small earlier-text">{s.text}</span>
-                <Mark felt={s.felt} group={s.group} />
-              </div>
-            ))}
-          </div>
+          <details key={d} className="earlier-day" open={!!filter || d >= day - 3}>
+            <summary className="t-label earlier-sum">{`Day ${d}`}<span className="earlier-swatches" aria-hidden="true">{segs.map(s => <i key={s.id} className="swatch" style={{ background: topicVar(s.group) }} />)}</span></summary>
+            <p className="earlier-prose">{segs.map(s => s.text).join(' ')}</p>
+            <div className="earlier-tags">{segs.map(s => (
+              <span key={s.id} className="earlier-tag t-small"><i className="swatch" style={{ background: topicVar(s.group) }} />{groupShort(s.group)}<Mark felt={s.felt} group={s.group} /></span>
+            ))}</div>
+          </details>
         ))}
       </div>
     </section>
@@ -164,13 +165,17 @@ export function Journal() {
   const st = (loc.state ?? {}) as JournalState;
   const todays = v.entries.filter(e => e.day === v.day);
   const latest = todays[todays.length - 1];
+  const [text, setText] = useState(st.prefill ?? '');
+  const api = useRef<ComposerApi | null>(null);
+  useEffect(() => { setText(st.prefill ?? ''); }, [v.day, loc.key]); // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <>
       <div className="page-head"><div><h1 className="t-title">Your diary</h1>
-        <p className="t-lede">Private. Spoken or typed. The tool reads what it is about, and you correct it.</p></div></div>
+        <p className="t-lede">Private. Written at the end of the day. Walk through the day, then write what stayed with you.</p></div></div>
+      <DayBuilder v={v} onWrite={p => api.current?.insert(p)} />
       <div className="cols">
         <div className="col col--wide">
-          <Composer key={`${v.day}-${loc.key}`} day={v.day} marks={v.marksToday} initial={st.prefill ?? ''} focus={!!st.focus || !!st.prefill} />
+          <Composer key={`${v.day}-${loc.key}`} day={v.day} marks={v.marksToday} text={text} setText={setText} focus={!!st.focus || !!st.prefill} apiRef={api} />
           {latest && <TaggedEntry entry={latest} />}
         </div>
         <div className="col col--narrow">

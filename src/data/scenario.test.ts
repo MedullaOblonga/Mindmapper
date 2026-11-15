@@ -41,7 +41,19 @@ it('branches after day 112', () => {
 });
 it('day 112 blocks and marks', () => {
   const d = A.days[111];
-  expect(d.blocks.map(b => b.label)).toEqual(['Sleep', 'Suit prep', 'Experiments', 'Gym', 'Call with Sam']);
-  expect(d.marks).toEqual([{ min: 647, blockLabel: 'Suit prep' }, { min: 1274, blockLabel: 'Call with Sam' }]);
+  expect(d.blocks.map(b => b.label)).toEqual(['Sleep', 'Suit prep', 'Lunch', 'Experiments', 'Gym', 'Call with Sam']);
+  expect(d.blocks.find(b => b.label === 'Suit prep')).toMatchObject({ startMin: 480, endMin: 780 });
+  expect(d.marks).toEqual([{ min: 647, blockLabel: 'Suit prep', mood: 'low' }, { min: 1274, blockLabel: 'Call with Sam', mood: 'high' }]);
   expect(A.days[112].blocks.some(b => b.safetyCritical && b.label === 'EVA prep review')).toBe(true);
+});
+
+it('full simulated entries for days 99 to 111 keep the weekly counts', () => {
+  const d106 = A.entries.find(e => e.day === 106)!;
+  expect(d106.segments[0].text).toMatch(/^Sam's birthday/);
+  expect(d106.segments[1].text).toBe('Work went fine. Finished the payload checklist an hour early.');
+});
+it('simulates high and low wrist presses with more lows late in the story', () => {
+  const lows = (w: number) => A.days.filter(d => d.week === w).flatMap(d => d.marks).filter(m => m.mood === 'low').length;
+  expect(lows(5)).toBe(7);
+  expect(lows(15)).toBeGreaterThan(lows(5) * 2);
 });

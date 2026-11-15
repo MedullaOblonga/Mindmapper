@@ -1,9 +1,9 @@
 import { params } from './params';
 import history from './nasa/check_history.json';
-import { SENTENCES, GROUP_CATEGORY } from './sentences';
+import { SENTENCES, GROUP_CATEGORY, DAY_TEXTS } from './sentences';
 import { mulberry32 } from '../lib/prng';
 import { dayIndex, weekOf } from '../lib/time';
-import type { Block, BlockKind, Branch, CheckSession, DayRecord, Entry, Felt, RealGroup, Scenario, Segment, WeekRow } from '../types';
+import type { Block, BlockKind, Branch, CheckSession, DayRecord, Entry, Felt, MoodMark, RealGroup, Scenario, Segment, WeekRow } from '../types';
 
 const G = params.generation;
 const LAST = params.mission.lastDay;
@@ -34,10 +34,8 @@ function blocksFor(day: number, row: WeekRow, onset: number, wake: number): Bloc
   };
   add('sleep', 'Sleep', onset, wake, 'wearable');
   const restDay = i === 7 && row.ledger.daysSinceRest < 7;
-  if (!restDay) {
-    const list = first('suitPrepLong', row.ledger.suitPrepLong) ? btList('suitPrepLongDay') : btList('normalDay');
-    for (const [label, s, e] of list) add('work', label, s, e, 'timeline');
-  }
+  const list = restDay ? btList('restDay') : first('suitPrepLong', row.ledger.suitPrepLong) ? btList('suitPrepLongDay') : btList('normalDay');
+  for (const [label, s, e, kind] of list) add(kind as BlockKind, label, s, e, 'timeline');
   if (first('greenhouse', row.ledger.greenhouse)) { const [l, s, e] = bt('greenhouse'); add('greenhouse', l, s, e, 'timeline'); }
   if (first('dinners', row.ledger.dinners)) { const [l, s, e] = bt('dinner'); add('dinner', l, s, e, 'timeline'); }
   if (first('gym', row.ledger.gym)) { const [l, s, e] = bt('gym'); add('gym', l, s, e, 'timeline'); }
@@ -54,6 +52,28 @@ export function blockAt(blocks: Block[], min: number): Block | null {
   return blocks.find(b => b.kind !== 'sleep' && b.startMin <= min && min < b.endMin) ?? null;
 }
 
+const HIGH_KINDS: BlockKind[] = ['gym', 'dinner', 'call', 'greenhouse', 'meal'];
+/** Simulated presses of the two wrist buttons (high and low). Day 112 uses only the story's two marked moments. */
+function moodMarksFor(day: number, week: number, branch: Branch, blocks: Block[], wakeMin: number): MoodMark[] {
+  const fixed = params.markedMoments.filter(m => m.day === day).map(m => ({ min: m.min, blockLabel: blockAt(blocks, m.min)?.label ?? null, mood: m.mood }));
+  if (day === 112) return fixed;
+  const mm = params.moodMarks;
+  const [high, low] = (week > 16 ? (branch === 'A' ? mm.branchA : mm.branchB)[String(week)] : undefined) ?? mm.perDayByWeek[String(week)] ?? mm.perDayByWeek.default;
+  const rand = mulberry32(day * 7919);
+  const out: MoodMark[] = [...fixed];
+  const highBlocks = blocks.filter(b => HIGH_KINDS.includes(b.kind));
+  const lowBlocks = blocks.filter(b => b.kind === 'work');
+  const place = (pool: Block[], mood: 'high' | 'low') => {
+    let min: number;
+    if (pool.length && rand() < 0.8) { const b = pool[Math.floor(rand() * pool.length)]; min = b.startMin + Math.floor(rand() * Math.max(1, b.endMin - b.startMin)); }
+    else min = mood === 'low' ? 1290 + Math.floor(rand() * 90) : Math.max(wakeMin + 20, 840) + Math.floor(rand() * 120);
+    out.push({ min, blockLabel: blockAt(blocks, min)?.label ?? null, mood });
+  };
+  for (let k = 0; k < high; k++) place(highBlocks, 'high');
+  for (let k = 0; k < low; k++) place(lowBlocks, 'low');
+  return out.sort((a, b) => a.min - b.min);
+}
+
 function buildDays(branch: Branch, weeks: WeekRow[]): DayRecord[] {
   const days: DayRecord[] = [];
   for (let day = 1; day <= LAST; day++) {
@@ -66,8 +86,7 @@ function buildDays(branch: Branch, weeks: WeekRow[]): DayRecord[] {
       const f = params.day112BlockFelt[b.label];
       if (f !== undefined) b.felt = f;
     }
-    const marks = params.markedMoments.filter(m => m.day === day)
-      .map(m => ({ min: m.min, blockLabel: blockAt(blocks, m.min)?.label ?? null }));
+    const marks = moodMarksFor(day, row.week, branch, blocks, wakeMin);
     days.push({ day, week, dayIndex: i, onsetMin, wakeMin, sleepMin, blocks, marks, dials: { ...row.dials } });
   }
   return days;
@@ -114,6 +133,11 @@ function buildEntries(branch: Branch, weeks: WeekRow[]): Entry[] {
       }
     }
     queue.forEach((q, k) => push(jdays[k % jdays.length], { text: pickText(q.group, q.felt), category: GROUP_CATEGORY[q.group], group: q.group, felt: q.felt }));
+  }
+  for (const [d, texts] of Object.entries(DAY_TEXTS)) {
+    const list = byDay.get(+d);
+    if (!list || list.length !== texts.length) continue;
+    texts.forEach((t, i) => { if (t) list[i].text = t; });
   }
   return [...byDay.keys()].sort((a, b) => a - b).map(day => ({
     id: `d${day}`, day, origin: 'ai-sample' as const,

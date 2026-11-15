@@ -5,9 +5,8 @@ import { useUI } from '../state/ui';
 import { CardStack } from '../components/cards/CardStack';
 import { countWord } from '../logic/words';
 import { fmtClock } from '../lib/time';
-import { markNow } from '../logic/mark';
 import { Tag } from '../components/ui';
-import { WristInline } from '../components/Wrist';
+import { MoodGlyph } from '../components/DayRing';
 import type { View } from '../state/view';
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -86,14 +85,13 @@ function Tonight({ v }: { v: View }) {
           {marks.length > 0 && (
             <div className="rows">
               {marks.map((m, i) => (
-                <div className="mark-line" key={i}><span><b className="num">{fmtClock(m.min)}</b>{m.blockLabel ? `  during ${m.blockLabel}` : ''}</span><span className="t-small">Marked on your wrist</span></div>
+                <div className="mark-line" key={i}><span><MoodGlyph mood={m.mood} /> <b className="num">{fmtClock(m.min)}</b>{m.blockLabel ? `\u00a0 during ${m.blockLabel}` : ''}</span><span className="t-small">{m.mood === 'high' ? 'High, on your wrist' : 'Low, on your wrist'}</span></div>
               ))}
             </div>
           )}
           <div className="btn-row">
             <button className="btn btn--primary" onClick={compose}>Speak or write</button>
             <button className="btn btn--quiet" onClick={() => add({ type: 'dismiss', what: 'tonight' })}>Not tonight</button>
-            <button className="btn btn--quiet" onClick={() => add({ type: 'mark', ...markNow(v) })}>Mark this moment</button>
           </div>
         </>
       )}
@@ -158,7 +156,6 @@ export function Today() {
       <div className="col col--narrow">
         <Tonight v={v} />
         <CheckPanel v={v} />
-        <WristInline v={v} />
       </div>
     </div>
     </>

@@ -191,3 +191,30 @@ export const GROUP_CATEGORY: Record<RealGroup, string> = {
   work: 'Work', home: 'Outside Communications', crew: 'Group Interaction', body: 'Sleep',
   timeoff: 'Recreation/Leisure', self: 'Adjustment', space: 'Privacy/Personal Space',
 };
+
+/**
+ * Full simulated diary entries for a cross-section of days (99 to 111), so a day reads as one journal entry.
+ * One string per generated segment, in the generator's order; null keeps the story's own sentence.
+ * AI-written sample text (origin 'ai-sample').
+ */
+export const DAY_TEXTS: Record<number, (string | null)[]> = {
+  99: ['The pump on the water loop failed again, the same seal as Tuesday.', 'The suit fit check after that took the rest of the morning; the left glove still pinches.',
+    'Missed the call window with Sam by six minutes because the check overran.', 'Dinner was better. Mei told the story about the goat and even Jonas laughed.', 'Went to bed feeling flat. Not bad, just flat.'],
+  100: [null, 'One good thing: the experiment rack booted first try and the numbers looked clean.', 'Then the sensor fault came back on the airlock panel after I had signed it off.',
+    'Sam sent a message asking if I was all right. I answered in two words.', 'Shoulder sore from the suit hours. Iced it in the bunk.'],
+  102: ['The experiment slot moved twice today. Got it done after dinner.', 'My sister sent a video of the kids singing, off key and loud.',
+    'Mom was on the same call and sounded tired. She said it was nothing.', 'Took a twenty-minute nap after lunch, which helped more than the coffee.'],
+  103: [null, 'Robotic arm practice went well, two clean dockings.', 'A long letter from Sam came through. Read it at the window twice.',
+    'Chess with Ravi after dinner. He blamed the lighting again and we both laughed.', 'Only six hours of sleep. Fine by the second coffee.'],
+  105: ['Third suit day this week. The laptop froze during the log and I lost ten minutes.', 'Sam’s last message was short. I cannot tell if that is the delay or something at home.',
+    'Ate with the crew but left early to finish my notes.', 'Sketched the cupola view before bed. Close enough.'],
+  106: [null, 'Work went fine. Finished the payload checklist an hour early.', 'Ana and I logged the sample run together, on time for once.',
+    'Sam had a bad week at home and I only heard about it after.', 'Played the guitar in my quarters for twenty minutes. My fingers remembered.'],
+  107: ['Short handover from Ravi, then suit prep ran past the timeline.', 'The experiment slot moved again. Got it done after dinner.',
+    'Spent the evening counting days to Sam’s birthday instead of writing to her.', 'Motivation came back a little after the gym.'],
+  108: ['The ground liked the sample photos. One less task tomorrow.', 'The call window lined up for once and Sam picked up on the first ring.',
+    'Ana and I finished the inventory together. It went fast with two.'],
+  109: [null, 'The fan repair took ninety minutes. The timeline said thirty.', 'Mom found my old bike in the garage and sent a picture of it.', 'Jonas let me lead the briefing. It went fine.'],
+  110: [null, 'Maintenance ran long, but the filter is finally seated.', 'Sam wrote about the car again. Nothing I can do from here.', 'Lay in the bunk and listened to the fans until after one.'],
+  111: [null, 'Behind all day. Skipped my free hour to catch up on the log.', 'Wrote Sam a letter and did not send it.', 'Headache this morning, gone after water and food.'],
+};

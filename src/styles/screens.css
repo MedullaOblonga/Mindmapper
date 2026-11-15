@@ -151,3 +151,55 @@ h2.t-head{margin:0}
 .pvt-progress>i{display:block;height:2px;background:var(--ink-muted)}
 .pvt-box{width:320px;max-width:100%;height:160px;border:2px solid var(--border);background:var(--sunk);display:flex;align-items:center;justify-content:center;font:500 56px/1 var(--sans);user-select:none;touch-action:manipulation;margin-top:20vh}
 .numbers summary{cursor:pointer}
+
+/* top bar extras */
+.delay{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+/* bedtime light */
+.bedlight{position:fixed;top:0;left:0;right:0;z-index:40}
+.bedlight-glow{display:block;height:6px;background:var(--act);box-shadow:0 0 24px 6px var(--act);animation:bedPulse 1.6s ease-in-out infinite}
+.bedlight-bar{display:flex;align-items:center;justify-content:space-between;gap:var(--s4);min-height:calc(var(--topbar-h) - 6px);padding:0 var(--s7);background:var(--sunk);border-bottom:1px solid var(--act-border)}
+@keyframes bedPulse{0%,100%{opacity:.25}50%{opacity:1}}
+/* wrist dock */
+.wrist-dock{position:fixed;right:var(--s5);bottom:var(--s5);z-index:30;display:flex;align-items:center;gap:var(--s2);padding:6px 6px 6px var(--s4);border-radius:var(--r-pill);background:var(--raised);border:1px solid var(--border)}
+.wrist-label{margin-right:var(--s1)}
+.wrist-mood{display:inline-flex;align-items:center;gap:var(--s2);min-height:var(--tap);padding:0 var(--s4);border-radius:var(--r-pill);border:1px solid var(--border);background:var(--panel);color:var(--ink);font:500 14px/1 var(--sans)}
+.wrist-mood:hover{border-color:var(--ink)}
+.wrist-free{border-color:var(--act-border);color:var(--act)}
+.wrist-pop{position:absolute;right:0;bottom:calc(100% + var(--s2));width:320px;border:1px solid var(--border)}
+.mood{display:inline-block;flex:none;width:12px;height:12px;border-radius:50%;border:2px solid var(--ink);vertical-align:-1px}
+.mood--high{background:var(--ink)}
+.mood--low{background:transparent}
+.page{padding-bottom:96px}
+/* day builder */
+.builder-grid{display:grid;grid-template-columns:minmax(260px,400px) 1fr;gap:var(--s6);align-items:start}
+.ring-wrap{display:flex;flex-direction:column;gap:var(--s2);align-items:center}
+.ring{width:100%;max-width:400px;height:auto}
+.ring-arc{cursor:pointer}
+.ring-hour{fill:var(--ink-muted);font:500 12px var(--sans)}
+.ring-title{fill:var(--ink);font:400 22px var(--serif)}
+.ring-sub{fill:var(--ink-muted);font:400 12px var(--sans)}
+.scroller-wrap{min-width:0;display:flex;flex-direction:column;gap:var(--s3)}
+.scroller-nav{display:flex;align-items:center;gap:var(--s3)}
+.scroller{display:flex;gap:var(--s3);overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px var(--s2);scrollbar-width:thin}
+.block-card{flex:0 0 260px;scroll-snap-align:center;display:flex;flex-direction:column;gap:var(--s2);padding:var(--s4);border-radius:var(--r-md);border:1px solid var(--line);background:var(--bg);cursor:pointer}
+.block-card--sel{border-color:var(--ink);background:var(--raised)}
+.block-bar{display:block;height:6px;border-radius:3px}
+.block-name{margin:0;font-size:16px}
+.moments{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.moments li{display:flex;align-items:center;gap:var(--s2)}
+.cue{color:var(--act);margin:0}
+.link-btn{border:0;background:none;padding:0;color:var(--act);font:inherit;cursor:pointer;min-height:auto;text-decoration:underline}
+.legend--sm{font-size:12px;gap:var(--s2) var(--s4)}
+.add-block{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:center}
+.add-block .field{min-height:36px}
+/* journal day prose */
+.earlier-day{border-top:1px solid var(--line);padding-top:var(--s2)}
+.earlier-sum{display:flex;align-items:center;justify-content:space-between;gap:var(--s2);cursor:pointer;min-height:32px}
+.earlier-swatches{display:flex;gap:3px}
+.earlier-swatches .swatch{width:8px;height:8px}
+.earlier-prose{margin:var(--s1) 0;font:400 16px/1.5 var(--serif)}
+.earlier-tags{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s3)}
+.earlier-tag{display:inline-flex;align-items:center;gap:6px}
+.earlier-tag .mark{width:12px;height:12px}
+@media (max-width:1023px){.builder-grid{grid-template-columns:1fr}}
+@media (max-width:699px){.wrist-dock{right:var(--s2);bottom:76px}.delay{display:none}.bedlight-bar{padding:var(--s2) var(--s4);flex-wrap:wrap}}
