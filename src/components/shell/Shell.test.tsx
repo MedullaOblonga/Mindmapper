@@ -8,4 +8,5 @@ it('renders the three navigation regions', () => {
   expect(screen.getByRole('navigation', { name: 'Demo story' })).toBeInTheDocument();
   expect(screen.getByText(/Stays on this device/)).toBeInTheDocument();
   expect(screen.getByText('MISSION DAY 112 OF 520', { exact: false })).toBeInTheDocument();
+  expect(screen.getByTitle(/One-way light time/)).toHaveTextContent('Delay to Earth 2 min 35 s one way');
 });

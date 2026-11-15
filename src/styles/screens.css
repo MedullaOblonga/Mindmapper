@@ -151,3 +151,39 @@ h2.t-head{margin:0}
 .pvt-progress>i{display:block;height:2px;background:var(--ink-muted)}
 .pvt-box{width:320px;max-width:100%;height:160px;border:2px solid var(--border);background:var(--sunk);display:flex;align-items:center;justify-content:center;font:500 56px/1 var(--sans);user-select:none;touch-action:manipulation;margin-top:20vh}
 .numbers summary{cursor:pointer}
+
+/* header: delay to Earth */
+.topbar-delay{white-space:nowrap}
+@media (max-width:1023px){.topbar-wide{display:none}}
+
+/* body trends */
+.trend-tools{display:flex;justify-content:space-between;align-items:center;gap:var(--s3);flex-wrap:wrap}
+.trend-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s4)}
+@media (max-width:1199px){.trend-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:699px){.trend-grid{grid-template-columns:minmax(0,1fr)}}
+.trend-head{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--s3)}
+.trend-val{flex:none;white-space:nowrap}
+.trend-tags{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:auto}
+.trend-status{display:flex;align-items:center;gap:var(--s2);font:500 13px/1.3 var(--sans);color:var(--ink-muted)}
+.trend-status--out{color:var(--ink)}
+.pt{flex:none;width:12px;height:12px;border-radius:50%}
+.pt--in{background:var(--t-body)}
+.pt--out{border:2px solid var(--ink)}
+.table-scroll{overflow-x:auto}
+.real-table th[scope="row"]{font-weight:400;text-align:left;border-top:1px solid var(--line);vertical-align:top}
+.tc svg{display:block;width:100%;height:auto;overflow:visible;touch-action:pan-y}
+.tc-band{fill:var(--raised)}
+.tc-axis{stroke:var(--line);stroke-width:1}
+.tc-limit{stroke:var(--border);stroke-width:1}
+.tc-usual{stroke:var(--ink-faint);stroke-width:1;stroke-dasharray:3 3}
+.tc-line{fill:none;stroke:var(--t-body);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.tc-dot{fill:var(--t-body);stroke:var(--panel);stroke-width:2}
+.tc-out{fill:var(--panel);stroke:var(--ink);stroke-width:2}
+.tc-cross{stroke:var(--ink-muted);stroke-width:1}
+.tc-ax{font:400 11px/1 var(--sans);fill:var(--ink-faint)}
+.tc-readout{min-height:18px}
+@media (max-width:699px){
+  .topbar-left{flex-direction:column;align-items:flex-start;gap:var(--s1)}
+  .topbar-left .t-label{white-space:nowrap}
+  .topbar .private{display:none}   /* its text is already hidden at this width; the lone icon cost the row its fit */
+}

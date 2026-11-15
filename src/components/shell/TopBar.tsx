@@ -1,5 +1,6 @@
 import { Lock } from 'lucide-react';
 import { MISSION_LENGTH } from '../../config';
+import { delayMin, fmtDelay } from '../../lib/delay';
 
 export function TopBar({ day, shared, onOpenLog }: { day: number; shared: number; onOpenLog?: () => void }) {
   const pct = Math.round((day / MISSION_LENGTH) * 1000) / 10;
@@ -10,6 +11,9 @@ export function TopBar({ day, shared, onOpenLog }: { day: number; shared: number
         <div className="mission-meter" role="img" aria-label={`Mission ${pct} percent complete`}>
           <i style={{ width: `${pct}%` }} />
         </div>
+        <span className="t-label num topbar-delay" title="One-way light time, computed for this mission day from the orbits of Earth and Mars">
+          <span className="topbar-wide">Delay to </span>{`Earth ${fmtDelay(delayMin(day))}`}<span className="topbar-wide"> one way</span>
+        </span>
       </div>
       <div className="topbar-right">
         <span className="private">

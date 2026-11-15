@@ -4,7 +4,7 @@ import { useUI } from '../../state/ui';
 import { appStore } from '../../state/store';
 import { pastMidnightRun } from '../../logic/signs';
 import { currentRule, withThreshold } from '../../logic/rules';
-import { params } from '../../data/params';
+import { delayMin, delayWords } from '../../lib/delay';
 import { Sheet } from '../../components/ui';
 import { ShareLogList } from '../../components/shell/ShareLogDrawer';
 import type { ShareRule } from '../../types';
@@ -62,7 +62,7 @@ export function Sharing() {
         </section>
         <section className="panel panel--tight col" aria-label="When you choose">
           <h2 className="t-head">When you choose: a message you approve</h2>
-          <p className="t-body">{`From any card you can draft a note to a crewmate, the crew medical officer or the ground. You see and edit the exact words. Messages to Earth take about ${params.mission.earthDelayMinutesOneWay} minutes each way.`}</p>
+          <p className="t-body">{`From any card you can draft a note to a crewmate, the crew medical officer or the ground. You see and edit the exact words. Messages to Earth take about ${delayWords(delayMin(v.day))} each way today.`}</p>
         </section>
         <section className="panel panel--tight panel--act col" aria-label="Lines you set before launch">
           <h2 className="t-head">Lines you set before launch</h2>
