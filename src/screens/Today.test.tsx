@@ -48,7 +48,7 @@ it('day 112: talk to someone writes to the share log', async () => {
   const diary = appStore.getState().events.length === 0 ? (await import('../data/scenario')).buildScenario('B').entries.flatMap(e => e.segments).map(s => s.text) : [];
   for (const t of diary) expect(draft.value).not.toContain(t);
   await u.click(screen.getByRole('button', { name: 'Send' }));
-  expect(screen.getByText('Share log: 1 shared')).toBeInTheDocument();
+  expect(screen.getByText('Share log: 2 shared')).toBeInTheDocument();   // the day-100 CO2 note, and this one
 });
 
 it('skipping all three clears the week', async () => {

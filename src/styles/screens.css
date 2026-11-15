@@ -266,3 +266,8 @@ h2.t-head{margin:0}
   .topbar-left .t-label{white-space:nowrap}
   .topbar .private{display:none}   /* its text is already hidden at this width; the lone icon cost the row its fit */
 }
+
+/* demo: astronaut / flight surgeon view switch */
+.story-view{flex:none;display:flex;align-items:center;gap:var(--s2)}
+.private--earth{color:var(--ink)}
+@media (max-width:699px){.topbar .private--earth{display:flex}.topbar .private--earth span{display:inline;font-size:13px}}

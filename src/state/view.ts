@@ -5,6 +5,7 @@ import type { LedgerFlags } from '../logic/ledger';
 import { recentUsual } from '../logic/ledger';
 import { shareOf } from '../logic/shares';
 import { pastMidnightRun } from '../logic/signs';
+import { FLIGHT_SURGEON, lineNotes, type Crossing } from '../logic/lines';
 import { T } from '../logic/thresholds';
 import { median } from '../lib/stats';
 import { weekOf } from '../lib/time';
@@ -14,7 +15,7 @@ import type { AppEvent } from './events';
 export interface ReminderView { id: string; text: string; wristLabel: string; buzz: ('short' | 'long')[]; on: boolean; oneOff: boolean; atMin?: number; }
 export interface View { day: number; week: number; branch: Branch; scenario: Scenario; entries: Entry[]; checks: CheckSession[];
   openCards: Card[]; raisedCards: Card[]; resolutions: Resolution[]; skippedThisWeek: number; shareLog: ShareLogEntry[];
-  lineCrossed: { day: number; message: string } | null; flags: LedgerFlags; reminders: ReminderView[];
+  lineCrossed: Crossing | null; flags: LedgerFlags; reminders: ReminderView[];
   marksToday: MoodMark[]; entryToday: Entry | null; blocksToday: Block[];
   movedUsual: CardContext['movedUsual']; ignoreNights: number[]; events: AppEvent[]; }
 
@@ -147,25 +148,13 @@ export function buildView(day: number, events: AppEvent[], override: Branch | nu
   const flags: LedgerFlags = { countWristDinners: fxAll.countWristDinners, quietKeys: [], movedUsual: flagsMoved };
   const checks = baseChecks.map(c => (fxAll.uncounted.includes(`c${c.day}`) ? { ...c, counts: false } : c));
 
-  // Lines set before launch (level 3), checked daily.
-  const shareLog: ShareLogEntry[] = [];
-  let lineCrossed: View['lineCrossed'] = null;
-  for (const rule of s.profile.shareRules.filter(r => r.auto && r.metric === 'pastMidnightRun')) {
-    let prev = 0;
-    for (let d = 1; d <= day; d++) {
-      const change = [...evs].reverse().find(e => e.type === 'rule-change' && e.ruleId === rule.id && e.day <= d) as Extract<AppEvent, { type: 'rule-change' }> | undefined;
-      const atLeast = change?.atLeast ?? rule.atLeast;
-      const run = pastMidnightRun(s.days, d, fxAll.ignoreNights).run;
-      if (run >= atLeast && prev < atLeast) {
-        shareLog.push({ id: `auto-${rule.id}-${d}`, day: d, to: 'Flight surgeon', text: rule.message ?? '', auto: true });
-        if (day - d < 7) lineCrossed = { day: d, message: rule.message ?? '' };
-      }
-      prev = run;
-    }
-  }
+  // Lines agreed before launch (level 3), checked daily.
+  const lines = lineNotes(s, day, evs, fxAll.ignoreNights);
+  const shareLog: ShareLogEntry[] = lines.log;
+  const lineCrossed: View['lineCrossed'] = lines.latest;
   for (const e of evs) {
-    if (e.type === 'share') shareLog.push({ id: e.id, day: e.day, to: e.to, text: e.text, auto: false });
-    if (e.type === 'rule-change') shareLog.push({ id: e.id, day: e.day, to: 'Flight surgeon', text: e.text, auto: false });
+    if (e.type === 'share') shareLog.push({ id: e.id, day: e.day, to: e.to, text: e.text, auto: false, kind: 'message' });
+    if (e.type === 'rule-change') shareLog.push({ id: e.id, day: e.day, to: FLIGHT_SURGEON, text: e.text, auto: false, kind: 'rule-change', ruleId: e.ruleId });
   }
   shareLog.sort((a, b) => b.day - a.day);
 

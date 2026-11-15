@@ -6,7 +6,7 @@ import { resetUI } from '../state/ui';
 import { resetClock } from '../state/clock';
 
 beforeEach(() => {
-  appStore.setState({ day: 112, events: [], branchOverride: null, storyHidden: false });
+  appStore.setState({ day: 112, events: [], branchOverride: null, storyHidden: false, viewer: 'astronaut' });
   resetUI();
   resetClock();
   window.location.hash = '#/today';

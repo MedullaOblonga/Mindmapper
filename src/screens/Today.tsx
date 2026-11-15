@@ -8,6 +8,7 @@ import { fmtClock } from '../lib/time';
 import { Tag } from '../components/ui';
 import { MoodGlyph } from '../components/DayRing';
 import { bodySeries, measure, readMeasure } from '../logic/body';
+import { CMO_NAME } from '../logic/lines';
 import type { View } from '../state/view';
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -54,11 +55,13 @@ function LineCrossed({ v }: { v: View }) {
   return (
     <section className="panel panel--act" aria-label="Agreed before launch">
       <div className="t-label act-text">Agreed before launch</div>
-      <p className="t-stmt-sm">{`On day ${v.lineCrossed.day} a line you set before launch was crossed. Your flight surgeon was told this, and only this:`}</p>
+      <p className="t-stmt-sm">{v.lineCrossed.fixed
+        ? `On day ${v.lineCrossed.day} an imminent risk was reported. ${CMO_NAME} was told at once. Your flight surgeon was sent this, and only this:`
+        : `On day ${v.lineCrossed.day} a line you set before launch was crossed. Your flight surgeon was told this, and only this:`}</p>
       <p className="t-quote">{`“${v.lineCrossed.message}”`}</p>
       <div className="btn-row">
         <button className="btn" onClick={() => ui.openShareLog(true)}>Open share log</button>
-        <button className="btn btn--quiet" onClick={() => nav('/profile/sharing')}>Change this rule</button>
+        <button className="btn btn--quiet" onClick={() => nav('/profile/sharing')}>{v.lineCrossed.fixed ? 'See the lines' : 'Change this rule'}</button>
       </div>
     </section>
   );

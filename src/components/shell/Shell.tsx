@@ -12,6 +12,9 @@ import { useView } from '../../state/useView';
 import { useUI } from '../../state/ui';
 import { BedtimeLight } from './BedtimeLight';
 import { WristDock } from '../Wrist';
+import { Stethoscope } from 'lucide-react';
+import { useApp } from '../../state/store';
+import { Surgeon } from '../../screens/Surgeon';
 
 export function Footer() {
   return <div className="t-foot page-foot">Sample data for illustration. Names are placeholders.</div>;
@@ -35,6 +38,21 @@ export function Shell({ children }: { children: ReactNode }) {
   const v = useView();
   const ui = useUI();
   const loc = useLocation();
+  const viewer = useApp(s => s.viewer);
+  if (viewer === 'surgeon') return (
+    <div className="app">
+      <TopBar day={v.day} shared={0} viewer="surgeon" />
+      <StoryBar branch={v.branch} />
+      <nav className="rail" aria-label="Flight surgeon">
+        <button className="rail-item" aria-current="page"><Stethoscope size={22} strokeWidth={1.8} aria-hidden="true" />Received</button>
+      </nav>
+      <main className="page">
+        <Surgeon />
+        <Footer />
+      </main>
+      <Toast />
+    </div>
+  );
   if (loc.pathname.startsWith('/check')) return <>{children}<Overlays /></>;
   return (
     <div className="app">
