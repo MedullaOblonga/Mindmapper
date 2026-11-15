@@ -45,3 +45,16 @@ it('long text with no keywords saves as Uncategorised', async () => {
   expect(within(panel).getByRole('button', { name: /Topic: Other/ })).toBeInTheDocument();
   expect(within(panel).getByText('How did this one feel?')).toBeInTheDocument();
 });
+
+it('the day card flips to the next part, and presses fill in how it felt', async () => {
+  const u = userEvent.setup();
+  open();
+  const region = screen.getByRole('region', { name: 'Rebuild your day' });
+  const card = within(region).getByRole('article');
+  expect(card).toHaveAccessibleName(/^Suit prep, 08:00 to 13:00\. Part 3 of 10/);
+  expect(within(card).getByRole('button', { name: 'Hard' })).toHaveAttribute('aria-pressed', 'true');
+  expect(within(card).getByText('From your wrist presses. Tap to correct.')).toBeInTheDocument();
+  expect(within(region).queryByRole('button', { name: 'Write about this' })).toBeNull();
+  await u.click(card);
+  expect(within(region).getByRole('article')).toHaveAccessibleName(/^Lunch, 13:00 to 14:00\. Part 4 of 10/);
+});

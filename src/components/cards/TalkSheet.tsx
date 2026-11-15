@@ -3,6 +3,7 @@ import { Sheet } from '../ui';
 import { useUI, type TalkRequest } from '../../state/ui';
 import { appStore, useApp } from '../../state/store';
 import { delayMin, delayWords } from '../../lib/delay';
+import { missionDay } from '../../config';
 import { params } from '../../data/params';
 import { resolveCard } from './useCardActions';
 
@@ -58,7 +59,7 @@ export function TalkSheet({ req }: { req: TalkRequest }) {
           {attach && <ul className="attach-list">{req.attach.map(s => <li key={s.id} className="t-small">{`Day ${s.day}: ${s.text}`}</li>)}</ul>}
         </div>
       )}
-      {r.earth && <p className="t-small">{`Reaches Earth in about ${delayWords(delayMin(day))}. A reply takes at least as long again.`}</p>}
+      {r.earth && <p className="t-small">{`Reaches Earth in about ${delayWords(delayMin(missionDay(day)))}. A reply takes at least as long again.`}</p>}
       <div className="btn-row">
         <button className="btn btn--primary" onClick={send} disabled={!text.trim()}>Send</button>
         <button className="btn" onClick={() => { close(); ui.showToast('Saved as a draft. Nothing was sent.'); }}>Save as draft</button>

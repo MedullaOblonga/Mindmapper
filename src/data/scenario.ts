@@ -52,13 +52,30 @@ export function blockAt(blocks: Block[], min: number): Block | null {
   return blocks.find(b => b.kind !== 'sleep' && b.startMin <= min && min < b.endMin) ?? null;
 }
 
+const moodCache = new Map<string, [number, number][]>();
+/** Each week's presses (per-day rate × days) spread unevenly over its days, so no two weeks look alike. Day 112 is left to the story. */
+function weekMoodCounts(week: number, branch: Branch): [number, number][] {
+  const key = `${branch}${week}`;
+  if (moodCache.has(key)) return moodCache.get(key)!;
+  const mm = params.moodMarks;
+  const [hi, lo] = (week > 16 ? (branch === 'A' ? mm.branchA : mm.branchB)[String(week)] : undefined) ?? mm.perDayByWeek[String(week)] ?? mm.perDayByWeek.default;
+  const days = Array.from({ length: 7 }, (_, i) => 7 * week - 6 + i).filter(d => d !== 112);
+  const out: [number, number][] = Array.from({ length: 7 }, () => [0, 0]);
+  const rand = mulberry32(week * 104729 + (week > 16 ? (branch === 'A' ? 1 : 2) : 0));
+  ([[hi, 0], [lo, 1]] as const).forEach(([rate, k]) => {
+    for (let n = 0; n < rate * days.length; n++) out[dayIndex(days[Math.floor(rand() * days.length)]) - 1][k] += 1;
+  });
+  moodCache.set(key, out);
+  return out;
+}
+
 const HIGH_KINDS: BlockKind[] = ['gym', 'dinner', 'call', 'greenhouse', 'meal'];
 /** Simulated presses of the two wrist buttons (high and low). Day 112 uses only the story's two marked moments. */
 function moodMarksFor(day: number, week: number, branch: Branch, blocks: Block[], wakeMin: number): MoodMark[] {
   const fixed = params.markedMoments.filter(m => m.day === day).map(m => ({ min: m.min, blockLabel: blockAt(blocks, m.min)?.label ?? null, mood: m.mood }));
   if (day === 112) return fixed;
-  const mm = params.moodMarks;
-  const [high, low] = (week > 16 ? (branch === 'A' ? mm.branchA : mm.branchB)[String(week)] : undefined) ?? mm.perDayByWeek[String(week)] ?? mm.perDayByWeek.default;
+  const counts = weekMoodCounts(week, branch)[dayIndex(day) - 1];
+  const [high, low] = counts;
   const rand = mulberry32(day * 7919);
   const out: MoodMark[] = [...fixed];
   const highBlocks = blocks.filter(b => HIGH_KINDS.includes(b.kind));

@@ -53,7 +53,7 @@ export function useCardActions(v: View) {
       }
       case 'rebuild-day':
         resolveCard(card, 'acted', a.label, 'You opened yesterday to rebuild it.');
-        nav('/patterns/days');
+        nav('/journal');
         return;
       case 'protective':
         ui.openTalk({ route: 'work', to: p.to ?? 'ana', draft: protectiveDraft(card, p.block ?? 'next review'), card, actionLabel: a.label });

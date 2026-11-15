@@ -1,10 +1,11 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useView } from '../../state/useView';
 import { marksFor, moodWeek } from '../../state/view';
 import { median } from '../../lib/stats';
-import { weekDays, weekOf, fmtClock } from '../../lib/time';
+import { weekOf, fmtClock } from '../../lib/time';
 import { MoodGlyph } from '../../components/DayRing';
-import { Tag, UsualBar } from '../../components/ui';
+import { Tag } from '../../components/ui';
 import type { MoodMark } from '../../types';
 
 function where(marks: MoodMark[], mood: 'high' | 'low'): [string, number][] {
@@ -16,45 +17,84 @@ function where(marks: MoodMark[], mood: 'high' | 'low'): [string, number][] {
   return [...c.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3);
 }
 
+const W = 720, H = 260, L = 44, R = 12, T = 18, B = 30;
+
+/** Diverging daily bars: high presses up, low presses down, your usual as dashed lines. */
+function DailyChart({ rows, uh, ul }: { rows: { day: number; high: number; low: number }[]; uh: number | null; ul: number | null }) {
+  const [hover, setHover] = useState<number | null>(null);
+  const max = Math.max(4, ...rows.map(r => Math.max(r.high, r.low)), uh ?? 0, ul ?? 0);
+  const mid = T + (H - T - B) / 2, half = (H - T - B) / 2;
+  const y = (n: number) => (n / max) * half;
+  const step = (W - L - R) / rows.length, bw = Math.max(4, step - 4);
+  const h = hover !== null ? rows[hover] : null;
+  return (
+    <div className="tc">
+      <p className="t-small tc-readout num" aria-live="polite">{h ? `Day ${h.day}: ${h.high} high, ${h.low} low` : 'Hover or tap a day for its count.'}</p>
+      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`High and low presses per day, days ${rows[0]?.day} to ${rows[rows.length - 1]?.day}. ${rows.map(r => `Day ${r.day}: ${r.high} high, ${r.low} low`).join('; ')}`}
+        onMouseLeave={() => setHover(null)}>
+        <line x1={L} x2={W - R} y1={mid} y2={mid} className="tc-axis" />
+        {uh !== null && <line x1={L} x2={W - R} y1={mid - y(uh)} y2={mid - y(uh)} className="tc-usual" />}
+        {ul !== null && <line x1={L} x2={W - R} y1={mid + y(ul)} y2={mid + y(ul)} className="tc-usual" />}
+        <text x={L - 8} y={mid - half + 4} textAnchor="end" className="tc-ax">High</text>
+        <text x={L - 8} y={mid + half} textAnchor="end" className="tc-ax">Low</text>
+        <text x={L - 8} y={mid + 4} textAnchor="end" className="tc-ax">0</text>
+        {rows.map((r, i) => {
+          const x = L + i * step + (step - bw) / 2;
+          return (
+            <g key={r.day} onMouseEnter={() => setHover(i)} onClick={() => setHover(i)}>
+              <rect x={L + i * step} y={T} width={step} height={H - T - B} fill="transparent" />
+              {r.high > 0 && <rect x={x} y={mid - y(r.high)} width={bw} height={Math.max(1, y(r.high) - 1)} rx={2} className="mb-high" />}
+              {r.low > 0 && <rect x={x} y={mid + 1} width={bw} height={Math.max(1, y(r.low) - 1)} rx={2} className="mb-low" />}
+              {hover === i && <rect x={L + i * step} y={T} width={step} height={H - T - B} className="mb-hover" />}
+              {(r.day % 7 === 1 || i === rows.length - 1) && <text x={L + i * step + step / 2} y={H - 10} textAnchor="middle" className="tc-ax">{`Day ${r.day}`}</text>}
+            </g>
+          );
+        })}
+      </svg>
+      <div className="legend legend--sm">
+        <span><i className="swatch mb-swatch-high" />High presses, above the line</span>
+        <span><i className="swatch mb-swatch-low" />Low presses, below the line</span>
+        <span><i className="usual-key" />Your usual per day</span>
+      </div>
+    </div>
+  );
+}
+
 export function Moments() {
   const v = useView();
   const nav = useNavigate();
-  const W = weekOf(v.day);
-  const weeks = Array.from({ length: Math.min(8, W) }, (_, i) => W - Math.min(8, W) + 1 + i);
+  const [table, setTable] = useState(false);
+  const Wk = weekOf(v.day);
   const usualWeeks = [3, 4, 5, 6, 7, 8].filter(w => 7 * w <= v.day);
-  const uh = usualWeeks.length >= 3 ? median(usualWeeks.map(w => moodWeek(v.scenario, v.events, w, v.day).high)) : null;
-  const ul = usualWeeks.length >= 3 ? median(usualWeeks.map(w => moodWeek(v.scenario, v.events, w, v.day).low)) : null;
-  const now = moodWeek(v.scenario, v.events, W, v.day);
-  const weekMarks = Array.from({ length: now.days }, (_, i) => marksFor(v.scenario, v.events, 7 * W - 6 + i)).flat();
-  const scale = 28;
+  const uhW = usualWeeks.length >= 3 ? median(usualWeeks.map(w => moodWeek(v.scenario, v.events, w, v.day).high)) : null;
+  const ulW = usualWeeks.length >= 3 ? median(usualWeeks.map(w => moodWeek(v.scenario, v.events, w, v.day).low)) : null;
+  const now = moodWeek(v.scenario, v.events, Wk, v.day);
+  const from = Math.max(1, v.day - 27);
+  const rows = Array.from({ length: v.day - from + 1 }, (_, i) => {
+    const d = from + i, ms = marksFor(v.scenario, v.events, d);
+    return { day: d, high: ms.filter(m => m.mood === 'high').length, low: ms.filter(m => m.mood === 'low').length };
+  });
+  const weekMarks = Array.from({ length: now.days }, (_, i) => marksFor(v.scenario, v.events, 7 * Wk - 6 + i)).flat();
   return (
     <>
       <div className="page-head"><div><h1 className="t-title">High and low moments</h1>
-        <p className="t-lede">How often you pressed each wrist button, week by week, next to your own usual. A count of presses, not a grade.</p></div>
+        <p className="t-lede">How often you pressed each button on your wrist, day by day, next to your own usual. A count of presses, not a grade.</p></div>
         <Tag data="sim" /></div>
       <div className="cols">
         <div className="col col--wide">
-          <section className="panel" aria-label="Weeks of presses">
-            <p className="t-stmt-sm">{uh === null ? `This week so far: ${now.high} high, ${now.low} low. Your usual appears after day 56.`
-              : `This week so far: ${now.high} high, ${now.low} low. Your usual week: ${uh} high, ${ul} low.`}</p>
-            <div className="mood-weeks">
-              {weeks.map(w => {
-                const m = moodWeek(v.scenario, v.events, w, v.day);
-                const [a, b] = weekDays(w);
-                return (
-                  <div key={w} className="mood-week">
-                    <div className="t-small num">{`Days ${a} to ${Math.min(b, v.day)}`}</div>
-                    <div className="mood-bars">
-                      <div className="mood-bar"><MoodGlyph mood="high" /><span className="t-small num mood-n">{m.high}</span>
-                        <UsualBar value={m.high} usual={uh} scaleMax={scale} color="var(--ink-muted)" label={`High presses: ${m.high}${uh !== null ? `, usual ${uh}` : ''}`} /></div>
-                      <div className="mood-bar"><MoodGlyph mood="low" /><span className="t-small num mood-n">{m.low}</span>
-                        <UsualBar value={m.low} usual={ul} scaleMax={scale} color="var(--t-work)" label={`Low presses: ${m.low}${ul !== null ? `, usual ${ul}` : ''}`} /></div>
-                    </div>
-                  </div>
-                );
-              })}
+          <section className="panel" aria-label="Presses per day">
+            <div className="trend-tools">
+              <p className="t-stmt-sm">{uhW === null ? `This week so far: ${now.high} high, ${now.low} low. Your usual appears after day 56.`
+                : `This week so far: ${now.high} high, ${now.low} low. Your usual week: ${uhW} high, ${ulW} low.`}</p>
+              <button className="btn btn--sm" aria-pressed={table} onClick={() => setTable(t => !t)}>{table ? 'Show as chart' : 'Show as table'}</button>
             </div>
-            <p className="t-small">The tick is your usual, from days 15 to 56. More low presses is not a verdict: it is a place to look.</p>
+            {table ? (
+              <div className="table-scroll"><table className="real-table num">
+                <thead><tr><th scope="col" className="t-label">Day</th><th scope="col" className="t-label">High</th><th scope="col" className="t-label">Low</th></tr></thead>
+                <tbody>{[...rows].reverse().map(r => <tr key={r.day}><th scope="row">{`Day ${r.day}`}</th><td>{r.high}</td><td>{r.low}</td></tr>)}</tbody>
+              </table></div>
+            ) : <DailyChart rows={rows} uh={uhW === null ? null : uhW / 7} ul={ulW === null ? null : ulW / 7} />}
+            <p className="t-small">The dashed lines are your usual day, from days 15 to 56. More low presses is not a verdict: it is a place to look.</p>
           </section>
         </div>
         <div className="col col--narrow">

@@ -172,7 +172,7 @@ export function Journal() {
     <>
       <div className="page-head"><div><h1 className="t-title">Your diary</h1>
         <p className="t-lede">Private. Written at the end of the day. Walk through the day, then write what stayed with you.</p></div></div>
-      <DayBuilder v={v} onWrite={p => api.current?.insert(p)} />
+      <DayBuilder v={v} />
       <div className="cols">
         <div className="col col--wide">
           <Composer key={`${v.day}-${loc.key}`} day={v.day} marks={v.marksToday} text={text} setText={setText} focus={!!st.focus || !!st.prefill} apiRef={api} />

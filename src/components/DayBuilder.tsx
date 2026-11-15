@@ -1,138 +1,74 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { appStore } from '../state/store';
 import { bedtimeOf, blockRange, SOURCE_TEXT, withFreeTime } from '../logic/ring';
 import { usualOnset } from '../logic/cards';
 import { pickFree } from '../logic/freeTime';
 import { fmtClock, fmtLater } from '../lib/time';
-import { BLOCK_LEGEND, BLOCK_VAR, DayRing, MoodGlyph } from './DayRing';
-import { Mark, MarkLegend } from './ui';
+import { BLOCK_VAR, DayRing, MoodGlyph } from './DayRing';
+import { Mark } from './ui';
 import type { Block, Felt, MoodMark } from '../types';
 import type { View } from '../state/view';
 
 const FELTS: { f: Felt; label: string }[] = [{ f: 'good', label: 'Good' }, { f: 'mixed', label: 'Mixed' }, { f: 'hard', label: 'Hard' }];
-const inBlock = (m: MoodMark, b: Block) => m.min >= b.startMin && m.min < b.endMin;
+export const inBlock = (m: MoodMark, b: Block) => m.min >= b.startMin && m.min < b.endMin;
 
-function Moments({ marks }: { marks: MoodMark[] }) {
-  if (!marks.length) return <p className="t-small">No presses during this.</p>;
-  return (
-    <ul className="moments">
-      {marks.map((m, i) => <li key={i} className="t-small"><MoodGlyph mood={m.mood} />{`${m.mood === 'high' ? 'High' : 'Low'} at ${fmtClock(m.min)}`}</li>)}
-    </ul>
-  );
+/** A guess from the wrist: only high presses → good, only low → hard, both → mixed. The astronaut's tap always wins. */
+export function feltFromPresses(marks: MoodMark[]): Felt | null {
+  const hi = marks.some(m => m.mood === 'high'), lo = marks.some(m => m.mood === 'low');
+  return hi && lo ? 'mixed' : hi ? 'good' : lo ? 'hard' : null;
 }
 
-function AddBlock({ day, onDone }: { day: number; onDone: () => void }) {
-  const [label, setLabel] = useState('');
-  const [start, setStart] = useState('14:00');
-  const [end, setEnd] = useState('15:00');
-  const toMin = (t: string) => { const [h, m] = t.split(':').map(Number); return h * 60 + (m || 0); };
-  const ok = label.trim() && toMin(end) > toMin(start);
-  return (
-    <div className="add-block">
-      <input className="field" aria-label="What was it?" placeholder="What was it?" value={label} onChange={e => setLabel(e.target.value)} />
-      <input className="field" type="time" aria-label="Start" value={start} onChange={e => setStart(e.target.value)} />
-      <input className="field" type="time" aria-label="End" value={end} onChange={e => setEnd(e.target.value)} />
-      <button className="btn btn--primary btn--sm" disabled={!ok} onClick={() => {
-        appStore.getState().add({ type: 'block-add', block: { id: `d${day}-you-${Date.now().toString(36)}`, day, kind: 'work', label: label.trim(),
-          startMin: toMin(start), endMin: toMin(end), source: 'you', felt: null } });
-        onDone();
-      }}>Add</button>
-      <button className="btn btn--quiet btn--sm" onClick={onDone}>Cancel</button>
-    </div>
-  );
-}
-
-/** Rebuild the day: the ring plus a scroller that steps from one block to the next, each with a prompt to write about it. */
-export function DayBuilder({ v, onWrite, compact }: { v: View; onWrite: (prefill: string) => void; compact?: boolean }) {
+/** Rebuild the day: the ring, and one card at a time. Tap the card to flip to the next part of the day. */
+export function DayBuilder({ v }: { v: View }) {
   const s = v.scenario, rec = s.days[v.day - 1];
+  const tapped = useMemo(() => new Set(v.events.filter(e => e.type === 'block-felt').map(e => (e as { blockId: string }).blockId)), [v.events]);
   const blocks = useMemo(() => withFreeTime(v.blocksToday, rec.wakeMin, bedtimeOf(s, v.day), v.day), [v.blocksToday, rec, s, v.day]);
   const marks = v.marksToday;
   const lowCounts = blocks.map(b => marks.filter(m => m.mood === 'low' && inBlock(m, b)).length);
   const cueIdx = lowCounts.some(n => n > 0) ? lowCounts.indexOf(Math.max(...lowCounts)) : Math.max(0, blocks.findIndex(b => b.kind === 'work'));
   const [sel, setSel] = useState(cueIdx);
-  const [adding, setAdding] = useState(false);
-  const list = useRef<HTMLDivElement>(null);
-  const fromScroll = useRef(false);
-  const busyUntil = useRef(0);
-  const settle = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => { setSel(cueIdx); }, [v.day]); // eslint-disable-line react-hooks/exhaustive-deps
-  useEffect(() => () => { if (settle.current) clearTimeout(settle.current); }, []);
-  useEffect(() => {
-    if (fromScroll.current) { fromScroll.current = false; return; }
-    const box = list.current, el = box?.children[sel] as HTMLElement | undefined;
-    if (!box || !el || typeof box.scrollTo !== 'function') return;
-    busyUntil.current = Date.now() + 700;
-    box.scrollTo({ left: el.offsetLeft - box.offsetLeft - (box.clientWidth - el.offsetWidth) / 2, behavior: 'smooth' });
-  }, [sel]);
-  const onScroll = () => {
-    if (settle.current) clearTimeout(settle.current);
-    settle.current = setTimeout(() => {
-      const box = list.current; if (!box || Date.now() < busyUntil.current) return;
-      const mid = box.scrollLeft + box.clientWidth / 2;
-      let best = 0, dist = Infinity;
-      Array.from(box.children).forEach((c, i) => { const el = c as HTMLElement; const d = Math.abs(el.offsetLeft - box.offsetLeft + el.offsetWidth / 2 - mid); if (d < dist) { dist = d; best = i; } });
-      if (best !== sel) { fromScroll.current = true; setSel(best); }
-    }, 140);
-  };
+  const b = blocks[Math.min(sel, blocks.length - 1)];
+  const bm = marks.filter(m => inBlock(m, b));
+  const guess = b.felt === null || !tapped.has(b.id) ? (feltFromPresses(bm) ?? b.felt) : b.felt;
+  const fromWrist = !tapped.has(b.id) && feltFromPresses(bm) !== null;
+  const free = b.kind === 'free' ? pickFree(b.endMin - b.startMin, s.profile) : [];
+  const next = () => setSel(i => (i + 1) % blocks.length);
   const late = rec.onsetMin - usualOnset(s);
   const cueOff = v.events.some(e => e.type === 'dismiss' && e.what === 'cue');
-  const cueBlock = blocks[cueIdx];
-  const lowCue = lowCounts[cueIdx] > 0 ? marks.filter(m => m.mood === 'low' && inBlock(m, cueBlock)) : [];
+  const lowCue = lowCounts[cueIdx] > 0 ? marks.filter(m => m.mood === 'low' && inBlock(m, blocks[cueIdx])) : [];
+  const ringBlocks = blocks.map(x => (x.id === b.id ? { ...x, felt: guess } : x.felt === null || !tapped.has(x.id) ? { ...x, felt: feltFromPresses(marks.filter(m => inBlock(m, x))) ?? x.felt } : x));
   return (
     <section className="panel builder" aria-label="Rebuild your day">
-      <div className="panel-title-row"><h2 className="t-head">{`Rebuild day ${v.day}`}</h2><span className="t-small">Scroll through your day and tap how each part felt.</span></div>
-      {lowCue.length > 0 && (
-        <p className="t-body cue">{`You pressed low ${lowCue.length === 1 ? `at ${fmtClock(lowCue[0].min)}` : `${lowCue.length} times`} during ${cueBlock.label}. Start there?`}</p>
-      )}
-      {!cueOff && late >= 60 && (
-        <p className="t-small">{`Asked because your sleep started ${fmtLater(late)} later than your usual. `}
-          <button className="link-btn" onClick={() => appStore.getState().add({ type: 'dismiss', what: 'cue' })}>Turn this cue off</button></p>
-      )}
-      <div className={`builder-grid ${compact ? 'builder-grid--compact' : ''}`}>
-        <div className="ring-wrap">
-          <DayRing blocks={blocks} marks={marks} selected={sel} onSelect={setSel} title={`Day ${v.day}`} sub={blocks[sel] ? `${blocks[sel].label} · ${blockRange(blocks[sel])}` : ''} />
-          <div className="legend legend--sm">
-            <span><MoodGlyph mood="high" />High press</span><span><MoodGlyph mood="low" />Low press</span>
-          </div>
-        </div>
-        <div className="scroller-wrap">
-          <div className="scroller-nav">
-            <button className="btn btn--sm" aria-label="Previous part of the day" disabled={sel <= 0} onClick={() => setSel(i => Math.max(0, i - 1))}>‹</button>
-            <span className="t-small num">{`${sel + 1} of ${blocks.length}`}</span>
-            <button className="btn btn--sm" aria-label="Next part of the day" disabled={sel >= blocks.length - 1} onClick={() => setSel(i => Math.min(blocks.length - 1, i + 1))}>›</button>
-          </div>
-          <div className="scroller" ref={list} onScroll={onScroll} role="list" aria-label="Parts of the day">
-            {blocks.map((b, i) => {
-              const bm = marks.filter(m => inBlock(m, b));
-              const free = b.kind === 'free' ? pickFree(b.endMin - b.startMin, s.profile) : [];
-              return (
-                <article key={b.id} role="listitem" className={`block-card ${i === sel ? 'block-card--sel' : ''}`} aria-current={i === sel ? 'true' : undefined} onClick={() => setSel(i)}>
-                  <i className="block-bar" style={{ background: BLOCK_VAR[b.kind] }} />
-                  <h3 className="t-head block-name">{b.label}</h3>
-                  <p className="t-small num">{`${blockRange(b)}. ${b.kind === 'free' ? 'Free in the mission plan' : SOURCE_TEXT[b.source]}`}</p>
-                  {b.kind !== 'free' && (
-                    <div className="btn-row" role="group" aria-label={`How ${b.label} felt`}>
-                      {FELTS.map(({ f, label }) => (
-                        <button key={f} className="btn btn--sm" aria-pressed={b.felt === f} onClick={e => { e.stopPropagation(); appStore.getState().add({ type: 'block-felt', blockId: b.id, felt: f }); }}>
-                          <Mark felt={f} color={BLOCK_VAR[b.kind]} />{label}</button>
-                      ))}
-                    </div>
-                  )}
-                  <Moments marks={bm} />
-                  {free.length > 0 && <p className="t-small">{`Your wrist offers: ${free.map(f => f.label.toLowerCase()).join(', ')}.`}</p>}
-                  <button className={`btn btn--sm ${i === sel ? 'btn--primary' : ''}`} onClick={e => { e.stopPropagation(); onWrite(`About ${b.label.toLowerCase()}, ${blockRange(b)}: `); }}>Write about this</button>
-                </article>
-              );
-            })}
-          </div>
-          <div className="btn-row">
-            {adding ? <AddBlock day={v.day} onDone={() => setAdding(false)} /> : <button className="btn btn--sm" onClick={() => setAdding(true)}>Add what is missing</button>}
-          </div>
-          <div className="legend legend--sm">{BLOCK_LEGEND.map(l => <span key={l.kind}><i className="swatch" style={{ background: BLOCK_VAR[l.kind] }} />{l.label}</span>)}</div>
-          <MarkLegend />
+      <div className="panel-title-row"><h2 className="t-head">{`Your day ${v.day}`}</h2>
+        {lowCue.length > 0 && <span className="t-small cue">{`You pressed low at ${fmtClock(lowCue[0].min)} during ${blocks[cueIdx].label}.`}</span>}</div>
+      <div className="builder-grid">
+        <DayRing blocks={ringBlocks} marks={marks} selected={sel} onSelect={setSel} title={`Day ${v.day}`} sub={`${b.label} · ${blockRange(b)}`} />
+        <div className="flip-wrap">
+          <article key={b.id} className="block-card block-card--flip card-enter" onClick={next} aria-live="polite"
+            aria-label={`${b.label}, ${blockRange(b)}. Part ${sel + 1} of ${blocks.length}. Tap for the next part.`}>
+            <i className="block-bar" style={{ background: BLOCK_VAR[b.kind] }} />
+            <div className="flip-head"><h3 className="t-head block-name">{b.label}</h3><span className="t-small num">{`${sel + 1} of ${blocks.length}`}</span></div>
+            <p className="t-small num">{`${blockRange(b)}. ${b.kind === 'free' ? 'Free in the mission plan' : SOURCE_TEXT[b.source]}`}</p>
+            {b.kind !== 'free' && (
+              <div className="btn-row" role="group" aria-label={`How ${b.label} felt`} onClick={e => e.stopPropagation()}>
+                {FELTS.map(({ f, label }) => (
+                  <button key={f} className="btn btn--sm" aria-pressed={guess === f} onClick={() => appStore.getState().add({ type: 'block-felt', blockId: b.id, felt: f })}>
+                    <Mark felt={f} color={BLOCK_VAR[b.kind]} />{label}</button>
+                ))}
+              </div>
+            )}
+            {fromWrist && <p className="t-small">From your wrist presses. Tap to correct.</p>}
+            {bm.length > 0 && <ul className="moments">{bm.map((m, i) => <li key={i} className="t-small"><MoodGlyph mood={m.mood} />{`${m.mood === 'high' ? 'High' : 'Low'} at ${fmtClock(m.min)}`}</li>)}</ul>}
+            {free.length > 0 && <p className="t-small">{`Your wrist offers: ${free.map(f => f.label.toLowerCase()).join(', ')}.`}</p>}
+            <span className="t-foot flip-hint">Tap the card for the next part of the day</span>
+          </article>
+          {!cueOff && late >= 60 && (
+            <p className="t-small">{`Asked because your sleep started ${fmtLater(late)} later than your usual. `}
+              <button className="link-btn" onClick={() => appStore.getState().add({ type: 'dismiss', what: 'cue' })}>Turn this cue off</button></p>
+          )}
         </div>
       </div>
-      <p className="t-foot">A rebuilt day is from memory and can be off, so every block is editable. Nothing here is sent anywhere.</p>
     </section>
   );
 }

@@ -7,6 +7,7 @@ import { countWord } from '../logic/words';
 import { fmtClock } from '../lib/time';
 import { Tag } from '../components/ui';
 import { MoodGlyph } from '../components/DayRing';
+import { Ledger } from './Ledger';
 import { bodySeries, measure, readMeasure } from '../logic/body';
 import type { View } from '../state/view';
 
@@ -173,6 +174,7 @@ export function Today() {
         <CheckPanel v={v} />
       </div>
     </div>
+    <Ledger />
     </>
   );
 }

@@ -21,10 +21,10 @@ export function WristDock({ v }: { v: View }) {
   const press = (mood: 'high' | 'low') => {
     const m = markNow(v, mood);
     appStore.getState().add({ type: 'mark', ...m });
-    ui.showToast(`Marked a ${mood} moment at ${fmtClock(m.min)}${m.blockLabel ? `, during ${m.blockLabel}` : ''}. It will be waiting tonight.`);
+    ui.showToast(`Simulated wrist: marked a ${mood} moment at ${fmtClock(m.min)}${m.blockLabel ? `, during ${m.blockLabel}` : ''}. It will be waiting tonight.`);
   };
   return (
-    <div className="wrist-rail" role="group" aria-label="Wrist">
+    <div className="wrist-rail" role="group" aria-label="Simulated wrist device" title="Simulated wrist device. In flight these are two physical buttons on a wristband; here you press them on screen.">
       {open && free && (
         <div className="wrist-pop panel panel--tight">
           <div className="t-head">{`Free until ${fmtClock(free.endMin)}`}</div>
@@ -34,7 +34,7 @@ export function WristDock({ v }: { v: View }) {
               {`${i.label} · ${i.minutes} min`}</button>))}</div>
         </div>
       )}
-      <span className="wrist-label t-label">Wrist</span>
+      <span className="wrist-label t-label">Simulated<br />wrist</span>
       <button className="wrist-mood" onClick={() => press('high')} aria-label="High moment"><MoodGlyph mood="high" /><span>High</span></button>
       <button className="wrist-mood" onClick={() => press('low')} aria-label="Low moment"><MoodGlyph mood="low" /><span>Low</span></button>
       {free && <button className="wrist-mood wrist-free" aria-expanded={open} onClick={() => setOpen(o => !o)}>Free time</button>}

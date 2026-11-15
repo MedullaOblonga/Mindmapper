@@ -1,18 +1,19 @@
 import { Lock, Radio } from 'lucide-react';
-import { MISSION_LENGTH } from '../../config';
+import { MISSION_LENGTH, missionDay } from '../../config';
 import { useClock } from '../../state/clock';
 import { stardate } from '../../lib/stardate';
 import { delayMin, fmtDelay } from '../../lib/delay';
 
-export function TopBar({ day, shared, onOpenLog }: { day: number; shared: number; onOpenLog?: () => void }) {
+export function TopBar({ day, shared, onOpenLog, due }: { day: number; shared: number; onOpenLog?: () => void; due?: React.ReactNode }) {
   const clock = useClock(1000);
-  const pct = Math.round((day / MISSION_LENGTH) * 1000) / 10;
-  const delay = delayMin(day + clock / 1440);
+  const md = missionDay(day);
+  const pct = Math.round((md / MISSION_LENGTH) * 1000) / 10;
+  const delay = delayMin(md + clock / 1440);
   return (
     <header className="topbar">
       <div className="topbar-left">
-        <span className="t-label num" title={`Mission day ${day} of ${MISSION_LENGTH}`}>{`STARDATE ${stardate(day, clock)}`}</span>
-        <div className="mission-meter" role="img" aria-label={`Mission day ${day} of ${MISSION_LENGTH}, ${pct} percent complete`}>
+        <span className="t-label num" title={`Mission day ${md} of ${MISSION_LENGTH}. Day ${day} with this tool.`}>{`STARDATE ${stardate(md, clock)}`}</span>
+        <div className="mission-meter" role="img" aria-label={`Mission day ${md} of ${MISSION_LENGTH}, ${pct} percent complete`}>
           <i style={{ width: `${pct}%` }} />
         </div>
         <span className="t-label num topbar-delay" title="One-way light time, computed for this mission day from the orbits of Earth and Mars">
@@ -20,7 +21,8 @@ export function TopBar({ day, shared, onOpenLog }: { day: number; shared: number
         </span>
       </div>
       <div className="topbar-right">
-        <span className="private">
+        {due}
+        <span className="private" title="Stays on this device. Only you can see it.">
           <Lock size={16} aria-hidden="true" />
           <span>Stays on this device. Only you can see it.</span>
         </span>

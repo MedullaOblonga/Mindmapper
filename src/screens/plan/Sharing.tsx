@@ -5,6 +5,7 @@ import { appStore } from '../../state/store';
 import { pastMidnightRun } from '../../logic/signs';
 import { currentRule, withThreshold } from '../../logic/rules';
 import { delayMin, delayWords } from '../../lib/delay';
+import { missionDay } from '../../config';
 import { Sheet } from '../../components/ui';
 import { ShareLogList } from '../../components/shell/ShareLogDrawer';
 import type { ShareRule } from '../../types';
@@ -62,7 +63,7 @@ export function Sharing() {
     <>
       <div className="page-head"><div><h1 className="t-title">What leaves this device, and when</h1>
         <p className="t-lede">Three levels. You set all of them before launch, and you can read every word that has ever been sent.</p></div>
-        <span className="note-pill">{`Earth is about ${delayWords(delayMin(v.day))} away today, each way`}</span></div>
+        <span className="note-pill">{`Earth is about ${delayWords(delayMin(missionDay(v.day)))} away today, each way`}</span></div>
       <ol className="levels">
         {LEVELS.map(l => (
           <li key={l.n} className={`panel panel--tight level ${l.n === 3 ? 'panel--act' : ''}`}>

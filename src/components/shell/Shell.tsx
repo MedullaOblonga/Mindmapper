@@ -10,7 +10,7 @@ import { TalkSheet } from '../cards/TalkSheet';
 import { Toast } from '../ui';
 import { useView } from '../../state/useView';
 import { useUI } from '../../state/ui';
-import { BedtimeLight } from './BedtimeLight';
+import { BedtimeLight, EntryDueChip } from './BedtimeLight';
 import { WristDock } from '../Wrist';
 
 export function Footer() {
@@ -39,7 +39,7 @@ export function Shell({ children }: { children: ReactNode }) {
   return (
     <div className="app">
       <BedtimeLight v={v} />
-      <TopBar day={v.day} shared={v.shareLog.length} onOpenLog={() => ui.openShareLog(true)} />
+      <TopBar day={v.day} shared={v.shareLog.length} onOpenLog={() => ui.openShareLog(true)} due={<EntryDueChip v={v} />} />
       <StoryBar branch={v.branch} />
       <Rail dot={v.openCards.length > 0} wrist={<WristDock v={v} />} />
       <main className="page">

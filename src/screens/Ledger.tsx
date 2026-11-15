@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
-import { useView } from '../../state/useView';
-import { useUI } from '../../state/ui';
-import { appStore } from '../../state/store';
-import { ledgerDraft, ledgerNow } from '../../logic/drafts';
-import { Tag, UsualBar } from '../../components/ui';
-import type { LedgerItem } from '../../types';
+import { useView } from '../state/useView';
+import { useUI } from '../state/ui';
+import { appStore } from '../state/store';
+import { ledgerDraft, ledgerNow } from '../logic/drafts';
+import { Tag, UsualBar } from '../components/ui';
+import type { LedgerItem } from '../types';
 
 const RESERVES: { id: LedgerItem['reserve']; label: string }[] = [
   { id: 'rest', label: 'Rest' }, { id: 'connection', label: 'Connection' }, { id: 'movement', label: 'Movement' }, { id: 'calm', label: 'Calm' }];
@@ -58,8 +58,8 @@ export function Ledger() {
   const back = top ? BROUGHT_BACK[top.reserve] : null;
   const add = appStore.getState().add;
   return (
-    <>
-      <div className="page-head"><div><h1 className="t-title">This week, against your usual</h1>
+    <section className="ledger-section" aria-label="This week, against your usual" id="against-your-usual">
+      <div className="page-head"><div><h2 className="t-title section-title">This week, against your usual</h2>
         <p className="t-lede">Each item sits next to your own usual, marked with a tick. Nothing is added up into one number, and away from your usual is not a verdict.</p></div>
         <Tag data="sim" /></div>
       {(before15 || items.some(i => i.key !== 'copingDone' && i.usual === null)) && <p className="t-small">Your usual appears after day 14.</p>}
@@ -87,12 +87,12 @@ export function Ledger() {
             <button className="btn" onClick={() => ui.openTalk({ route: 'sharing', draft: ledgerDraft(v) })}>Flight surgeon</button>
           </div>
         </section>
-        <section className="panel panel--tight col" aria-label="Agreed before launch">
+        <section className="panel panel--tight col" aria-label="Lines agreed before launch">
           <div className="t-head">Agreed before launch</div>
           <p className="t-body">{`You and your flight surgeon set what is shared automatically. ${v.lineCrossed ? `One line was crossed on day ${v.lineCrossed.day}.` : 'Nothing this week has crossed it.'}`}</p>
           <a href="#/profile/sharing" className="t-head link-tap" onClick={e => { e.preventDefault(); nav('/profile/sharing'); }}>See the rules</a>
         </section>
       </div>
-    </>
+    </section>
   );
 }

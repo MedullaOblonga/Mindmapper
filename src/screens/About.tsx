@@ -13,6 +13,7 @@ const REAL: { feature: string; data: DataTag | null; evidence: EvidenceTag | nul
   { feature: 'Attention test history before day 112', data: 'nasa-replay', evidence: 'nasa-use' },
   { feature: 'Attention test design (3 minutes, 355 ms slow line)', data: 'nasa-method', evidence: 'nasa-use' },
   { feature: 'Sleep, timeline and the ledger counts', data: 'sim', evidence: null },
+  { feature: 'Wrist buttons (high and low): a simulated wearable, pressed on screen', data: 'sim', evidence: 'exp' },
   { feature: 'Every threshold that raises a card', data: null, evidence: 'placeholder' },
   { feature: 'Body trends: wearable, cuff, blood and collar CO2 values', data: 'sim', evidence: null },
   { feature: 'Body trends: the reaction speed line, set from NASA bed-rest test records', data: 'nasa-method', evidence: 'exp' },
