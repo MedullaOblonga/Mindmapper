@@ -14,7 +14,7 @@ export function Tag({ data, evidence, children }: { data?: DataTag; evidence?: E
 export const topicVar = (g: Group) => `var(${groupDef(g).colorVar})`;
 export const cssVars = (o: Record<string, string>) => o as unknown as CSSProperties;
 
-const FELT_TITLE: Record<Felt | 'none', string> = { good: 'Felt good', mixed: 'Mixed', hard: 'Felt hard', none: 'Not marked yet' };
+const FELT_TITLE: Record<Felt | 'none', string> = { good: 'Felt good', mixed: 'Mixed', hard: 'Felt difficult', none: 'Not marked yet' };
 export function Mark({ felt, group, color }: { felt: Felt | null; group?: Group; color?: string }) {
   const c = color ?? (group ? topicVar(group) : undefined);
   return <span className={`mark mark--${felt ?? 'none'}`} style={c ? cssVars({ '--c': c }) : undefined} title={FELT_TITLE[felt ?? 'none']} aria-hidden="true" />;
@@ -22,7 +22,7 @@ export function Mark({ felt, group, color }: { felt: Felt | null; group?: Group;
 export function MarkRow({ good, mixed, hard, group, label }: { good: number; mixed: number; hard: number; group?: Group; label?: string }) {
   const marks: Felt[] = [...Array(good).fill('good'), ...Array(mixed).fill('mixed'), ...Array(hard).fill('hard')];
   return (
-    <div className="mark-row" role="img" aria-label={label ?? `${good} felt good, ${mixed} mixed, ${hard} felt hard`}>
+    <div className="mark-row" role="img" aria-label={label ?? `${good} felt good, ${mixed} mixed, ${hard} felt difficult`}>
       {marks.map((f, i) => <Mark key={i} felt={f} group={group} />)}
     </div>
   );
@@ -32,7 +32,7 @@ export function MarkLegend({ group }: { group?: Group }) {
     <div className="legend">
       <span><Mark felt="good" group={group} />Felt good</span>
       <span><Mark felt="mixed" group={group} />Mixed</span>
-      <span><Mark felt="hard" group={group} />Felt hard</span>
+      <span><Mark felt="hard" group={group} />Felt difficult</span>
     </div>
   );
 }

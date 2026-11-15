@@ -8,7 +8,7 @@ export function Evidence({ ev, label }: { ev: CardEvidence; label?: string }) {
       {ev.rows.map(r => (
         <div className="evidence-row" key={r.label}>
           <div>{r.label}<br /><span className="num">{r.count}</span> {r.count === 1 ? 'mention' : 'mentions'}</div>
-          <MarkRow good={r.good} mixed={r.mixed} hard={r.hard} group={ev.group} label={`${r.label}: ${r.good} felt good, ${r.mixed} mixed, ${r.hard} felt hard`} />
+          <MarkRow good={r.good} mixed={r.mixed} hard={r.hard} group={ev.group} label={`${r.label}: ${r.good} felt good, ${r.mixed} mixed, ${r.hard} felt difficult`} />
         </div>
       ))}
     </div>

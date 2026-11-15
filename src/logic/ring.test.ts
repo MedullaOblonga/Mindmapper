@@ -8,7 +8,7 @@ it('draws arcs clockwise from midnight at the top', () => {
   expect(arcPath(480, 1320, 100, 0, 0)).toMatch(/0 1 1 /);
 });
 it('names the hardest part of the day', () => {
-  expect(dayPartSentence(params.dayPartFelt as never)).toBe('Evenings felt hard on 5 of the last 7 days. Mornings mostly did not.');
+  expect(dayPartSentence(params.dayPartFelt as never)).toBe('Evenings felt difficult on 5 of the last 7 days. Mornings mostly did not.');
   expect(dayPartSentence({ morning: ['good'], afternoon: ['good'], evening: ['hard'] })).toBe('No part of the day stands out this week.');
 });
 it('fills the gaps in the mission plan with free time', () => {

@@ -9,7 +9,7 @@ import { Mark } from './ui';
 import type { Block, Felt, MoodMark } from '../types';
 import type { View } from '../state/view';
 
-const FELTS: { f: Felt; label: string }[] = [{ f: 'good', label: 'Good' }, { f: 'mixed', label: 'Mixed' }, { f: 'hard', label: 'Hard' }];
+const FELTS: { f: Felt; label: string }[] = [{ f: 'good', label: 'Good' }, { f: 'mixed', label: 'Mixed' }, { f: 'hard', label: 'Difficult' }];
 export const inBlock = (m: MoodMark, b: Block) => m.min >= b.startMin && m.min < b.endMin;
 
 /** A guess from the wrist: only high presses → good, only low → hard, both → mixed. The astronaut's tap always wins. */

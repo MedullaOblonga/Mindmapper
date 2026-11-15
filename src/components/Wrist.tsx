@@ -6,7 +6,6 @@ import { markNow } from '../logic/mark';
 import { bedtimeOf, withFreeTime } from '../logic/ring';
 import { pickFree } from '../logic/freeTime';
 import { fmtClock } from '../lib/time';
-import { MoodGlyph } from './DayRing';
 import type { View } from '../state/view';
 
 /** The wrist device as two buttons: one for a high moment, one for a low moment. In free time it offers things to do. */
@@ -23,8 +22,22 @@ export function WristDock({ v }: { v: View }) {
     appStore.getState().add({ type: 'mark', ...m });
     ui.showToast(`Simulated wrist: marked a ${mood} moment at ${fmtClock(m.min)}${m.blockLabel ? `, during ${m.blockLabel}` : ''}. It will be waiting tonight.`);
   };
+  const [flash, setFlash] = useState<'high' | 'low' | null>(null);
+  const pressBand = (mood: 'high' | 'low') => { press(mood); setFlash(mood); setTimeout(() => setFlash(null), 1600); };
   return (
-    <div className="wrist-rail" role="group" aria-label="Simulated wrist device" title="Simulated wrist device. In flight these are two physical buttons on a wristband; here you press them on screen.">
+    <div className="wrist-rail" role="group" aria-label="Simulated wrist device" title="Simulated wristband. In flight these are two physical buttons on the band.">
+      <span className="wrist-label t-label">Simulated<br />wrist</span>
+      <div className="band" aria-hidden="false">
+        <i className="band-strap band-strap--top" aria-hidden="true" />
+        <div className="band-face">
+          <span className="band-time num">{fmtClock(now)}</span>
+          <span className="band-msg">{flash ? (flash === 'high' ? 'High marked' : 'Low marked') : 'Press a side button'}</span>
+        </div>
+        <button className="band-btn band-btn--top" onClick={() => pressBand('high')} aria-label="High moment" title="Top button: a high moment" />
+        <button className="band-btn band-btn--bottom" onClick={() => pressBand('low')} aria-label="Low moment" title="Bottom button: a low moment" />
+        <i className="band-strap band-strap--bottom" aria-hidden="true" />
+      </div>
+      <span className="band-key t-foot"><span>Top: high</span><span>Bottom: low</span></span>
       {open && free && (
         <div className="wrist-pop panel panel--tight">
           <div className="t-head">{`Free until ${fmtClock(free.endMin)}`}</div>
@@ -34,9 +47,6 @@ export function WristDock({ v }: { v: View }) {
               {`${i.label} · ${i.minutes} min`}</button>))}</div>
         </div>
       )}
-      <span className="wrist-label t-label">Simulated<br />wrist</span>
-      <button className="wrist-mood" onClick={() => press('high')} aria-label="High moment"><MoodGlyph mood="high" /><span>High</span></button>
-      <button className="wrist-mood" onClick={() => press('low')} aria-label="Low moment"><MoodGlyph mood="low" /><span>Low</span></button>
       {free && <button className="wrist-mood wrist-free" aria-expanded={open} onClick={() => setOpen(o => !o)}>Free time</button>}
     </div>
   );

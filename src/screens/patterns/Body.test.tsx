@@ -9,8 +9,10 @@ const open = (day: number) => { appStore.setState({ day }); window.location.hash
 it('shows measured things only, each with a chart', () => {
   open(112);
   expect(screen.getByRole('button', { name: 'Body trends' })).toHaveAttribute('aria-current', 'page');
-  for (const n of ['Sleep', 'Reaction speed', 'Resting heart rate', 'Body mass', 'CO2 around you, awake', 'CO2 around you, asleep'])
+  for (const n of ['Sleep', 'Reaction speed', 'Resting heart rate', 'Body mass', 'CO2 around you'])
     expect(screen.getByRole('region', { name: n })).toBeInTheDocument();
+  for (const n of ['Sleep and attention', 'Heart and blood', 'Body', 'Air around you'])
+    expect(screen.getByRole('heading', { name: n })).toBeInTheDocument();
   expect(screen.getAllByRole('img', { name: /last 28 days/ })).toHaveLength(10);
   const text = document.querySelector('main')!.textContent!;
   expect(text).not.toMatch(/\b(mood|stress|fatigue)\b/i);
@@ -27,12 +29,13 @@ it('day 112: sleep and reaction speed are worth a second look and can be sent, e
   expect((screen.getByLabelText(/Your message/) as HTMLTextAreaElement).value).toMatch(/^Body trends, day 112\. Sleep: latest/);
 });
 
-it('filters by system and switches to a table', async () => {
+it('groups the two CO2 readings in one panel and switches to a table', async () => {
   const u = userEvent.setup();
   open(101);
-  await u.click(screen.getByRole('button', { name: 'Air' }));
-  expect(screen.getAllByRole('img', { name: /last 28 days/ })).toHaveLength(2);
-  expect(screen.getByText('Outside the NASA limit on 2 of the last 2 nights')).toBeInTheDocument();
+  const air = screen.getByRole('region', { name: 'Air around you' });
+  expect(within(air).getAllByRole('img', { name: /last 28 days/ })).toHaveLength(2);
+  expect(within(air).getAllByRole('region')).toHaveLength(1);
+  expect(within(air).getByText('Outside the NASA limit on 2 of the last 2 nights')).toBeInTheDocument();
   await u.click(screen.getByRole('button', { name: 'Show as table' }));
   expect(screen.getByRole('region', { name: 'Last 7 days as a table' })).toBeInTheDocument();
   expect(screen.getByRole('columnheader', { name: 'Day 101' })).toBeInTheDocument();

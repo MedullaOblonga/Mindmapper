@@ -5,9 +5,9 @@ import App from '../../App';
 
 it('profile opens on About you, and lines can be changed and removed', async () => {
   const u = userEvent.setup();
-  window.location.hash = '#/plan/signs';
+  window.location.hash = '#/plan/sharing';
   render(<HashRouter><App /></HashRouter>);
-  expect(window.location.hash).toBe('#/profile/signs');
+  expect(window.location.hash).toBe('#/profile/sharing');
   await u.click(screen.getByRole('button', { name: 'Profile' }));
   expect(screen.getByRole('heading', { name: 'About you' })).toBeInTheDocument();
   const comms = screen.getByRole('region', { name: 'How you like to communicate' });

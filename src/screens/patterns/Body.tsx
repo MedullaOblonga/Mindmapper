@@ -3,7 +3,7 @@ import { useView } from '../../state/useView';
 import { useUI } from '../../state/ui';
 import { Tag, DATA_TAG } from '../../components/ui';
 import { TrendChart } from '../../components/TrendChart';
-import { BASIS_LABEL, NASA, SYSTEMS, bodyDraft, bodyReadings, fmt, rangeText, type Reading, type System } from '../../logic/body';
+import { BASIS_LABEL, NASA, bodyDraft, bodyReadings, fmt, rangeText, type Reading, type MeasureId } from '../../logic/body';
 import type { View } from '../../state/view';
 
 const pct = (x: number, dec = 0) => `${(x * 100).toFixed(dec)}%`;
@@ -27,7 +27,7 @@ function TrendCard({ r, v }: { r: Reading; v: View }) {
   return (
     <section className="panel panel--tight trend-card" aria-label={r.def.name}>
       <div className="trend-head">
-        <div><h2 className="t-head">{r.def.name}</h2><div className="t-small">{r.def.source}</div></div>
+        <div><h3 className="t-head">{r.def.name}</h3><div className="t-small">{r.def.source}</div></div>
         {r.last && <div className="t-stmt-sm num trend-val">{fmt(r, r.last.v)} <span className="t-small">{r.def.unit}</span></div>}
       </div>
       <TrendChart r={r} day={v.day} />
@@ -66,13 +66,41 @@ function TableView({ rs, day }: { rs: Reading[]; day: number }) {
   );
 }
 
+/** Both collar CO2 readings in one panel: awake and asleep, each against the same NASA limit. */
+function CO2Card({ day, night, v }: { day: Reading; night: Reading; v: View }) {
+  return (
+    <section className="panel panel--tight trend-card trend-card--wide" aria-label="CO2 around you">
+      <div className="trend-head">
+        <div><h3 className="t-head">CO2 around you</h3><div className="t-small">Collar-worn CO2 monitor, awake and asleep</div></div>
+        <div className="t-stmt-sm num trend-val">{`${day.last ? fmt(day, day.last.v) : '—'} / ${night.last ? fmt(night, night.last.v) : '—'}`} <span className="t-small">mmHg, awake / asleep</span></div>
+      </div>
+      <div className="co2-pair">
+        {[['Awake', day], ['Asleep', night]].map(([label, r]) => (
+          <div key={label as string} className="co2-half">
+            <div className="t-label">{label as string}</div>
+            <TrendChart r={r as Reading} day={v.day} />
+            <Status r={r as Reading} />
+          </div>
+        ))}
+      </div>
+      <p className="t-small">{day.def.plain}</p>
+      <div className="trend-tags"><Tag>{originText(day, v)}</Tag><Tag>{BASIS_LABEL[day.def.basis]}</Tag></div>
+    </section>
+  );
+}
+
+const SECTIONS: { id: string; title: string; note: string; ids: MeasureId[] }[] = [
+  { id: 'sleep-attention', title: 'Sleep and attention', note: 'Short sleep slows reactions, so these two sit together.', ids: ['sleep', 'speed'] },
+  { id: 'heart', title: 'Heart and blood', note: 'Every day from your wrist, and weekly from the arm cuff.', ids: ['rhr', 'sbp'] },
+  { id: 'body', title: 'Body', note: 'Exercise log, and the weekly body check.', ids: ['exercise', 'mass', 'glucose', 'temp'] },
+  { id: 'air', title: 'Air around you', note: 'One monitor worn at the collar by day and clipped in the sleep station at night.', ids: ['co2day', 'co2sleep'] },
+];
+
 export function Body() {
   const v = useView();
   const ui = useUI();
-  const [sys, setSys] = useState<System | 'all'>('all');
   const [table, setTable] = useState(false);
   const all = useMemo(() => bodyReadings(v.scenario, v.checks, v.day), [v.scenario, v.checks, v.day]);
-  const rs = all.filter(r => sys === 'all' || r.def.system === sys);
   const far = all.filter(r => r.status === 'sustained');
   const once = all.filter(r => r.status === 'once');
   const talk = (route: string) => ui.openTalk({ route, draft: bodyDraft(all, v.day) });
@@ -100,14 +128,29 @@ export function Body() {
       </section>
 
       <div className="trend-tools">
-        <div className="btn-row" role="group" aria-label="Body system">
-          {SYSTEMS.map(s => <button key={s.id} className="btn btn--sm" aria-pressed={sys === s.id} onClick={() => setSys(s.id)}>{s.label}</button>)}
-        </div>
+        <nav className="btn-row" aria-label="Sections">
+          {SECTIONS.map(sec => <a key={sec.id} className="btn btn--sm" href={`#${sec.id}`} onClick={e => { e.preventDefault(); document.getElementById(sec.id)?.scrollIntoView?.({ behavior: 'smooth', block: 'start' }); }}>{sec.title}</a>)}
+        </nav>
         <button className="btn btn--sm" onClick={() => setTable(t => !t)}>{table ? 'Show charts' : 'Show as table'}</button>
       </div>
       <p className="t-small">Last 28 days. The shaded band is the inside of each line and the dashed line is your own usual, taken from days 15 to 56. A ring marks a reading outside its line. Hover or tap a chart for values.</p>
 
-      {table ? <TableView rs={rs} day={v.day} /> : <div className="trend-grid">{rs.map(r => <TrendCard key={r.def.id} r={r} v={v} />)}</div>}
+      {table ? <TableView rs={all} day={v.day} /> : SECTIONS.map(sec => {
+        const rs = sec.ids.map(id => all.find(r => r.def.id === id)).filter((r): r is Reading => !!r);
+        const out = rs.filter(r => r.status === 'sustained').length;
+        return (
+          <section key={sec.id} id={sec.id} className="trend-section" aria-label={sec.title}>
+            <div className="trend-section-head">
+              <h2 className="t-head trend-section-title">{sec.title}</h2>
+              <span className="t-small">{out ? `${out} worth a second look` : 'All inside their lines'}</span>
+            </div>
+            <p className="t-small">{sec.note}</p>
+            <div className="trend-grid">
+              {sec.id === 'air' && rs.length === 2 ? <CO2Card day={rs[0]} night={rs[1]} v={v} /> : rs.map(r => <TrendCard key={r.def.id} r={r} v={v} />)}
+            </div>
+          </section>
+        );
+      })}
 
       <section className="panel" aria-label="Where each line comes from">
         <h2 className="t-head">Where each line comes from</h2>

@@ -18,7 +18,7 @@ it('day 105: one ledger card, two items', () => {
 it('day 112: family, own sign, check come first, in that order', () => {
   const c = candidateCards(A, 16, ctx());
   expect(c.slice(0, 3).map(x => [x.kind, x.subject])).toEqual([['topic-shift', 'home'], ['own-sign', 'midnight'], ['check', 'am']]);
-  expect(c[0].statement).toBe('Family has come up nearly four times as often as in your first two weeks. More of it felt hard.');
+  expect(c[0].statement).toBe('Family has come up nearly four times as often as in your first two weeks. More of it felt difficult.');
   expect(c[0].evidence).toMatchObject({ type: 'marks', rows: [{ label: 'Days 57 to 70', count: 4, good: 4 }, { label: 'Days 99 to 112', count: 15, hard: 9 }] });
   expect(c[0].actions.map(a => a.label)).toEqual(['Write about it', 'Book a call window', 'Talk to someone']);
   expect(c[1].statement).toContain('It showed up on days 109, 110 and 111.');

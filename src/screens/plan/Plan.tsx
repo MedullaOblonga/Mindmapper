@@ -1,14 +1,12 @@
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Tabs } from '../../components/ui';
 import { AboutYou } from './AboutYou';
-import { Signs } from './Signs';
 import { Sharing } from './Sharing';
 import { Reminders } from './Reminders';
 import { Helped } from './Helped';
 
 export const PROFILE_TABS = [
   { id: 'about', label: 'About you' },
-  { id: 'signs', label: 'Early signs' },
   { id: 'sharing', label: 'Sharing' },
   { hidden: true, id: 'reminders', label: 'Wrist reminders' },
   { hidden: true, id: 'helped', label: 'What has helped' },
@@ -22,7 +20,6 @@ export function Profile() {
     <>
       <Tabs label="Profile" tabs={PROFILE_TABS.filter(t => !('hidden' in t))} current={tab} onPick={id => nav(`/profile/${id}`)} />
       {tab === 'about' && <AboutYou />}
-      {tab === 'signs' && <Signs />}
       {tab === 'reminders' && <Reminders />}
       {tab === 'sharing' && <Sharing />}
       {tab === 'helped' && <Helped />}

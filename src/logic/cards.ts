@@ -54,8 +54,8 @@ function topicShift(_s: Scenario, week: number, ctx: CardContext, g: Group): Car
   const words = first.count > 0 ? ratioWords(last.count / first.count) : null;
   const topic = groupShort(g);
   const statement = words
-    ? `${topic} has come up ${words} as often as in your first two weeks. More of it felt hard.`
-    : `${topic} has come up more often than in your first two weeks. More of it felt hard.`;
+    ? `${topic} has come up ${words} as often as in your first two weeks. More of it felt difficult.`
+    : `${topic} has come up more often than in your first two weeks. More of it felt difficult.`;
   const actions: CardAction[] =
     g === 'home' ? [write(topic), { id: 'call-window', kind: 'call-window', label: 'Book a call window' }, talk('home')]
     : g === 'work' ? [write(topic), talk('work', `Talk to ${WORK_MATE}`), coping('work') ?? talk('work')]

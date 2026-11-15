@@ -48,7 +48,7 @@ export function dayPartSentence(grid: Grid): string {
   const most = [...parts].sort((a, b) => b.hard - a.hard)[0];
   if (most.hard < 4) return 'No part of the day stands out this week.';
   const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-  let out = `${cap(most.p)}s felt hard on ${most.hard} of the last ${most.n} days.`;
+  let out = `${cap(most.p)}s felt difficult on ${most.hard} of the last ${most.n} days.`;
   const least = parts.filter(x => x.p !== most.p).sort((a, b) => a.hard - b.hard)[0];
   if (least.hard <= 1) out += ` ${cap(least.p)}s mostly did not.`;
   return out;

@@ -6,7 +6,7 @@ export const USUAL_RULE = 'Prototype rule: your usual is taken from days 15 to 5
 
 export const WHY: Record<string, WhyRecord> = {
   'why.topic-shift': { title: 'Why this card?', compared: 'How much of your diary was about {topic} each week, and how those entries felt to you.',
-    rule: 'Shown only when a topic takes a much bigger share than your usual for three weeks running and more of it felt hard. A bigger share alone is not shown.',
+    rule: 'Shown only when a topic takes a much bigger share than your usual for three weeks running and more of it felt difficult. A bigger share alone is not shown.',
     tags: ['ai-sample', 'placeholder'], source: 'Stuster 2010 (NASA journals study, NASA TM-2010-216130); placeholder thresholds' },
   'why.own-sign': { title: 'Why this card?', compared: 'A sign you wrote before launch, checked against your wearable.',
     rule: 'The tool adds no signs of its own.', tags: ['sim', 'analog'], source: 'Behavioral Health evidence report 2025, p.60 (self-reflection training)' },

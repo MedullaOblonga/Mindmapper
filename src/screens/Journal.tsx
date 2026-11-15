@@ -8,12 +8,12 @@ import { GROUPS, groupDef, groupShort } from '../data/topics';
 import { params } from '../data/params';
 import { Mark, MarkLegend, Tag, cssVars, topicVar } from '../components/ui';
 import { canListen, listen } from '../lib/speech';
-import type { Entry, Felt, Group, MoodMark, Segment } from '../types';
+import type { Block, Entry, Felt, Group, MoodMark, Segment } from '../types';
 import { DayBuilder } from '../components/DayBuilder';
-import { MoodGlyph } from '../components/DayRing';
+import { MoodGlyph, BLOCK_VAR } from '../components/DayRing';
 
 interface JournalState { prefill?: string; focus?: boolean; filter?: { group: Group; ids: string[]; from: number; to: number; topic: string } }
-const FELTS: { f: Felt; label: string }[] = [{ f: 'good', label: 'Good' }, { f: 'mixed', label: 'Mixed' }, { f: 'hard', label: 'Hard' }];
+const FELTS: { f: Felt; label: string }[] = [{ f: 'good', label: 'Good' }, { f: 'mixed', label: 'Mixed' }, { f: 'hard', label: 'Difficult' }];
 
 function TopicChip({ seg }: { seg: Segment }) {
   const [open, setOpen] = useState(false);
@@ -68,7 +68,7 @@ function TaggedEntry({ entry }: { entry: Entry }) {
 }
 
 export interface ComposerApi { insert: (s: string) => void }
-function Composer({ day, marks, text, setText, focus, apiRef }: { day: number; marks: MoodMark[]; text: string; setText: (t: string | ((p: string) => string)) => void; focus: boolean; apiRef: React.MutableRefObject<ComposerApi | null> }) {
+function Composer({ day, marks, blocks, text, setText, focus, apiRef }: { day: number; marks: MoodMark[]; blocks: Block[]; text: string; setText: (t: string | ((p: string) => string)) => void; focus: boolean; apiRef: React.MutableRefObject<ComposerApi | null> }) {
   const [listening, setListening] = useState(false);
   const ta = useRef<HTMLTextAreaElement>(null);
   const stopRef = useRef<(() => void) | null>(null);
@@ -97,8 +97,18 @@ function Composer({ day, marks, text, setText, focus, apiRef }: { day: number; m
   return (
     <section className="panel" aria-label="Write">
       <label className="t-label" htmlFor="composer">{`Day ${day} · private diary`}</label>
+      {blocks.length > 0 && (
+        <div className="chip-row" role="group" aria-label="Insert an activity">
+          <span className="t-label chip-row-label">Activities</span>
+          {blocks.map(b => (
+            <button key={b.id} className="btn btn--sm" onClick={() => insert(`During ${b.label.toLowerCase()} (${fmtClock(b.startMin)} to ${fmtClock(b.endMin)}): `)}>
+              <i className="swatch" style={{ background: BLOCK_VAR[b.kind] }} />{b.label}</button>
+          ))}
+        </div>
+      )}
       {marks.length > 0 && (
-        <div className="btn-row">
+        <div className="chip-row" role="group" aria-label="Insert a wrist press">
+          <span className="t-label chip-row-label">Presses</span>
           {marks.map((m, i) => (
             <button key={i} className="btn btn--sm" onClick={() => insert(`At ${fmtClock(m.min)}${m.blockLabel ? `, during ${m.blockLabel}` : ''} (${m.mood}): `)}>
               <MoodGlyph mood={m.mood} />{`${fmtClock(m.min)}${m.blockLabel ? ` · ${m.blockLabel}` : ''}`}</button>
@@ -175,7 +185,7 @@ export function Journal() {
       <DayBuilder v={v} />
       <div className="cols">
         <div className="col col--wide">
-          <Composer key={`${v.day}-${loc.key}`} day={v.day} marks={v.marksToday} text={text} setText={setText} focus={!!st.focus || !!st.prefill} apiRef={api} />
+          <Composer key={`${v.day}-${loc.key}`} day={v.day} marks={v.marksToday} blocks={v.blocksToday.filter(b => b.kind !== 'sleep')} text={text} setText={setText} focus={!!st.focus || !!st.prefill} apiRef={api} />
           {latest && <TaggedEntry entry={latest} />}
         </div>
         <div className="col col--narrow">

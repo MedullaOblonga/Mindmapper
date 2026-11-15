@@ -23,9 +23,9 @@ it('save is disabled when blank, tags the entry, and corrections stick', async (
   expect(within(panel).getByText(/Sam sent a lovely letter from home/)).toBeInTheDocument();
   expect(weekCounts(buildView(112, appStore.getState().events, null).entries, 16).home).toBe(before + 1);
   expect(within(panel).getByText('Guessed. Tap to correct.')).toBeInTheDocument();
-  const hard = within(panel).getByRole('button', { name: 'Hard' });
+  const hard = within(panel).getByRole('button', { name: 'Difficult' });
   await u.click(hard);
-  expect(within(panel).getByRole('button', { name: 'Hard' })).toHaveAttribute('aria-pressed', 'true');
+  expect(within(panel).getByRole('button', { name: 'Difficult' })).toHaveAttribute('aria-pressed', 'true');
   expect(within(panel).queryByText('Guessed. Tap to correct.')).toBeNull();
 });
 
@@ -52,9 +52,17 @@ it('the day card flips to the next part, and presses fill in how it felt', async
   const region = screen.getByRole('region', { name: 'Rebuild your day' });
   const card = within(region).getByRole('article');
   expect(card).toHaveAccessibleName(/^Suit prep, 08:00 to 13:00\. Part 3 of 10/);
-  expect(within(card).getByRole('button', { name: 'Hard' })).toHaveAttribute('aria-pressed', 'true');
+  expect(within(card).getByRole('button', { name: 'Difficult' })).toHaveAttribute('aria-pressed', 'true');
   expect(within(card).getByText('From your wrist presses. Tap to correct.')).toBeInTheDocument();
   expect(within(region).queryByRole('button', { name: 'Write about this' })).toBeNull();
   await u.click(card);
   expect(within(region).getByRole('article')).toHaveAccessibleName(/^Lunch, 13:00 to 14:00\. Part 4 of 10/);
+});
+
+it('activity tabs above the entry box insert the activity and its time', async () => {
+  const u = userEvent.setup();
+  open();
+  const acts = screen.getByRole('group', { name: 'Insert an activity' });
+  await u.click(within(acts).getByRole('button', { name: 'Suit prep' }));
+  expect((screen.getByLabelText(/private diary/i) as HTMLTextAreaElement).value).toBe('During suit prep (08:00 to 13:00): ');
 });

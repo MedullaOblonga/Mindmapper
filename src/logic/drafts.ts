@@ -24,7 +24,7 @@ export function draftFor(card: Card, v: View): string {
     case 'topic-shift': {
       const g = card.subject as Group, w = card.week;
       const now = shareWords(pctOf(v, g, w)), then = shareWords(pctOf(v, g, Math.max(1, w - 7)));
-      return `Over the last two weeks, ${lower(groupShort(g))} has taken up ${now} of my diary, up from ${then}, and more of it has felt hard.${g === 'home' ? missedLine(v) : ''} I would like to talk it through.`;
+      return `Over the last two weeks, ${lower(groupShort(g))} has taken up ${now} of my diary, up from ${then}, and more of it has felt difficult.${g === 'home' ? missedLine(v) : ''} I would like to talk it through.`;
     }
     case 'own-sign':
       return card.subject === 'midnight' && card.statement.match(/days ([\d, and]+)\./)
