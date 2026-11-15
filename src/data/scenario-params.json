@@ -12,15 +12,8 @@
   "weeklyReviewOn": "last day of each 7-day week (day 7, 14, ... 112)",
   "checkEveryDays": 4,
   "safetyCriticalBlocks": [
-   {
-    "day": 113,
-    "label": "EVA prep review",
-    "startMin": 840,
-    "endMin": 930
-   }
-  ],
-  "earthDelayMinutesOneWay": 18,
-  "earthDelayNote": "Simulated value for the demo day. NASA cites up to 20-22 minutes one way for Mars."
+   {"day": 113, "label": "EVA prep review", "startMin": 840, "endMin": 930}
+  ]
  },
  "people": {
   "crew": [

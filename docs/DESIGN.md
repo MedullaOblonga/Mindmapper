@@ -867,3 +867,19 @@ Project page fields: list every NASA resource in §9.3 under "NASA Data"; disclo
 2. **Changing a pre-launch line is logged to the flight surgeon** (§7.9). This is my proposal so a safety line cannot vanish silently. Say if you want it private instead.
 3. **The demo astronaut's diary mix is not NASA's.** In the real ISS journals, contact with home and ground is about 18% of what astronauts wrote about and adjusting is about 13%; the simulated astronaut starts at 10% and 3%. The story still works, and the real mix is shown in the Why drawer. Re-basing the story on the real mix is possible but changes the card wording ("nearly four times" becomes "about twice") and every pinned number.
 4. **Team name and members** for the video or slides.
+
+---
+
+## Addendum: Body trends, reaction speed test on Today, delay to Earth
+
+Added after the first build. Where this differs from the sections above, this addendum is the newer decision.
+
+**Patterns → Body trends — `#/patterns/body`.** A third Patterns tab. It reverses the earlier choice to avoid line charts, for measured values only: a trend is how these are read. The rules of the design system still hold. Colour never carries status: the line is `--t-body`, the inside of a line is a `--raised` band, a reading outside is a ring in `--ink`, the person's usual is a dashed `--ink-faint` line. No measure rated by the astronaut appears (no mood, stress or fatigue dials), and cabin CO2 is replaced by CO2 at the collar.
+
+Each measure declares its line, how many recent readings must be outside (`need` of `of`), and where the line comes from (`basis`): `nasa-data`, `nasa-standard`, `own` or `clinical`. The table lives in `src/logic/body.ts` and is printed on the screen under "Where each line comes from". One reading outside is named and left alone. A sustained one is listed under "Worth a second look" with the Talk actions.
+
+The reaction speed line (8% below the person's own usual, two tests in a row) is derived by `analysis/winscat_cutoffs.py` from NASA's WinSCAT bed-rest records. It is set so that 5% of single tests from healthy volunteers cross it. This is a false-alert rate only.
+
+**Today.** The "Scheduled check" panel is now "Reaction speed test" and is always shown. Every fourth day it offers the scheduled check (dials plus test) and the test alone; on other days the test alone (`#/check?slot=am&test=1`).
+
+**Top bar.** After the mission meter: "DELAY TO EARTH {2 MIN 35 S} ONE WAY", from `src/lib/delay.ts`. The fixed `earthDelayMinutesOneWay` parameter is removed, and the Talk sheet and Sharing screen use the same computed value.

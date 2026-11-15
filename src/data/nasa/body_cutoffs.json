@@ -1,0 +1,39 @@
+{
+  "source": "NASA Life Sciences Portal, experiment MR085G, WinSCAT, Flight Analogs bed-rest Campaigns 1 and 3",
+  "method": "Running-memory response speed (1000 / CPTRT). Own usual = mean of the last three sessions before bed rest. Later sessions (during and after bed rest) are expressed as percent change from own usual. Intervals are 95% percentile bootstrap intervals, resampling whole people.",
+  "people": 28,
+  "peopleInFiles": 29,
+  "laterSessions": 141,
+  "medianPctChange": 0.0286,
+  "targetSingleRate": 0.05,
+  "speedDropCut": 0.0808,
+  "speedDropCutCI": [
+    0.0501,
+    0.0979
+  ],
+  "atCut": {
+    "single": 0.0496,
+    "singleCI": [
+      0.0134,
+      0.0963
+    ],
+    "twoInRow": 0.0088,
+    "twoInRowCI": [
+      0.0,
+      0.0286
+    ]
+  },
+  "at20pct": {
+    "single": 0.0,
+    "singleCI": [
+      0.0,
+      0.0
+    ]
+  },
+  "ares": {
+    "source": "LSDA Bed Rest Standard Measures, ARES simple reaction time, one volunteer (DOI 10.83263/7081-d617)",
+    "sessions": 143,
+    "single": 0.0559,
+    "twoInRow": 0.0
+  }
+}

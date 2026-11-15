@@ -4,7 +4,7 @@ import { useUI } from '../../state/ui';
 import { appStore } from '../../state/store';
 import { pastMidnightRun } from '../../logic/signs';
 import { currentRule, withThreshold } from '../../logic/rules';
-import { earthDelayMin } from '../../lib/stardate';
+import { delayMin, delayWords } from '../../lib/delay';
 import { Sheet } from '../../components/ui';
 import { ShareLogList } from '../../components/shell/ShareLogDrawer';
 import type { ShareRule } from '../../types';
@@ -57,12 +57,12 @@ export function Sharing() {
   const [editing, setEditing] = useState<ShareRule | null>(null);
   const run = pastMidnightRun(v.scenario.days, v.day, v.ignoreNights).run;
   const quiet = daysWithoutEntry(v);
-  const delay = Math.round(earthDelayMin(v.day));
+
   return (
     <>
       <div className="page-head"><div><h1 className="t-title">What leaves this device, and when</h1>
         <p className="t-lede">Three levels. You set all of them before launch, and you can read every word that has ever been sent.</p></div>
-        <span className="note-pill">{`Earth is about ${delay} minutes away today, each way`}</span></div>
+        <span className="note-pill">{`Earth is about ${delayWords(delayMin(v.day))} away today, each way`}</span></div>
       <ol className="levels">
         {LEVELS.map(l => (
           <li key={l.n} className={`panel panel--tight level ${l.n === 3 ? 'panel--act' : ''}`}>

@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { Sheet } from '../ui';
 import { useUI, type TalkRequest } from '../../state/ui';
-import { appStore } from '../../state/store';
+import { appStore, useApp } from '../../state/store';
+import { delayMin, delayWords } from '../../lib/delay';
 import { params } from '../../data/params';
 import { resolveCard } from './useCardActions';
-import { useApp } from '../../state/store';
-import { earthDelayMin } from '../../lib/stardate';
 
 interface Recipient { id: string; label: string; to: string; earth: boolean }
 const name = (id: string) => [...params.people.crew, ...params.people.home].find(p => p.id === id)?.name ?? id;
@@ -59,7 +58,7 @@ export function TalkSheet({ req }: { req: TalkRequest }) {
           {attach && <ul className="attach-list">{req.attach.map(s => <li key={s.id} className="t-small">{`Day ${s.day}: ${s.text}`}</li>)}</ul>}
         </div>
       )}
-      {r.earth && <p className="t-small">{`Reaches Earth in about ${Math.round(earthDelayMin(day))} minutes. A reply takes at least as long again.`}</p>}
+      {r.earth && <p className="t-small">{`Reaches Earth in about ${delayWords(delayMin(day))}. A reply takes at least as long again.`}</p>}
       <div className="btn-row">
         <button className="btn btn--primary" onClick={send} disabled={!text.trim()}>Send</button>
         <button className="btn" onClick={() => { close(); ui.showToast('Saved as a draft. Nothing was sent.'); }}>Save as draft</button>

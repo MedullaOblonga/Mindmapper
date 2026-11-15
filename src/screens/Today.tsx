@@ -7,6 +7,7 @@ import { countWord } from '../logic/words';
 import { fmtClock } from '../lib/time';
 import { Tag } from '../components/ui';
 import { MoodGlyph } from '../components/DayRing';
+import { bodySeries, measure, readMeasure } from '../logic/body';
 import type { View } from '../state/view';
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -102,16 +103,30 @@ function Tonight({ v }: { v: View }) {
 
 function CheckPanel({ v }: { v: View }) {
   const nav = useNavigate();
-  if (v.day % 4 !== 0) return null;
   const am = v.checks.some(c => c.day === v.day && c.slot === 'am');
   const pm = v.checks.some(c => c.day === v.day && c.slot === 'pm');
+  const scheduled = v.day % 4 === 0;
+  const next = am ? 'pm' : 'am';
+  const r = readMeasure(measure('speed'), bodySeries(v.scenario, v.checks, v.day).speed, v.day);
+  const last = [...v.checks].reverse().find(c => c.counts);
   return (
-    <section className="panel panel--tight" aria-label="Scheduled check">
-      <div className="panel-title-row"><div className="t-head">Scheduled check</div><Tag>Modelled on NASA’s Reaction Self-Test</Tag></div>
-      <div className="t-body">Every fourth day. Two dials and a 3-minute attention test, about 4 minutes.</div>
-      {am && pm ? <p className="t-small">This evening’s check is recorded.</p>
-        : <div className="btn-row"><button className="btn" onClick={() => nav(`/check?slot=${am ? 'pm' : 'am'}`)}>{am ? 'Start this evening’s check' : 'Start this morning’s check'}</button></div>}
-      {am && !pm && <p className="t-small">This morning’s check is recorded.</p>}
+    <section className="panel panel--tight" aria-label="Reaction speed test">
+      <div className="panel-title-row"><div className="t-head">Reaction speed test</div><Tag>Modelled on NASA’s Reaction Self-Test</Tag></div>
+      <div className="t-body">A 3-minute test of attention. It is measured, not rated by you. Scheduled every fourth day, and yours to take whenever you want one.</div>
+      {last && r.last && (
+        <p className="t-small num">{`Last test, day ${last.day} ${last.slot === 'am' ? 'morning' : 'evening'}: ${r.last.v.toFixed(2)} responses per second.${r.usual !== null ? ` Your usual is ${r.usual.toFixed(2)}.` : ''} ${r.statusText}.`}</p>
+      )}
+      {scheduled && <div className="t-head">Scheduled check today</div>}
+      {scheduled && <div className="t-small">Two dials and the test, about 4 minutes.</div>}
+      {am && pm ? <p className="t-small">{scheduled ? 'This evening’s check is recorded.' : 'Both of today’s tests are recorded.'}</p>
+        : (
+          <div className="btn-row">
+            {scheduled && <button className="btn" onClick={() => nav(`/check?slot=${next}`)}>{am ? 'Start this evening’s check' : 'Start this morning’s check'}</button>}
+            <button className="btn" onClick={() => nav(`/check?slot=${next}&test=1`)}>{scheduled ? 'Test only' : 'Take the test now'}</button>
+          </div>
+        )}
+      {am && !pm && <p className="t-small">{scheduled ? 'This morning’s check is recorded.' : 'One test is recorded today.'}</p>}
+      <a href="#/patterns/body" className="t-head link-tap" onClick={e => { e.preventDefault(); nav('/patterns/body'); }}>See it in Body trends</a>
     </section>
   );
 }

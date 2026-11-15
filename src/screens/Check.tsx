@@ -103,6 +103,8 @@ function Recorded({ s, earlier, onDone }: { s: CheckSession; earlier: CheckSessi
           <thead><tr><th className="t-label" scope="col"> </th><th className="t-label" scope="col">This test</th><th className="t-label" scope="col">Your usual</th></tr></thead>
           <tbody>
             <tr><td className="t-body">Responses</td><td>{s.trials}</td><td className="t-small">—</td></tr>
+            <tr><td className="t-body">Responses per second</td><td>{s.trials ? s.speed.toFixed(2) : '—'}</td>
+              <td className="t-small">{u ? (1000 / u.rt).toFixed(2) : '—'}</td></tr>
             <tr><td className="t-body">Average response time</td><td>{s.trials ? `${Math.round(s.meanRtMs)} ms` : '—'}</td>
               <td className="t-small">{u ? `${Math.round(u.rt - u.wobble)} to ${Math.round(u.rt + u.wobble)} ms` : '—'}</td></tr>
             <tr><td className="t-body">Slow responses (355 ms or more)</td><td>{s.lapses}</td><td className="t-small">{u ? `${Math.round(u.lapses)}` : '—'}</td></tr>
@@ -122,28 +124,29 @@ export function Check() {
   const [q] = useSearchParams();
   const storyHidden = useApp(s => s.storyHidden);
   const slot: 'am' | 'pm' = q.get('slot') === 'pm' ? 'pm' : 'am';
+  const only = q.get('test') === '1';   // reaction speed test by itself, from Today
   const dials = dialsFor(slot, v.scenario.profile.stressAnchors);
   const [values, setValues] = useState<Record<string, number | null>>({});
-  const [step, setStep] = useState<'dials' | 'intro' | 'test' | 'done' | 'interrupted'>('dials');
+  const [step, setStep] = useState<'dials' | 'intro' | 'test' | 'done' | 'interrupted'>(only ? 'intro' : 'dials');
   const [demo, setDemo] = useState(!storyHidden);
   const [session, setSession] = useState<CheckSession | null>(null);
   const exists = v.checks.some(c => c.day === v.day && c.slot === slot);
   const earlier = v.checks.filter(c => c.counts && (c.day < v.day || (c.day === v.day && c.slot === 'am' && slot === 'pm')));
   const durationS = demo ? 30 : 180;
   const finish = (trials: Trial[]) => {
-    const s = { ...scoreTrials(trials, durationS, v.day, slot), dials: values as Record<string, number> };
+    const s = { ...scoreTrials(trials, durationS, v.day, slot), ...(only ? {} : { dials: values as Record<string, number> }) };
     appStore.getState().add({ type: 'check', session: s });
     setSession(s); setStep('done');
   };
   return (
     <div className="check">
       <header className="check-top">
-        <span className="t-label">{`Scheduled check · day ${v.day} · ${slot === 'am' ? 'morning' : 'evening'}`}</span>
+        <span className="t-label">{`${only ? 'Reaction speed test' : 'Scheduled check'} · day ${v.day} · ${slot === 'am' ? 'morning' : 'evening'}`}</span>
         <a href="#/today" className="t-head link-tap" onClick={e => { e.preventDefault(); nav('/today'); }}>Leave</a>
       </header>
       <main className="check-main">
         {exists && step !== 'done' ? (
-          <div className="check-step"><h1 className="t-title">{`This ${slot === 'am' ? 'morning' : 'evening'}’s check is recorded.`}</h1>
+          <div className="check-step"><h1 className="t-title">{`This ${slot === 'am' ? 'morning' : 'evening'}’s ${only ? 'test' : 'check'} is recorded.`}</h1>
             <div className="btn-row"><button className="btn btn--primary" onClick={() => nav('/today')}>Done</button></div></div>
         ) : step === 'dials' ? (
           <div className="check-step">
@@ -153,7 +156,7 @@ export function Check() {
           </div>
         ) : step === 'intro' ? (
           <div className="check-step">
-            <h1 className="t-title">Step 2 · Attention test</h1>
+            <h1 className="t-title">{only ? 'Reaction speed test' : 'Step 2 · Attention test'}</h1>
             <p className="t-stmt-sm">A 3-minute attention test, modelled on the one ISS crews take. A counter will appear in the box at random moments. Tap the box or press Space as fast as you can each time.</p>
             <div className="toggle-row"><Toggle on={demo} onChange={setDemo} label="Demo length (30 seconds)" /><span className="t-body">Demo length (30 seconds)</span></div>
             <div><Tag>Modelled on PVT-B. Not NASA’s software.</Tag></div>

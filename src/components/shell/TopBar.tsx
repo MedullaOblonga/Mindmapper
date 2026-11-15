@@ -1,12 +1,13 @@
 import { Lock, Radio } from 'lucide-react';
 import { MISSION_LENGTH } from '../../config';
 import { useClock } from '../../state/clock';
-import { stardate, earthDelayMin, fmtDelay } from '../../lib/stardate';
+import { stardate } from '../../lib/stardate';
+import { delayMin, fmtDelay } from '../../lib/delay';
 
 export function TopBar({ day, shared, onOpenLog }: { day: number; shared: number; onOpenLog?: () => void }) {
   const clock = useClock(1000);
   const pct = Math.round((day / MISSION_LENGTH) * 1000) / 10;
-  const delay = earthDelayMin(day, clock);
+  const delay = delayMin(day + clock / 1440);
   return (
     <header className="topbar">
       <div className="topbar-left">
@@ -14,8 +15,8 @@ export function TopBar({ day, shared, onOpenLog }: { day: number; shared: number
         <div className="mission-meter" role="img" aria-label={`Mission day ${day} of ${MISSION_LENGTH}, ${pct} percent complete`}>
           <i style={{ width: `${pct}%` }} />
         </div>
-        <span className="t-small num delay" title="Simulated one-way signal time to Earth">
-          <Radio size={14} aria-hidden="true" />{`Earth delay ${fmtDelay(delay)}`}<span className="sr-only"> one way</span>
+        <span className="t-label num topbar-delay" title="One-way light time, computed for this mission day from the orbits of Earth and Mars">
+          <Radio size={14} aria-hidden="true" /><span className="topbar-wide">Delay to </span>{`Earth ${fmtDelay(delay)}`}<span className="topbar-wide"> one way</span>
         </span>
       </div>
       <div className="topbar-right">

@@ -14,17 +14,25 @@ const REAL: { feature: string; data: DataTag | null; evidence: EvidenceTag | nul
   { feature: 'Attention test design (3 minutes, 355 ms slow line)', data: 'nasa-method', evidence: 'nasa-use' },
   { feature: 'Sleep, timeline and the ledger counts', data: 'sim', evidence: null },
   { feature: 'Every threshold that raises a card', data: null, evidence: 'placeholder' },
+  { feature: 'Body trends: wearable, cuff, blood and collar CO2 values', data: 'sim', evidence: null },
+  { feature: 'Body trends: the reaction speed line, set from NASA bed-rest test records', data: 'nasa-method', evidence: 'exp' },
+  { feature: 'Delay to Earth in the header, computed from the orbits of Earth and Mars', data: 'sim', evidence: null },
   { feature: 'Your early signs and steps', data: 'sim', evidence: 'analog' },
   { feature: 'Coping tasks and their evidence lines', data: null, evidence: 'earth' },
 ];
 
 const RESOURCES: { name: string; use: string; href?: string }[] = [
   { name: 'ISS astronaut journals study (Stuster 2010; NASA TM-2010-216130; Life Sciences Data Archive H01)', use: 'The 24 topic categories, word for word, and the tone of each topic in the “Why is there no mood score?” explainer.', href: 'https://doi.org/10.83263/w7m8-qf96' },
-  { name: 'ISS Reaction Self-Test (Jones et al., Sleep 2022) and PVT-B (Basner et al. 2011)', use: 'The every-fourth-day check: dials plus a 3-minute attention test with a 355 ms slow-response line.' },
+  { name: 'ISS Reaction Self-Test (Jones et al., Sleep 2022) and PVT-B (Basner et al. 2011)', use: 'The every-fourth-day check: dials plus a 3-minute attention test with a 355 ms slow-response line. Also the 6-hour sleep line in Body trends: on the ISS, nights under 6 hours went with slower response speed.' },
   { name: 'Bed Rest Standard Measures: Performance Testing (L01)', use: 'The demo astronaut’s test history before day 112 is one volunteer’s real sessions, in order. The rule for a slow test was chosen against all three volunteers.', href: 'https://doi.org/10.83263/7081-d617' },
   { name: 'HRP evidence report: Behavioral Health (2025)', use: 'Crews must monitor themselves and act without Earth (p.55); under-reporting (p.28); per-person usuals (p.59, p.120); matching support to stressor (p.61); coping evidence (p.87–93).', href: 'https://humanresearchroadmap.nasa.gov/' },
   { name: 'HRP evidence report: Sleep (2016)', use: 'Short sleep and performance; boredom on the transit (p.57).', href: 'https://humanresearchroadmap.nasa.gov/' },
   { name: 'HRP research plan, June 2026, gap BH-201', use: 'The gap this tool answers: indicators and thresholds for semi-autonomous monitoring.', href: 'https://humanresearchroadmap.nasa.gov/' },
+  { name: 'WinSCAT in head-down bed rest (NASA Life Sciences Portal, experiment MR085G, Flight Analogs Campaigns 1 and 3)', use: 'The reaction speed line in Body trends: 8% or more below your own usual on two tests in a row. Set from 28 healthy volunteers and 141 tests; the script is analysis/winscat_cutoffs.py.', href: 'https://nlsp.nasa.gov/' },
+  { name: 'NASA Personal CO2 Monitor (ISS technology demonstration; ICES-2018-309)', use: 'The collar-worn CO2 readings in Body trends are modelled on it. The values are simulated.' },
+  { name: 'NASA-STD-3001 Volume 2 and the OCHMO technical brief on carbon dioxide; Law et al. 2014', use: 'The 3.0 mmHg line for CO2, set from ISS crew headache reports.', href: 'https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-004-carbon-dioxide.pdf' },
+  { name: 'NASA Nutritional Status Assessment on the ISS (SMO 016E)', use: 'The body mass line: crews lose 2 to 5% of body mass early in flight, so more than 5% is outside that range.' },
+  { name: 'NASA planetary fact sheets (NSSDCA)', use: 'Orbit sizes and periods of Earth and Mars, for the delay to Earth in the header.', href: 'https://nssdc.gsfc.nasa.gov/planetary/factsheet/' },
   { name: 'Acoustic noise chamber data (L04)', use: 'Background for the “Noisy nights” item.', href: 'https://doi.org/10.83263/z56c-ea13' },
 ];
 
@@ -33,6 +41,7 @@ const NOT_CLAIMED = [
   'It does not prevent anything. It helps you notice a change early and choose what to do.',
   'It has not been tested on astronauts or in an analog mission.',
   'Its thresholds are placeholders. NASA lists validated thresholds as an open research gap.',
+  'The Body trends lines taken from NASA records show how often a line fires in well people. They do not show that it catches a real change.',
   'It is not NASA software, and the attention test is modelled on PVT-B, not the licensed test.',
   'A handful of “what followed” records cannot show that a coping task works.',
 ];

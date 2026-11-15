@@ -9,7 +9,7 @@ it('renders the three navigation regions', () => {
   expect(screen.getByText(/Stays on this device/)).toBeInTheDocument();
   expect(screen.getByText(/^STARDATE 473\d\d\.\d$/)).toBeInTheDocument();
   expect(screen.getByRole('img', { name: /Mission day 112 of 520/ })).toBeInTheDocument();
-  expect(screen.getByText(/Earth delay 1[78] min \d\d s/)).toBeInTheDocument();
+  expect(screen.getByTitle(/One-way light time/)).toHaveTextContent(/Delay to Earth 2 min \d\d s one way/);
 });
 
 it('the bedtime light shows at the bunk near bedtime with no entry, and goes on writing', async () => {
