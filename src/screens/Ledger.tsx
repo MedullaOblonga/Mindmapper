@@ -63,7 +63,7 @@ export function Ledger() {
       <div className="page-head"><div><h2 className="t-title section-title">This week, against your usual</h2>
         <p className="t-lede">Each item sits next to your own usual, marked with a tick. Nothing is added up into one number, and away from your usual is not a verdict.</p></div>
         <Tag data="sim" /></div>
-      {(before15 || items.some(i => i.key !== 'copingDone' && i.usual === null)) && <p className="t-small">Your usual appears after day 138.</p>}
+      {(before15 || items.some(i => i.key !== 'copingDone' && i.usual === null)) && <p className="t-small">{`Your usual appears after day ${D(14)}.`}</p>}
       <div className="cols">
         <div className="col col--half"><Column title="Away from your usual" items={away} empty="Everything is at or near your usual this week." before15={before15} /></div>
         <div className="col col--half"><Column title="At or near your usual" items={near} before15={before15} /></div>

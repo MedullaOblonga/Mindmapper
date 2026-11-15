@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import { params } from '../../data/params';
-import { MISSION_DAY_OFFSET } from '../../config';
 import { appStore } from '../../state/store';
 import { useUI } from '../../state/ui';
 import { draftFor, protectiveDraft } from '../../logic/drafts';
@@ -71,6 +70,6 @@ export function topicSegments(card: Card, v: View) {
   if (card.evidence.type !== 'marks') return [];
   const last = card.evidence.rows[card.evidence.rows.length - 1];
   const [, a, b] = last.label.match(/Days (\d+) to (\d+)/) ?? [];
-  const from = +a - MISSION_DAY_OFFSET, to = +b - MISSION_DAY_OFFSET;   // labels show mission days
+  const from = +a, to = +b;   // labels show story days
   return v.entries.flatMap(e => e.segments).filter(s => s.group === card.subject && s.day >= from && s.day <= to);
 }

@@ -7,14 +7,13 @@ import { delayMin, fmtDelay } from '../../lib/delay';
 
 export function TopBar({ day, shared, onOpenLog, due, viewer = 'astronaut' }: { day: number; shared: number; onOpenLog?: () => void; due?: React.ReactNode; viewer?: Viewer }) {
   const clock = useClock(1000);
-  const md = missionDay(day);
-  const pct = Math.round((md / MISSION_LENGTH) * 1000) / 10;
-  const delay = delayMin(md + clock / 1440);
+  const pct = Math.round((day / MISSION_LENGTH) * 1000) / 10;
+  const delay = delayMin(missionDay(day) + clock / 1440);   // the delay alone uses the later cruise window
   return (
     <header className="topbar">
       <div className="topbar-left">
-        <span className="t-label num" title={`Mission day ${md} of ${MISSION_LENGTH}`}>{`STARDATE ${stardate(md, clock)}`}</span>
-        <div className="mission-meter" role="img" aria-label={`Mission day ${md} of ${MISSION_LENGTH}, ${pct} percent complete`}>
+        <span className="t-label num" title={`Mission day ${day} of ${MISSION_LENGTH}`}>{`STARDATE ${stardate(day, clock)}`}</span>
+        <div className="mission-meter" role="img" aria-label={`Mission day ${day} of ${MISSION_LENGTH}, ${pct} percent complete`}>
           <i style={{ width: `${pct}%` }} />
         </div>
         <span className="t-label num topbar-delay" title="One-way light time, computed for this mission day from the orbits of Earth and Mars">
