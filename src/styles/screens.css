@@ -291,3 +291,6 @@ h2.t-head{margin:0}
 .story-view{flex:none;display:flex;align-items:center;gap:var(--s2)}
 .private--earth{color:var(--ink)}
 @media (max-width:699px){.topbar .private--earth{display:flex}.topbar .private--earth span{display:inline;font-size:13px}}
+.check-more{align-self:flex-start;min-height:32px}
+.check-list{list-style:none;margin:0;padding:0}
+.check-row{display:flex;justify-content:space-between;align-items:center;gap:var(--s3)}

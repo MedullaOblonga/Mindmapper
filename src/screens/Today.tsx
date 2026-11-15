@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useView } from '../state/useView';
 import { useApp, appStore } from '../state/store';
@@ -8,12 +9,11 @@ import { fmtClock } from '../lib/time';
 import { Tag } from '../components/ui';
 import { MoodGlyph } from '../components/DayRing';
 import { Ledger } from './Ledger';
+import { dueChecks } from '../logic/checks';
 import { bodySeries, measure, readMeasure } from '../logic/body';
 import { CMO_NAME } from '../logic/lines';
 import type { View } from '../state/view';
 
-const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-const NUM = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
 
 function Head({ title, lede, pill }: { title: string; lede: string; pill?: string }) {
   return (
@@ -68,37 +68,42 @@ function LineCrossed({ v }: { v: View }) {
   );
 }
 
+const lowerFirst = (x: string) => x.charAt(0).toLowerCase() + x.slice(1);
+/** "Suit prep, lunch, experiments, gym and a call with Sam." from the day's timeline. */
+export function daySummary(v: View): string {
+  const parts = v.blocksToday.filter(b => b.kind !== 'sleep').map(b => (b.kind === 'call' ? `a ${lowerFirst(b.label)}` : lowerFirst(b.label)));
+  if (!parts.length) return 'A rest day, with nothing on the timeline.';
+  const list = parts.length === 1 ? parts[0] : `${parts.slice(0, -1).join(', ')} and ${parts[parts.length - 1]}`;
+  return `${list.charAt(0).toUpperCase()}${list.slice(1)}.`;
+}
+
 function Tonight({ v }: { v: View }) {
   const nav = useNavigate();
-  const dismissed = v.events.some(e => e.type === 'dismiss' && e.day === v.day);
   const add = appStore.getState().add;
   const marks = v.marksToday;
   const entry = v.entryToday;
-  if (dismissed && !entry) return null;
-  const compose = () => nav('/journal', { state: { focus: true } });
+  const dismissed = v.events.some(e => e.type === 'dismiss' && e.what === 'tonight' && e.day === v.day);
+  const sleep = v.scenario.days[v.day - 1];
   return (
-    <section className="panel panel--tight panel--act" aria-label="Tonight">
-      <div className="t-label act-text">Tonight</div>
+    <section className="panel panel--tight panel--act" aria-label="Your day">
+      <div className="panel-title-row"><div className="t-label act-text">{`Your day ${v.day}`}</div>
+        <a href="#/journal" className="t-head link-tap" onClick={e => { e.preventDefault(); nav('/journal'); }}>Open your journal</a></div>
+      <p className="t-stmt-sm">{daySummary(v)}</p>
+      <p className="t-small num">{`Slept ${fmtClock(sleep.onsetMin)} to ${fmtClock(sleep.wakeMin)}, from your wearable.`}</p>
+      {marks.length > 0 && (
+        <div className="rows">
+          {marks.map((m, i) => (
+            <div className="mark-line" key={i}><span><MoodGlyph mood={m.mood} /> <b className="num">{fmtClock(m.min)}</b>{m.blockLabel ? `\u00a0 during ${m.blockLabel}` : ''}</span><span className="t-small">{m.mood === 'high' ? 'High press' : 'Low press'}</span></div>
+          ))}
+        </div>
+      )}
       {entry ? (
-        <>
-          <p className="t-stmt-sm">{`Written. ${entry.segments.length} ${entry.segments.length === 1 ? 'thing' : 'things'}, tagged.`}</p>
-          <a href="#/journal" className="t-head link-tap" onClick={e => { e.preventDefault(); nav('/journal'); }}>Open today’s entry</a>
-        </>
+        <p className="t-body">{`Tonight’s entry is written: ${entry.segments.length} ${entry.segments.length === 1 ? 'thing' : 'things'}, tagged.`}</p>
       ) : (
-        <>
-          <p className="t-stmt-sm">{marks.length ? `${cap(NUM[marks.length] ?? String(marks.length))} ${marks.length === 1 ? 'moment' : 'moments'} you marked today ${marks.length === 1 ? 'is' : 'are'} waiting.` : 'Anything from today worth keeping?'}</p>
-          {marks.length > 0 && (
-            <div className="rows">
-              {marks.map((m, i) => (
-                <div className="mark-line" key={i}><span><MoodGlyph mood={m.mood} /> <b className="num">{fmtClock(m.min)}</b>{m.blockLabel ? `\u00a0 during ${m.blockLabel}` : ''}</span><span className="t-small">{m.mood === 'high' ? 'High, on your wrist' : 'Low, on your wrist'}</span></div>
-              ))}
-            </div>
-          )}
-          <div className="btn-row">
-            <button className="btn btn--primary" onClick={compose}>Speak or write</button>
-            <button className="btn btn--quiet" onClick={() => add({ type: 'dismiss', what: 'tonight' })}>Not tonight</button>
-          </div>
-        </>
+        <div className="btn-row">
+          <button className="btn btn--primary" onClick={() => nav('/journal', { state: { focus: true } })}>Write tonight’s entry</button>
+          {!dismissed && <button className="btn btn--quiet" onClick={() => add({ type: 'dismiss', what: 'tonight' })}>Not tonight</button>}
+        </div>
       )}
       <div className="t-foot">Your diary is for you. Nobody else reads it, and it is not graded.</div>
     </section>
@@ -107,30 +112,37 @@ function Tonight({ v }: { v: View }) {
 
 function CheckPanel({ v }: { v: View }) {
   const nav = useNavigate();
+  const [all, setAll] = useState(false);
+  const due = dueChecks(v);
+  const top = due[0];
   const am = v.checks.some(c => c.day === v.day && c.slot === 'am');
-  const pm = v.checks.some(c => c.day === v.day && c.slot === 'pm');
-  const scheduled = v.day % 4 === 0;
-  const next = am ? 'pm' : 'am';
+  const go = (k: string, testOnly = false) => nav(k === 'reaction' ? `/check?slot=${am ? 'pm' : 'am'}${testOnly ? '&test=1' : ''}` : `/check?kind=${k}`);
+  const sinceText = (n: number) => (n === 0 ? 'done today' : n === 1 ? 'last done yesterday' : `last done ${n} days ago`);
   const r = readMeasure(measure('speed'), bodySeries(v.scenario, v.checks, v.day).speed, v.day);
-  const last = [...v.checks].reverse().find(c => c.counts);
   return (
-    <section className="panel panel--tight" aria-label="Reaction speed test">
-      <div className="panel-title-row"><div className="t-head">Reaction speed test</div><Tag>Modelled on NASA’s Reaction Self-Test</Tag></div>
-      <div className="t-body">A 3-minute test of attention. It is measured, not rated by you. Scheduled every fourth day, and yours to take whenever you want one.</div>
-      {last && r.last && (
-        <p className="t-small num">{`Last test, day ${last.day} ${last.slot === 'am' ? 'morning' : 'evening'}: ${r.last.v.toFixed(2)} responses per second.${r.usual !== null ? ` Your usual is ${r.usual.toFixed(2)}.` : ''} ${r.statusText}.`}</p>
+    <section className="panel panel--tight" aria-label="Today’s check">
+      <div className="panel-title-row"><div className="t-head">Today’s check</div><Tag>Rotates with what has changed</Tag></div>
+      {top.score < 0 ? <p className="t-body">Every check is done for today.</p> : (
+        <>
+          <p className="t-stmt-sm">{top.def.title}</p>
+          <p className="t-small">{`${top.def.length}. ${top.def.basis}.`}</p>
+          <p className="t-body">{top.reason ? `Why today: ${top.reason.charAt(0).toLowerCase()}${top.reason.slice(1)}` : `Why today: ${sinceText(top.since)}.`}</p>
+          {top.def.kind === 'reaction' && r.last && <p className="t-small num">{`Last test: ${r.last.v.toFixed(2)} responses per second.${r.usual !== null ? ` Your usual is ${r.usual.toFixed(2)}.` : ''}`}</p>}
+          <div className="btn-row"><button className="btn btn--primary" onClick={() => go(top.def.kind)}>{`Start the ${top.def.title.toLowerCase()}`}</button></div>
+        </>
       )}
-      {scheduled && <div className="t-head">Scheduled check today</div>}
-      {scheduled && <div className="t-small">Two dials and the test, about 4 minutes.</div>}
-      {am && pm ? <p className="t-small">{scheduled ? 'This evening’s check is recorded.' : 'Both of today’s tests are recorded.'}</p>
-        : (
-          <div className="btn-row">
-            {scheduled && <button className="btn" onClick={() => nav(`/check?slot=${next}`)}>{am ? 'Start this evening’s check' : 'Start this morning’s check'}</button>}
-            <button className="btn" onClick={() => nav(`/check?slot=${next}&test=1`)}>{scheduled ? 'Test only' : 'Take the test now'}</button>
-          </div>
-        )}
-      {am && !pm && <p className="t-small">{scheduled ? 'This morning’s check is recorded.' : 'One test is recorded today.'}</p>}
-      <a href="#/patterns/body" className="t-head link-tap" onClick={e => { e.preventDefault(); nav('/patterns/body'); }}>See it in Body trends</a>
+      <button className="link-btn t-small check-more" aria-expanded={all} onClick={() => setAll(a => !a)}>{all ? 'Hide the other checks' : 'Other checks'}</button>
+      {all && (
+        <ul className="rows check-list">
+          {due.filter(d => d !== top).map(d => (
+            <li key={d.def.kind} className="check-row">
+              <div><div className="t-head">{d.def.title}</div><div className="t-small">{d.reason ?? sinceText(d.since)}</div></div>
+              {!d.doneToday && <button className="btn btn--sm" onClick={() => go(d.def.kind, d.def.kind === 'reaction')}>Take now</button>}
+            </li>
+          ))}
+        </ul>
+      )}
+      <p className="t-foot">Only one check is offered at a time. The others stay here when you want one.</p>
     </section>
   );
 }

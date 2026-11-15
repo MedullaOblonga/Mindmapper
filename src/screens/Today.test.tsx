@@ -77,19 +77,33 @@ it('Escape closes a sheet and returns focus to its opener', async () => {
   expect(opener).toHaveFocus();
 });
 
-it('offers the reaction speed test on any day, and the scheduled check every fourth', async () => {
+it('offers one rotating check at a time, with the reaction test among the others', async () => {
   const u = userEvent.setup();
   const r = renderAt(106);
-  const panel = screen.getByRole('region', { name: 'Reaction speed test' });
-  expect(within(panel).getByText(/Last test, day 104 evening: .* responses per second\. Your usual is/)).toBeInTheDocument();
-  expect(within(panel).queryByRole('button', { name: /Start this morning/ })).toBeNull();
-  await u.click(within(panel).getByRole('button', { name: 'Take the test now' }));
+  const panel = screen.getByRole('region', { name: 'Today’s check' });
+  expect(within(panel).getByText(/^Why today:/)).toBeInTheDocument();
+  await u.click(within(panel).getByRole('button', { name: 'Other checks' }));
+  const row = within(panel).getByText('Reaction speed test').closest('li')!;
+  await u.click(within(row as HTMLElement).getByRole('button', { name: 'Take now' }));
   expect(screen.getByText('Reaction speed test · day 106 · morning')).toBeInTheDocument();
   expect(screen.getByRole('button', { name: 'Start the test' })).toBeInTheDocument();   // no dials first
   r.unmount();
   window.location.hash = '#/today';
   renderAt(112);
-  const p2 = screen.getByRole('region', { name: 'Reaction speed test' });
-  expect(within(p2).getByRole('button', { name: 'Start this evening’s check' })).toBeInTheDocument();
-  expect(within(p2).getByRole('button', { name: 'Test only' })).toBeInTheDocument();
+  const p2 = screen.getByRole('region', { name: 'Today’s check' });
+  const title = within(p2).getByText(/check$|test$/, { selector: '.t-stmt-sm' }).textContent;
+  expect(['Connection check', 'Mood check', 'Sleep check', 'Workload check', 'Reaction speed test']).toContain(title);
+  expect(within(p2).getAllByRole('button', { name: /^Start the / })).toHaveLength(1);
+});
+
+it('a questionnaire from the rotation is answered and recorded', async () => {
+  const u = userEvent.setup();
+  window.location.hash = '#/check?kind=connection';
+  render(<HashRouter><App /></HashRouter>);
+  const save = screen.getByRole('button', { name: 'Save' });
+  expect(save).toBeDisabled();
+  for (const g of screen.getAllByRole('radiogroup')) await u.click(within(g).getAllByRole('radio')[0]);
+  await u.click(save);
+  expect(screen.getByRole('heading', { name: 'Recorded.' })).toBeInTheDocument();
+  expect(appStore.getState().events.some(e => e.type === 'questionnaire' && e.kind === 'connection')).toBe(true);
 });

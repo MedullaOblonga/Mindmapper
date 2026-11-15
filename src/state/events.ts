@@ -17,6 +17,7 @@ export type AppEvent = { id: string; day: number } & (
   | { type: 'rule-change'; ruleId: string; text: string; atLeast: number }
   | { type: 'safety'; ruleId: string }
   | { type: 'dismiss'; what: 'tonight' | 'cue' }
+  | { type: 'questionnaire'; kind: string; answers: number[] }
   | { type: 'profile'; itemId: string; category?: string; text?: string; removed?: boolean });
 
 type DistributiveOmit<T, K extends keyof never> = T extends unknown ? Omit<T, K> : never;

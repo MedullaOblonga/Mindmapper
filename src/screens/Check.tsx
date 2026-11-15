@@ -6,6 +6,7 @@ import { scoreTrials, nextWaitMs, type Trial } from '../logic/pvt';
 import { checkUsual } from '../logic/cards';
 import { T } from '../logic/thresholds';
 import { Dial, type DialDef } from '../components/ui/Dial';
+import { checkDef, type CheckDef } from '../logic/checks';
 import { Tag, Toggle } from '../components/ui';
 import type { CheckSession } from '../types';
 
@@ -118,7 +119,7 @@ function Recorded({ s, earlier, onDone }: { s: CheckSession; earlier: CheckSessi
   );
 }
 
-export function Check() {
+function ReactionCheck() {
   const v = useView();
   const nav = useNavigate();
   const [q] = useSearchParams();
@@ -174,4 +175,50 @@ export function Check() {
       </main>
     </div>
   );
+}
+
+/** A short questionnaire from the rotation: one dial per question, then "Recorded." Nothing is scored for anyone else. */
+function Questionnaire({ def }: { def: CheckDef }) {
+  const v = useView();
+  const nav = useNavigate();
+  const items = def.items ?? [];
+  const [vals, setVals] = useState<(number | null)[]>(items.map(() => null));
+  const [done, setDone] = useState(false);
+  const submit = () => { appStore.getState().add({ type: 'questionnaire', kind: def.kind, answers: vals as number[] }); setDone(true); };
+  return (
+    <div className="check">
+      <header className="check-top">
+        <span className="t-label">{`${def.title} · day ${v.day}`}</span>
+        <a href="#/today" className="t-head link-tap" onClick={e => { e.preventDefault(); nav('/today'); }}>Leave</a>
+      </header>
+      <main className="check-main">
+        {done ? (
+          <div className="check-step">
+            <h1 className="t-title">Recorded.</h1>
+            <p className="t-stmt-sm">Only you can see your answers. The tool compares them with your own earlier answers, never with anyone else.</p>
+            <details className="numbers"><summary className="t-head link-tap">Show my answers</summary>
+              <ul className="plain-list t-body">{items.map((it, i) => <li key={it.text}>{`${it.text} ${vals[i]}${it.anchors[vals[i]!] ? ` (${it.anchors[vals[i]!]})` : ''}`}</li>)}</ul>
+            </details>
+            <div className="btn-row"><button className="btn btn--primary" onClick={() => nav('/today')}>Done</button></div>
+          </div>
+        ) : (
+          <div className="check-step">
+            <h1 className="t-title">{def.title}</h1>
+            <p className="t-small">{`${def.length}. ${def.basis}.`}</p>
+            {items.map((it, i) => (
+              <Dial key={it.text} def={{ id: String(i), label: it.text, min: it.min, max: it.max, anchors: it.anchors }} value={vals[i]}
+                onChange={n => setVals(x => x.map((y, j) => (j === i ? n : y)))} />
+            ))}
+            <div className="btn-row"><button className="btn btn--primary" disabled={vals.some(x => x === null)} onClick={submit}>Save</button></div>
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}
+
+export function Check() {
+  const [q] = useSearchParams();
+  const def = checkDef(q.get('kind') ?? '');
+  return def && def.kind !== 'reaction' ? <Questionnaire def={def} /> : <ReactionCheck />;
 }
