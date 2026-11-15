@@ -1,12 +1,13 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Shell } from './components/shell/Shell';
 import { Placeholder } from './screens/Placeholder';
+import { Today } from './screens/Today';
 
 export default function App() {
   return (
     <Shell>
       <Routes>
-        <Route path="/today" element={<Placeholder title="Today" />} />
+        <Route path="/today" element={<Today />} />
         <Route path="/journal" element={<Placeholder title="Journal" />} />
         <Route path="/patterns/:tab" element={<Placeholder title="Patterns" />} />
         <Route path="/plan/:tab" element={<Placeholder title="My plan" />} />
