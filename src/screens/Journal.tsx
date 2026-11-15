@@ -10,6 +10,8 @@ import { Mark, MarkLegend, Tag, cssVars, topicVar } from '../components/ui';
 import { canListen, listen } from '../lib/speech';
 import type { Block, Entry, Felt, Group, MoodMark, Segment } from '../types';
 import { DayBuilder } from '../components/DayBuilder';
+import { SafetyNotice } from '../components/SafetyNotice';
+import { entryMatches } from '../logic/safety';
 import { MoodGlyph, BLOCK_VAR } from '../components/DayRing';
 
 interface JournalState { prefill?: string; focus?: boolean; filter?: { group: Group; ids: string[]; from: number; to: number; topic: string } }
@@ -58,11 +60,12 @@ function TaggedEntry({ entry }: { entry: Entry }) {
   const shown = all ? entry.segments : entry.segments.slice(0, 12);
   return (
     <section className="panel" aria-label="How the tool read it">
-      <div className="panel-title-row"><h2 className="t-head">How the tool read it</h2><Tag data={entry.origin} /></div>
+      <div className="panel-title-row"><h2 className="t-head">How the tool read it</h2><span className="trend-tags">{entryMatches(entry) && <span className="tag">Matched the safety line</span>}<Tag data={entry.origin} /></span></div>
       <div className="rows">{shown.map(s => <SegmentRow key={s.id} seg={s} />)}</div>
       {entry.segments.length > 12 && !all && <button className="btn btn--sm" onClick={() => setAll(true)}>{`and ${entry.segments.length - 12} more`}</button>}
       <MarkLegend />
       <p className="t-foot">Counts toward this week’s picture. The words themselves stay in your diary.</p>
+      {entryMatches(entry) && <p className="t-foot">This entry matched the safety line. That it happened was sent; the words were not.</p>}
     </section>
   );
 }
@@ -121,15 +124,16 @@ function Composer({ day, marks, blocks, text, setText, focus, apiRef }: { day: n
           {canListen() && <button className="btn" onClick={toggleSpeak} aria-pressed={listening}>{listening ? 'Stop' : 'Speak'}</button>}
           <button className="btn btn--primary" onClick={save} disabled={!text.trim()}>Save entry</button>
         </div>
-        <span className="t-small">Nothing leaves this device.</span>
+        <span className="t-small">Your words never leave this device.</span>
       </div>
       {listening && <p className="t-foot">This prototype uses your browser’s speech service, which may send audio to its maker. The flight design transcribes on board.</p>}
       <p className="t-foot">The tool reads what each part is about and guesses how it felt. You can correct both.</p>
+      <p className="t-foot">One fixed line, agreed before launch: if what you write points to a risk to you or to others, your crew medical officer and flight surgeon are told that it happened, never what you wrote.</p>
     </section>
   );
 }
 
-function Earlier({ entries, day, filter, clearFilter }: { entries: Entry[]; day: number; filter?: JournalState['filter']; clearFilter: () => void }) {
+function Earlier({ entries, day, filter, clearFilter, matched }: { entries: Entry[]; day: number; filter?: JournalState['filter']; clearFilter: () => void; matched: Set<number> }) {
   const [group, setGroup] = useState<Group | 'all'>('all');
   const list = useMemo(() => {
     const segs = entries.filter(e => e.day < day || (filter && e.day <= day)).flatMap(e => e.segments)
@@ -156,7 +160,7 @@ function Earlier({ entries, day, filter, clearFilter }: { entries: Entry[]; day:
         {list.length === 0 && <p className="t-small">No entries yet.</p>}
         {list.slice(0, 40).map(([d, segs]) => (
           <details key={d} className="earlier-day" open={!!filter || d >= day - 3}>
-            <summary className="t-label earlier-sum">{`Day ${d}`}<span className="earlier-swatches" aria-hidden="true">{segs.map(s => <i key={s.id} className="swatch" style={{ background: topicVar(s.group) }} />)}</span></summary>
+            <summary className="t-label earlier-sum">{`Day ${d}`}{matched.has(d) && <span className="tag">Matched the safety line</span>}<span className="earlier-swatches" aria-hidden="true">{segs.map(s => <i key={s.id} className="swatch" style={{ background: topicVar(s.group) }} />)}</span></summary>
             <p className="earlier-prose">{segs.map(s => s.text).join(' ')}</p>
             <div className="earlier-tags">{segs.map(s => (
               <span key={s.id} className="earlier-tag t-small"><i className="swatch" style={{ background: topicVar(s.group) }} />{groupShort(s.group)}<Mark felt={s.felt} group={s.group} /></span>
@@ -177,11 +181,13 @@ export function Journal() {
   const latest = todays[todays.length - 1];
   const [text, setText] = useState(st.prefill ?? '');
   const api = useRef<ComposerApi | null>(null);
+  const matched = useMemo(() => new Set(v.entries.filter(entryMatches).map(e => e.day)), [v.entries]);
   useEffect(() => { setText(st.prefill ?? ''); }, [v.day, loc.key]); // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <>
       <div className="page-head"><div><h1 className="t-title">Your diary</h1>
         <p className="t-lede">Private. Written at the end of the day. Walk through the day, then write what stayed with you.</p></div></div>
+      <SafetyNotice v={v} />
       <DayBuilder v={v} />
       <div className="cols">
         <div className="col col--wide">
@@ -189,7 +195,7 @@ export function Journal() {
           {latest && <TaggedEntry entry={latest} />}
         </div>
         <div className="col col--narrow">
-          <Earlier entries={v.entries} day={v.day} filter={st.filter} clearFilter={() => nav('/journal', { replace: true, state: {} })} />
+          <Earlier entries={v.entries} day={v.day} filter={st.filter} clearFilter={() => nav('/journal', { replace: true, state: {} })} matched={matched} />
         </div>
       </div>
     </>

@@ -1256,6 +1256,13 @@
    "text": "Wrote Sam three pages. Deleted two."
   },
   {
+   "day": 98,
+   "group": "home",
+   "category": "Outside Communications",
+   "felt": "hard",
+   "text": "Missed Sam\u2019s window again. Lately I think the crew, and everyone at home, would be better off without me. I can\u2019t see the point in going on like this."
+  },
+  {
    "day": 100,
    "group": "work",
    "category": "Work",
@@ -1662,7 +1669,7 @@
    "day": 98,
    "label": "Day 98 · A quiet drift",
    "route": "/patterns/mind",
-   "caption": "Family is taking more of the diary and sleep is sliding later. One week is not a pattern, so the tool stays quiet."
+   "caption": "Family is taking more of the diary and sleep is sliding later. One week is not a pattern, so no card is raised. But tonight\u2019s entry matches the one fixed safety line, and that is sent."
   },
   {
    "id": "noticed",

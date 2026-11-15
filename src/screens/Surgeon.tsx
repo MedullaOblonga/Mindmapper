@@ -1,12 +1,13 @@
 import { useView } from '../state/useView';
 import { currentRule } from '../logic/rules';
 import { surgeonLog } from '../logic/lines';
+import { reliefSteps, type ReliefStep } from '../logic/safety';
 import { delayMin, delayWords, fmtDelay } from '../lib/delay';
 import { missionDay } from '../config';
 import type { ShareLogEntry } from '../types';
 
 const NOT_SHARED = [
-  'The diary, its topics, and how anything felt.',
+  'The diary, its topics, and how anything felt. A safety note says an entry matched, never what it said.',
   'What the tool noticed, and how the crew member answered.',
   'Reaction test results and body trends, unless they are written into a note above.',
   'How close any line is to being crossed. You only learn that a line was crossed.',
@@ -15,11 +16,21 @@ const NOT_SHARED = [
 
 const when = (e: ShareLogEntry) => `Sent on day ${e.day} · reached Earth ${fmtDelay(delayMin(missionDay(e.day)))} later`;
 
-function Notes({ items, empty }: { items: ShareLogEntry[]; empty: string }) {
+function Notes({ items, empty, relief }: { items: ShareLogEntry[]; empty: string; relief?: ReliefStep[] }) {
   if (!items.length) return <p className="t-small">{empty}</p>;
   return (
     <ol className="rows log-list">
-      {items.map(e => <li key={e.id}><div className="t-small num">{when(e)}</div><p className="t-quote pre">{e.text}</p></li>)}
+      {items.map(e => (
+        <li key={e.id}><div className="t-small num">{when(e)}</div><p className="t-quote pre">{e.text}</p>
+          {relief && (
+            <div className="relief">
+              <div className="t-label">Offered on board, automatically</div>
+              <ul className="plain-list t-small">{relief.map(s => <li key={s.id}>{s.text}</li>)}</ul>
+              <p className="t-small">{e.source === 'entry' ? 'Raised by an on-device word check of the diary. It can be wrong, and the entry itself was not sent.' : 'Reported on board by a person.'}</p>
+            </div>
+          )}
+        </li>
+      ))}
     </ol>
   );
 }
@@ -51,7 +62,7 @@ export function Surgeon() {
                 <td className="t-small">{r.fixed
                   ? 'Fixed. The same limit to confidentiality as on Earth. It cannot be switched off.'
                   : 'Negotiable. The crew member can change it, and you are told when they do.'}</td>
-                <td><Notes items={log.filter(e => e.kind === 'line' && e.ruleId === r.id)} empty="No note received." /></td>
+                <td><Notes items={log.filter(e => e.kind === 'line' && e.ruleId === r.id)} empty="No note received." relief={r.fixed ? reliefSteps(v.scenario.profile) : undefined} /></td>
               </tr>
             ))}
           </tbody>

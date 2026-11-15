@@ -49,7 +49,8 @@ export type CardEvidence =
 export interface Resolution { cardId: string; day: number; status: 'acted'|'not-right'|'skipped';
   title: string; choice: string; effect: string; }
 export interface ShareLogEntry { id: string; day: number; to: string; text: string; auto: boolean;
-  kind: 'message' | 'line' | 'rule-change'; ruleId?: string; }
+  kind: 'message' | 'line' | 'rule-change'; ruleId?: string;
+  fixed?: boolean; source?: 'entry' | 'report'; }   // fixed line only: crossed by a diary entry match or by a report
 
 /* ---- mirrors of scenario-params.json ---- */
 export type RealGroup = Exclude<Group, 'other'>;

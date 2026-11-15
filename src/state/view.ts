@@ -149,7 +149,7 @@ export function buildView(day: number, events: AppEvent[], override: Branch | nu
   const checks = baseChecks.map(c => (fxAll.uncounted.includes(`c${c.day}`) ? { ...c, counts: false } : c));
 
   // Lines agreed before launch (level 3), checked daily.
-  const lines = lineNotes(s, day, evs, fxAll.ignoreNights);
+  const lines = lineNotes(s, day, evs, fxAll.ignoreNights, entries);
   const shareLog: ShareLogEntry[] = lines.log;
   const lineCrossed: View['lineCrossed'] = lines.latest;
   for (const e of evs) {

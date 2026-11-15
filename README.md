@@ -12,7 +12,7 @@ Use the **Demo story** bar at the top. It drives a simulated 126-day mission:
 
 1. **Day 12 · Settling in.** For the first 14 days the tool only watches.
 2. **Day 42 · It gets one wrong.** Tap *That's not right* → *The data is wrong* → *Tell the tool*. The tool changes.
-3. **Day 98 · A quiet drift.** Patterns → On your mind: family takes a widening share of the diary. One week is not a pattern, so Today stays quiet.
+3. **Day 98 · A quiet drift.** Patterns → On your mind: family takes a widening share of the diary. One week is not a pattern, so no card is raised. But that night's diary entry matches the one fixed safety line: open Journal to see the notice, the exact note that was sent, and the relief steps. Switch to Flight surgeon view to see what Earth received.
 4. **Day 112 · Three things noticed.** Three cards, each with actions you choose.
 5. **Day 119 · What followed.** Choose *If you acted* or *If you didn't*. If you didn't, a line you set before launch was crossed and the exact message is shown.
 
@@ -43,12 +43,14 @@ The Demo story bar has a switch: **Astronaut view / Flight surgeon view**. The f
 
 | Line | Kind | Sends |
 |---|---|---|
-| Imminent risk to self or to someone else | Fixed. The same limit to confidentiality as on Earth. Cannot be changed or switched off | A note to the crew medical officer at once, and to the flight surgeon. Reported by the astronaut (Profile → Sharing → "Report a risk now") or the crew medical officer. The tool never infers it from the diary or any measurement |
+| Imminent risk to self or to someone else | Fixed. The same limit to confidentiality as on Earth. Cannot be changed or switched off | A note to the crew medical officer at once, and to the flight surgeon, saying that it happened. Crossed when the astronaut reports it (Profile → Sharing → "Report a risk now"), or when a diary entry matches an on-device word check. Diary text is never sent. In the demo it is crossed by the day 98 entry |
 | CO2 at the collar at or above 3.0 mmHg, 2 days or nights running | Negotiable between astronaut and flight surgeon | An automatic note to the flight surgeon. In the demo it is crossed on day 100 |
 | Sleep starting past midnight, 5 nights running | Negotiable | An automatic note to the flight surgeon |
 | Nothing written for 10 days | Negotiable. Asks the astronaut first | Nothing. Not visible to the flight surgeon |
 
 A change to a negotiable line is itself sent to the flight surgeon.
+
+**The word check.** `src/logic/safety.ts` holds a short list of phrases. It is a stand-in, like the topic tagger: it will miss real risk and match harmless sentences, and it has not been validated. When an entry matches, the astronaut sees a notice on Journal and Today for 7 days with the exact note that was sent, three relief steps built from their own pre-launch plan (the crew medical officer comes now; one item from their own list; a second checker on safety-critical work), and a button to add their own words for the flight surgeon. The flight surgeon view shows the note and the same relief steps, and says the match can be wrong.
 
 ## Run it locally
 

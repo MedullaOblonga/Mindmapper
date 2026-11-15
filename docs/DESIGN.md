@@ -891,3 +891,15 @@ The reaction speed line (8% below the person's own usual, two tests in a row) is
 **What the flight surgeon sees.** Only share-log entries whose recipient is the flight surgeon (`surgeonLog` in `src/logic/lines.ts`): notes the crew member chose to send, notes sent by agreed lines, and changes to those lines. Each shows the day it was sent and the one-way delay on that day. Lines that ask the crew member first (`auto: false`) are not listed. The view never shows how close a line is to being crossed.
 
 **Lines (§7 Sharing, level 3).** `ShareRule` gains `fixed`. One line is fixed: imminent risk to self or to others, the limit to confidentiality that applies on Earth. It cannot be edited. It is never inferred by the tool; it is sent when the crew member reports it ("Report a risk now" on the Sharing screen, event `safety`) and goes to the crew medical officer and the flight surgeon. All other lines are negotiable, including the new collar CO2 line (`co2Run`: at or above 3.0 mmHg on 2 days or nights running). This supersedes the earlier wording that every line is set by the astronaut alone.
+
+## Addendum: diary word check for the fixed safety line
+
+This supersedes the earlier statement that the fixed line is never inferred from the diary.
+
+**Word check.** `matchesSafetyLine` in `src/logic/safety.ts` tests each diary segment against a short phrase list for risk to self or others. It runs on the device and is a stand-in to be replaced and validated. A matching entry crosses the fixed line on the day it was written: one note to the crew medical officer and one to the flight surgeon, with the text from `entryNote` in `src/logic/lines.ts`. The note states the day and that an entry matched. It never contains diary text. The demo entry is the day 98 anchor entry in `scenario-params.json`.
+
+**What the astronaut sees.** `SafetyNotice` (Journal and Today, for 7 days after the note): what happened, the exact words sent, that the check can be wrong, the relief steps, and "Add your own words for the flight surgeon", which opens the Talk sheet. The entry carries a "Matched the safety line" tag in the Journal. The Sharing screen shows "Crossed on day N" and both notes in the share log.
+
+**Relief steps.** `reliefSteps` builds three from the pre-launch profile: the crew medical officer comes now, one coping item from the crew member's own list that fits low mood, and a second checker on safety-critical work. They are supports, not treatment, and are shown to the flight surgeon under the note.
+
+**Wording.** UI text says "matched the safety line"; the guard test still bans "flagged" and "detected". The diary's privacy lines now name the one exception.

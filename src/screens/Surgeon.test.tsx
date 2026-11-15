@@ -46,7 +46,7 @@ it('lists the fixed and negotiable lines with the notes they sent', async () => 
   expect(rows).toHaveLength(3);                     // the "ask me first" line is not the surgeon's to see
   expect(within(rows[0]).getByText(/imminent risk to my life or to someone else/)).toBeInTheDocument();
   expect(within(rows[0]).getByText(/^Fixed\./)).toBeInTheDocument();
-  expect(within(rows[0]).getByText('No note received.')).toBeInTheDocument();
+  expect(within(rows[0]).getByText(/Sent on day 98/)).toBeInTheDocument();
   expect(within(rows[1]).getByText(/Sent on day 114/)).toBeInTheDocument();
   expect(within(rows[2]).getByText(/Sent on day 100 · reached Earth 1\d min \d\d s later/)).toBeInTheDocument();
   expect(within(lines).queryByText(/write nothing for 10 days/)).toBeNull();

@@ -320,3 +320,7 @@ h2.t-head{margin:0}
 .band-btn--bottom{top:66px}
 .band-key{display:flex;flex-direction:column;align-items:center;font-size:10px;line-height:1.3}
 @media (max-width:699px){.band-key{display:none}.band{transform:scale(.62);margin:-34px -6px}}
+
+/* safety line */
+.relief{display:flex;flex-direction:column;gap:var(--s2);margin-top:var(--s2);padding-top:var(--s2);border-top:1px dashed var(--line)}
+.earlier-sum .tag{margin-left:var(--s2);text-transform:none;letter-spacing:.02em}

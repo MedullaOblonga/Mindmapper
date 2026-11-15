@@ -114,11 +114,11 @@ export function Sharing() {
                 <tr key={r.id}>
                   <td><p className="t-body rule-text">{cur.text}</p>
                     <span className="t-small">{r.fixed
-                      ? 'Fixed. The same limit to confidentiality as on Earth. The tool never judges this from your diary or your numbers: you report it, or your crew medical officer does.'
+                      ? 'Fixed. The same limit to confidentiality as on Earth. It is crossed when you report it, when your crew medical officer does, or when something you write matches a word check on this device. Your words are never sent.'
                       : r.auto ? 'Automatic, to your flight surgeon' : 'Asks you first. Tells nobody for you.'}</span></td>
-                  <td className="t-small num">{r.fixed ? (rep ? `Reported on day ${rep.day}` : 'Not reported')
+                  <td className="t-small num">{r.fixed ? (rep ? `${rep.source === 'entry' ? 'Crossed' : 'Reported'} on day ${rep.day}` : 'Not reported')
                     : now >= cur.atLeast ? `Crossed (${now} of ${cur.atLeast})` : now > 0 ? `At ${now} of ${cur.atLeast}` : 'Not crossed'}</td>
-                  <td>{r.auto && r.message ? <p className="t-quote">{`\u201c${r.fixed ? r.message : withThreshold(r.message, r.atLeast, cur.atLeast)}\u201d`}</p> : <span className="t-small">Nothing is sent.</span>}</td>
+                  <td>{r.auto && r.message ? <p className="t-quote">{`\u201c${r.fixed ? (rep?.text ?? r.message) : withThreshold(r.message, r.atLeast, cur.atLeast)}\u201d`}</p> : <span className="t-small">Nothing is sent.</span>}</td>
                   <td>{r.fixed
                     ? <button className="btn btn--sm" onClick={() => setReporting(r)}>Report a risk now</button>
                     : <button className="btn btn--sm" onClick={() => setEditing(r)}>Change this rule</button>}</td>

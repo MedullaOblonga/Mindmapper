@@ -3,12 +3,13 @@ import { bodySeries, CO2_LIMIT } from './body';
 import { pastMidnightRun } from './signs';
 import { withThreshold } from './rules';
 import type { AppEvent } from '../state/events';
-import type { Scenario, ShareLogEntry, ShareRule } from '../types';
+import { entryMatches } from './safety';
+import type { Entry, Scenario, ShareLogEntry, ShareRule } from '../types';
 
 /* Lines agreed before launch (sharing level 3).
    Fixed lines are the limits to confidentiality that apply on Earth: imminent risk to self or to others.
-   The tool never infers these from the diary or from any measurement. They are reported by the crew
-   member or by the crew medical officer.
+   They are crossed in two ways: a person reports it, or a diary entry matches the on-device word check
+   in safety.ts. Either way the note says that it happened and never includes diary text.
    Negotiable lines are agreed between the crew member and the flight surgeon, and the crew member can
    change them; each change is itself sent. */
 
@@ -32,21 +33,25 @@ export function co2Runs(s: Scenario, day: number): number[] {
 
 export interface Crossing { day: number; message: string; ruleId: string; fixed: boolean; }
 
+export const entryNote = (day: number) => `Safety note agreed before launch: a diary entry on day ${day} matched the safety line for risk to self or others. The crew medical officer has been told. No diary content is included.`;
+
 /** Every note the agreed lines have sent up to `day`, and the most recent one from the last 7 days. */
-export function lineNotes(s: Scenario, day: number, evs: AppEvent[], ignoreNights: number[]): { log: ShareLogEntry[]; latest: Crossing | null } {
+export function lineNotes(s: Scenario, day: number, evs: AppEvent[], ignoreNights: number[], entries: Entry[] = []): { log: ShareLogEntry[]; latest: Crossing | null } {
   const log: ShareLogEntry[] = [];
   let latest: Crossing | null = null;
-  const note = (rule: ShareRule, d: number, id: string, message: string) => {
-    log.push({ id, day: d, to: FLIGHT_SURGEON, text: message, auto: true, kind: 'line', ruleId: rule.id });
+  const note = (rule: ShareRule, d: number, id: string, message: string, source?: ShareLogEntry['source']) => {
+    log.push({ id, day: d, to: FLIGHT_SURGEON, text: message, auto: true, kind: 'line', ruleId: rule.id, fixed: !!rule.fixed, source });
     if (day - d < 7 && (!latest || d >= latest.day)) latest = { day: d, message, ruleId: rule.id, fixed: !!rule.fixed };
   };
   const co2 = co2Runs(s, day);
   for (const rule of s.profile.shareRules.filter(r => r.auto)) {
     if (rule.metric === 'safetyReport') {
-      for (const e of evs) if (e.type === 'safety' && e.ruleId === rule.id) {
-        log.push({ id: `${e.id}-cmo`, day: e.day, to: CMO, text: rule.message ?? '', auto: true, kind: 'line', ruleId: rule.id });
-        note(rule, e.day, e.id, rule.message ?? '');
-      }
+      const both = (d: number, id: string, message: string, source: ShareLogEntry['source']) => {
+        log.push({ id: `${id}-cmo`, day: d, to: CMO, text: message, auto: true, kind: 'line', ruleId: rule.id, fixed: true, source });
+        note(rule, d, id, message, source);
+      };
+      for (const e of evs) if (e.type === 'safety' && e.ruleId === rule.id) both(e.day, e.id, rule.message ?? '', 'report');
+      for (const e of entries) if (e.day <= day && entryMatches(e)) both(e.day, `auto-${rule.id}-${e.id}`, entryNote(e.day), 'entry');
       continue;
     }
     const runOn = rule.metric === 'pastMidnightRun' ? (d: number) => pastMidnightRun(s.days, d, ignoreNights).run

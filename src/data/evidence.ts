@@ -28,6 +28,6 @@ export const WHY: Record<string, WhyRecord> = {
     rule: 'The topics are the 24 categories NASA used to study ten ISS astronauts’ journals. In those journals the most written-about were work, contact with home and ground, adjusting, and the crew.',
     tags: ['nasa-method'], source: 'Stuster 2010 (NASA TM-2010-216130), figure on p.9' },
   'why.sharing': { title: 'Why nothing is sent', compared: '',
-    rule: 'Astronauts under-report symptoms when they fear for their flight status. So nothing leaves this device unless you send it, or unless a line agreed before launch is crossed. One of those lines is fixed, as it is on Earth: an imminent risk to you or to someone else.',
+    rule: 'Astronauts under-report symptoms when they fear for their flight status. So nothing leaves this device unless you send it, or unless a line agreed before launch is crossed. One of those lines is fixed, as it is on Earth: an imminent risk to you or to someone else. It is the only thing your diary is checked for, and your words are never sent.',
     tags: ['nasa-method'], source: 'Behavioral Health evidence report 2025, p.28' },
 };

@@ -11,7 +11,7 @@ import { MoodGlyph } from '../components/DayRing';
 import { Ledger } from './Ledger';
 import { dueChecks } from '../logic/checks';
 import { bodySeries, measure, readMeasure } from '../logic/body';
-import { CMO_NAME } from '../logic/lines';
+import { SafetyNotice } from '../components/SafetyNotice';
 import type { View } from '../state/view';
 
 
@@ -52,19 +52,22 @@ function WhatTheToolDid({ v }: { v: View }) {
 function LineCrossed({ v }: { v: View }) {
   const ui = useUI();
   const nav = useNavigate();
-  if (!v.lineCrossed) return null;
+  const c = v.lineCrossed;
   return (
-    <section className="panel panel--act" aria-label="Agreed before launch">
-      <div className="t-label act-text">Agreed before launch</div>
-      <p className="t-stmt-sm">{v.lineCrossed.fixed
-        ? `On day ${v.lineCrossed.day} an imminent risk was reported. ${CMO_NAME} was told at once. Your flight surgeon was sent this, and only this:`
-        : `On day ${v.lineCrossed.day} a line you set before launch was crossed. Your flight surgeon was told this, and only this:`}</p>
-      <p className="t-quote">{`“${v.lineCrossed.message}”`}</p>
-      <div className="btn-row">
-        <button className="btn" onClick={() => ui.openShareLog(true)}>Open share log</button>
-        <button className="btn btn--quiet" onClick={() => nav('/profile/sharing')}>{v.lineCrossed.fixed ? 'See the lines' : 'Change this rule'}</button>
-      </div>
-    </section>
+    <>
+      <SafetyNotice v={v} />
+      {c && !c.fixed && (
+        <section className="panel panel--act" aria-label="Agreed before launch">
+          <div className="t-label act-text">Agreed before launch</div>
+          <p className="t-stmt-sm">{`On day ${c.day} a line you set before launch was crossed. Your flight surgeon was told this, and only this:`}</p>
+          <p className="t-quote">{`“${c.message}”`}</p>
+          <div className="btn-row">
+            <button className="btn" onClick={() => ui.openShareLog(true)}>Open share log</button>
+            <button className="btn btn--quiet" onClick={() => nav('/profile/sharing')}>Change this rule</button>
+          </div>
+        </section>
+      )}
+    </>
   );
 }
 
@@ -105,7 +108,7 @@ function Tonight({ v }: { v: View }) {
           {!dismissed && <button className="btn btn--quiet" onClick={() => add({ type: 'dismiss', what: 'tonight' })}>Not tonight</button>}
         </div>
       )}
-      <div className="t-foot">Your diary is for you. Nobody else reads it, and it is not graded.</div>
+      <div className="t-foot">Your diary is for you. Nobody else reads it, and it is not graded. One fixed line: a word check for risk to you or to others runs on this device.</div>
     </section>
   );
 }

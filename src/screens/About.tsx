@@ -17,6 +17,7 @@ const REAL: { feature: string; data: DataTag | null; evidence: EvidenceTag | nul
   { feature: 'Every threshold that raises a card', data: null, evidence: 'placeholder' },
   { feature: 'Body trends: wearable, cuff, blood and collar CO2 values', data: 'sim', evidence: null },
   { feature: 'Body trends: the reaction speed line, set from NASA bed-rest test records', data: 'nasa-method', evidence: 'exp' },
+  { feature: 'Word check of diary entries for the one fixed safety line', data: null, evidence: 'exp' },
   { feature: 'Flight surgeon view (demo switch): built only from notes addressed to the flight surgeon', data: 'sim', evidence: null },
   { feature: 'Delay to Earth in the header, computed from the orbits of Earth and Mars', data: 'sim', evidence: null },
   { feature: 'Your early signs and steps', data: 'sim', evidence: 'analog' },
@@ -40,7 +41,7 @@ const RESOURCES: { name: string; use: string; href?: string }[] = [
 
 const NOT_CLAIMED = [
   'It does not diagnose anything or detect any condition.',
-  'It does not judge risk to you or to others. The one fixed line is reported by a person, never inferred from your diary or your numbers.',
+  'Its word check for risk to self or others is a stand-in. It will miss real risk and match harmless sentences, and it has not been validated.',
   'It does not prevent anything. It helps you notice a change early and choose what to do.',
   'It has not been tested on astronauts or in an analog mission.',
   'Its thresholds are placeholders. NASA lists validated thresholds as an open research gap.',
