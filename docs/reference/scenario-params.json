@@ -1,0 +1,520 @@
+{
+ "_note": "Single source of truth for the simulated mission. All numbers here are SIMULATED for the demo unless a field says otherwise. Minutes are minutes after 00:00 of the wake day; a negative sleep onset means before midnight (-50 = 23:10 the evening before).",
+ "mission": {
+  "lengthDays": 520,
+  "defaultDay": 112,
+  "lastDay": 126,
+  "settlingDays": 14,
+  "usualFromWeeks": [3, 8],
+  "weeklyReviewOn": "last day of each 7-day week (day 7, 14, ... 112)",
+  "checkEveryDays": 4,
+  "safetyCriticalBlocks": [
+   {"day": 113, "label": "EVA prep review", "startMin": 840, "endMin": 930}
+  ],
+  "earthDelayMinutesOneWay": 18,
+  "earthDelayNote": "Simulated value for the demo day. NASA cites up to 20-22 minutes one way for Mars."
+ },
+ "people": {
+  "crew": [
+   {"id": "ana", "name": "Ana", "role": "crewmate"},
+   {"id": "ravi", "name": "Ravi", "role": "crewmate"},
+   {"id": "mei", "name": "Mei", "role": "crew medical officer"},
+   {"id": "jonas", "name": "Jonas", "role": "commander"}
+  ],
+  "home": [
+   {"id": "sam", "name": "Sam", "role": "partner"},
+   {"id": "mom", "name": "Mom", "role": "mother"}
+  ],
+  "ground": [
+   {"id": "fs", "name": "Flight surgeon", "role": "ground"},
+   {"id": "psy", "name": "Ground psychologist", "role": "ground"}
+  ],
+  "_note": "All names are placeholders."
+ },
+ "groupsOrder": ["work", "home", "crew", "body", "timeoff", "self", "space"],
+ "weeks": [
+  {
+   "week": 1,
+   "days": [1, 7],
+   "segments": {"work": 6, "home": 1, "crew": 3, "body": 1, "timeoff": 0, "self": 1, "space": 0},
+   "homeFelt": {"good": 1, "mixed": 0, "hard": 0},
+   "sleepMeanMin": 415,
+   "onsetMeanMin": -50,
+   "ledger": {"suitPrepLong": 1, "daysSinceRest": 6, "callsMissed": 0, "noisyNights": 1, "gym": 3, "greenhouse": 1, "dinners": 6, "callsSam": 3, "callsMom": 2},
+   "dials": {"stress": 3, "sleepiness": 3}
+  },
+  {
+   "week": 2,
+   "days": [8, 14],
+   "segments": {"work": 8, "home": 1, "crew": 4, "body": 2, "timeoff": 1, "self": 0, "space": 0},
+   "homeFelt": {"good": 1, "mixed": 0, "hard": 0},
+   "sleepMeanMin": 422,
+   "onsetMeanMin": -50,
+   "ledger": {"suitPrepLong": 1, "daysSinceRest": 6, "callsMissed": 0, "noisyNights": 0, "gym": 4, "greenhouse": 2, "dinners": 5, "callsSam": 3, "callsMom": 2},
+   "dials": {"stress": 3, "sleepiness": 3}
+  },
+  {
+   "week": 3,
+   "days": [15, 21],
+   "segments": {"work": 9, "home": 2, "crew": 5, "body": 2, "timeoff": 1, "self": 1, "space": 0},
+   "homeFelt": {"good": 2, "mixed": 0, "hard": 0},
+   "sleepMeanMin": 430,
+   "onsetMeanMin": -50,
+   "ledger": {"suitPrepLong": 1, "daysSinceRest": 6, "callsMissed": 0, "noisyNights": 0, "gym": 4, "greenhouse": 2, "dinners": 5, "callsSam": 3, "callsMom": 2},
+   "dials": {"stress": 3, "sleepiness": 3}
+  },
+  {
+   "week": 4,
+   "days": [22, 28],
+   "segments": {"work": 9, "home": 2, "crew": 5, "body": 2, "timeoff": 1, "self": 0, "space": 1},
+   "homeFelt": {"good": 2, "mixed": 0, "hard": 0},
+   "sleepMeanMin": 430,
+   "onsetMeanMin": -50,
+   "ledger": {"suitPrepLong": 1, "daysSinceRest": 5, "callsMissed": 0, "noisyNights": 1, "gym": 4, "greenhouse": 2, "dinners": 5, "callsSam": 3, "callsMom": 2},
+   "dials": {"stress": 3, "sleepiness": 3}
+  },
+  {
+   "week": 5,
+   "days": [29, 35],
+   "segments": {"work": 9, "home": 2, "crew": 5, "body": 2, "timeoff": 1, "self": 1, "space": 0},
+   "homeFelt": {"good": 2, "mixed": 0, "hard": 0},
+   "sleepMeanMin": 430,
+   "onsetMeanMin": -50,
+   "ledger": {"suitPrepLong": 1, "daysSinceRest": 6, "callsMissed": 0, "noisyNights": 0, "gym": 4, "greenhouse": 2, "dinners": 5, "callsSam": 3, "callsMom": 2},
+   "dials": {"stress": 3, "sleepiness": 3}
+  },
+  {
+   "week": 6,
+   "days": [36, 42],
+   "segments": {"work": 9, "home": 2, "crew": 5, "body": 2, "timeoff": 1, "self": 0, "space": 1},
+   "homeFelt": {"good": 2, "mixed": 0, "hard": 0},
+   "sleepMeanMin": 430,
+   "onsetMeanMin": -50,
+   "ledger": {"suitPrepLong": 1, "daysSinceRest": 6, "callsMissed": 0, "noisyNights": 0, "gym": 4, "greenhouse": 2, "dinners": 2, "callsSam": 3, "callsMom": 2},
+   "dials": {"stress": 3, "sleepiness": 3}
+  },
+  {
+   "week": 7,
+   "days": [43, 49],
+   "segments": {"work": 9, "home": 2, "crew": 5, "body": 2, "timeoff": 1, "self": 1, "space": 0},
+   "homeFelt": {"good": 2, "mixed": 0, "hard": 0},
+   "sleepMeanMin": 430,
+   "onsetMeanMin": -50,
+   "ledger": {"suitPrepLong": 1, "daysSinceRest": 7, "callsMissed": 0, "noisyNights": 0, "gym": 4, "greenhouse": 2, "dinners": 5, "callsSam": 3, "callsMom": 2},
+   "dials": {"stress": 3, "sleepiness": 3}
+  },
+  {
+   "week": 8,
+   "days": [50, 56],
+   "segments": {"work": 9, "home": 2, "crew": 5, "body": 2, "timeoff": 1, "self": 0, "space": 1},
+   "homeFelt": {"good": 2, "mixed": 0, "hard": 0},
+   "sleepMeanMin": 430,
+   "onsetMeanMin": -50,
+   "ledger": {"suitPrepLong": 1, "daysSinceRest": 6, "callsMissed": 0, "noisyNights": 0, "gym": 4, "greenhouse": 2, "dinners": 5, "callsSam": 3, "callsMom": 2},
+   "dials": {"stress": 3, "sleepiness": 3}
+  },
+  {
+   "week": 9,
+   "days": [57, 63],
+   "segments": {"work": 9, "home": 2, "crew": 5, "body": 2, "timeoff": 1, "self": 1, "space": 0},
+   "homeFelt": {"good": 2, "mixed": 0, "hard": 0},
+   "sleepMeanMin": 426,
+   "onsetMeanMin": -50,
+   "ledger": {"suitPrepLong": 1, "daysSinceRest": 6, "callsMissed": 0, "noisyNights": 0, "gym": 4, "greenhouse": 2, "dinners": 5, "callsSam": 3, "callsMom": 2},
+   "dials": {"stress": 3, "sleepiness": 3}
+  },
+  {
+   "week": 10,
+   "days": [64, 70],
+   "segments": {"work": 9, "home": 2, "crew": 5, "body": 2, "timeoff": 1, "self": 0, "space": 1},
+   "homeFelt": {"good": 2, "mixed": 0, "hard": 0},
+   "sleepMeanMin": 422,
+   "onsetMeanMin": -50,
+   "ledger": {"suitPrepLong": 1, "daysSinceRest": 6, "callsMissed": 0, "noisyNights": 1, "gym": 4, "greenhouse": 2, "dinners": 5, "callsSam": 3, "callsMom": 2},
+   "dials": {"stress": 3, "sleepiness": 3}
+  },
+  {
+   "week": 11,
+   "days": [71, 77],
+   "segments": {"work": 9, "home": 3, "crew": 4, "body": 2, "timeoff": 1, "self": 1, "space": 0},
+   "homeFelt": {"good": 3, "mixed": 0, "hard": 0},
+   "sleepMeanMin": 416,
+   "onsetMeanMin": -45,
+   "ledger": {"suitPrepLong": 1, "daysSinceRest": 7, "callsMissed": 0, "noisyNights": 0, "gym": 4, "greenhouse": 2, "dinners": 4, "callsSam": 3, "callsMom": 2},
+   "dials": {"stress": 3, "sleepiness": 3}
+  },
+  {
+   "week": 12,
+   "days": [78, 84],
+   "segments": {"work": 9, "home": 3, "crew": 5, "body": 2, "timeoff": 1, "self": 1, "space": 1},
+   "homeFelt": {"good": 2, "mixed": 1, "hard": 0},
+   "sleepMeanMin": 408,
+   "onsetMeanMin": -40,
+   "ledger": {"suitPrepLong": 2, "daysSinceRest": 7, "callsMissed": 0, "noisyNights": 0, "gym": 4, "greenhouse": 2, "dinners": 4, "callsSam": 3, "callsMom": 2},
+   "dials": {"stress": 3, "sleepiness": 3}
+  },
+  {
+   "week": 13,
+   "days": [85, 91],
+   "segments": {"work": 8, "home": 4, "crew": 4, "body": 3, "timeoff": 1, "self": 1, "space": 1},
+   "homeFelt": {"good": 3, "mixed": 1, "hard": 0},
+   "sleepMeanMin": 395,
+   "onsetMeanMin": -35,
+   "ledger": {"suitPrepLong": 2, "daysSinceRest": 8, "callsMissed": 0, "noisyNights": 0, "gym": 4, "greenhouse": 2, "dinners": 4, "callsSam": 3, "callsMom": 2},
+   "dials": {"stress": 4, "sleepiness": 4}
+  },
+  {
+   "week": 14,
+   "days": [92, 98],
+   "segments": {"work": 8, "home": 5, "crew": 4, "body": 3, "timeoff": 1, "self": 1, "space": 0},
+   "homeFelt": {"good": 2, "mixed": 1, "hard": 2},
+   "sleepMeanMin": 385,
+   "onsetMeanMin": -25,
+   "ledger": {"suitPrepLong": 2, "daysSinceRest": 8, "callsMissed": 1, "noisyNights": 0, "gym": 4, "greenhouse": 3, "dinners": 3, "callsSam": 2, "callsMom": 2},
+   "dials": {"stress": 5, "sleepiness": 4}
+  },
+  {
+   "week": 15,
+   "days": [99, 105],
+   "segments": {"work": 8, "home": 7, "crew": 3, "body": 3, "timeoff": 1, "self": 1, "space": 0},
+   "homeFelt": {"good": 2, "mixed": 1, "hard": 4},
+   "sleepMeanMin": 372,
+   "onsetMeanMin": -8,
+   "ledger": {"suitPrepLong": 3, "daysSinceRest": 9, "callsMissed": 1, "noisyNights": 1, "gym": 5, "greenhouse": 3, "dinners": 2, "callsSam": 2, "callsMom": 1},
+   "dials": {"stress": 5, "sleepiness": 5}
+  },
+  {
+   "week": 16,
+   "days": [106, 112],
+   "segments": {"work": 8, "home": 8, "crew": 3, "body": 3, "timeoff": 1, "self": 1, "space": 0},
+   "homeFelt": {"good": 2, "mixed": 1, "hard": 5},
+   "sleepMeanMin": 358,
+   "onsetMeanMin": 12,
+   "ledger": {"suitPrepLong": 3, "daysSinceRest": 11, "callsMissed": 2, "noisyNights": 2, "gym": 5, "greenhouse": 3, "dinners": 1, "callsSam": 1, "callsMom": 1},
+   "dials": {"stress": 6, "sleepiness": 6}
+  }
+ ],
+ "weeksBranchA": [
+  {
+   "week": 17,
+   "days": [113, 119],
+   "segments": {"work": 8, "home": 7, "crew": 3, "body": 3, "timeoff": 1, "self": 1, "space": 0},
+   "homeFelt": {"good": 4, "mixed": 2, "hard": 1},
+   "sleepMeanMin": 392,
+   "onsetMeanMin": -30,
+   "ledger": {"suitPrepLong": 1, "daysSinceRest": 3, "callsMissed": 0, "noisyNights": 0, "gym": 4, "greenhouse": 3, "dinners": 4, "callsSam": 3, "callsMom": 2},
+   "dials": {"stress": 5, "sleepiness": 4}
+  },
+  {
+   "week": 18,
+   "days": [120, 126],
+   "segments": {"work": 8, "home": 6, "crew": 4, "body": 3, "timeoff": 1, "self": 1, "space": 0},
+   "homeFelt": {"good": 5, "mixed": 1, "hard": 0},
+   "sleepMeanMin": 421,
+   "onsetMeanMin": -48,
+   "ledger": {"suitPrepLong": 1, "daysSinceRest": 5, "callsMissed": 0, "noisyNights": 0, "gym": 4, "greenhouse": 2, "dinners": 5, "callsSam": 3, "callsMom": 2},
+   "dials": {"stress": 4, "sleepiness": 3}
+  }
+ ],
+ "weeksBranchB": [
+  {
+   "week": 17,
+   "days": [113, 119],
+   "segments": {"work": 7, "home": 8, "crew": 2, "body": 3, "timeoff": 0, "self": 2, "space": 0},
+   "homeFelt": {"good": 1, "mixed": 1, "hard": 6},
+   "sleepMeanMin": 350,
+   "onsetMeanMin": 35,
+   "ledger": {"suitPrepLong": 3, "daysSinceRest": 18, "callsMissed": 2, "noisyNights": 2, "gym": 4, "greenhouse": 2, "dinners": 1, "callsSam": 1, "callsMom": 1},
+   "dials": {"stress": 6, "sleepiness": 6}
+  },
+  {
+   "week": 18,
+   "days": [120, 126],
+   "segments": {"work": 7, "home": 8, "crew": 2, "body": 4, "timeoff": 0, "self": 1, "space": 0},
+   "homeFelt": {"good": 1, "mixed": 1, "hard": 6},
+   "sleepMeanMin": 348,
+   "onsetMeanMin": 30,
+   "ledger": {"suitPrepLong": 2, "daysSinceRest": 25, "callsMissed": 2, "noisyNights": 1, "gym": 3, "greenhouse": 1, "dinners": 1, "callsSam": 1, "callsMom": 1},
+   "dials": {"stress": 7, "sleepiness": 7}
+  }
+ ],
+ "branchRule": "After day 112: branch A if at least one of the day-112 cards has status 'acted' by the end of day 112, else branch B. The story bar can force either branch.",
+ "generation": {
+  "seed": 520,
+  "journalDayIndexes": {
+   "default": [1, 2, 4, 5, 7],
+   "week16": [1, 2, 3, 4, 5, 6],
+   "_note": "1 = first day of the week. Week 16 leaves day 112 open: tonight's entry is written live. Weeks 9-16 therefore have 41 journal days of 56."
+  },
+  "segmentAssignment": "Per week: first place anchor entries on their own day; each anchor uses up one segment of its group for that week (for home, one of that week's homeFelt of the same felt value). Then list the remaining segments in groupsOrder and deal them round-robin onto the week's journal days. Weekly totals per group must equal the weeks table exactly.",
+  "feltCycles": {
+   "_note": "Felt for generated segments, cycled per group in order. Home uses homeFelt counts instead: goods first, then mixed, then hard.",
+   "work": ["good", "mixed", "mixed", "hard", "good", "mixed"],
+   "crew": ["good", "good", "mixed", "good"],
+   "body": ["mixed", "good", "mixed", "hard"],
+   "timeoff": ["good", "good", "good", "mixed"],
+   "self": ["mixed", "mixed", "hard"],
+   "space": ["mixed", "hard", "mixed"]
+  },
+  "sleepDurationOffsetsMin": [8, -6, 4, -9, 6, -3, 0],
+  "onsetOffsetsMin": [-10, 5, 0, 10, -5, -8, 8],
+  "explicitOnsetMin": {"99": -20, "100": -5, "101": 10, "102": -15, "103": 5, "104": -10, "105": -25, "106": -10, "107": 15, "108": -5, "109": -10, "110": 20, "111": 35, "112": 42},
+  "explicitOnsetMinBranchA": {"113": -20, "114": -35, "115": -45},
+  "explicitOnsetMinBranchB": {"113": 50, "114": 40, "115": 35, "116": 30},
+  "sleepRule": "sleepMin(day) = week.sleepMeanMin + sleepDurationOffsetsMin[dayIndex-1]. onsetMin(day) = explicit value if listed, else week.onsetMeanMin + onsetOffsetsMin[dayIndex-1]. wakeMin = onsetMin + sleepMin. Check: day 112 gives onset 42 (00:42), sleep 358 (5 h 58 min), wake 400 (06:40).",
+  "blockDayIndexes": {
+   "suitPrepLong": [7, 2, 4],
+   "gym": [7, 1, 3, 5, 2],
+   "callsSam": [7, 2, 5],
+   "callsMom": [3, 6],
+   "dinners": [1, 2, 3, 4, 5, 6, 7],
+   "greenhouse": [2, 5, 6],
+   "_note": "Take the first N indexes, N from the week's ledger."
+  },
+  "blockTimes": {
+   "suitPrepLongDay": [
+    ["Suit prep", 510, 840, "work"],
+    ["Experiments", 840, 1140, "work"]
+   ],
+   "normalDay": [
+    ["Systems checks", 510, 720, "work"],
+    ["Experiments", 780, 1080, "work"]
+   ],
+   "restDay": [],
+   "gym": ["Gym", 1200, 1245],
+   "dinner": ["Crew dinner", 1110, 1155],
+   "greenhouse": ["Greenhouse", 735, 765],
+   "callSam": ["Call with Sam", 1270, 1295],
+   "callSamWeek16": ["Call with Sam", 1270, 1282],
+   "callMom": ["Call with Mom", 1265, 1285],
+   "_note": "A day is a rest day when its day index is 7 and the week's daysSinceRest is under 7. Minutes from 00:00."
+  },
+  "week6UnloggedDinners": 3,
+  "checks": {
+   "rule": "A check session on every day divisible by 4, slots am and pm, days 4 to 108: 54 sessions. They are the first 54 sessions of reference/nasa/check_history.json, in order, each with origin 'nasa-replay' (meanRtMs, lapses, falseStarts and trials straight from the file; durationS 180 and counts true so they act as full-length history). Then day 112 am is the simulated result below.",
+   "day112am": {"meanRtMs": 281, "lapses": 4, "falseStarts": 1, "trials": 46, "origin": "sim"},
+   "afterDay112": "Sessions on days 116, 120 and 124, am and pm. Branch A: the next 6 sessions of check_history.json (sessions 55 to 60 of the file), origin 'nasa-replay'. Branch B: simulated, origin 'sim': meanRtMs = 262 + rtPatternB[i], lapses = 3 + lapsePatternB[i], falseStarts 0, trials 46.",
+   "rtPatternB": [-6, 4, -2, 7, -4, 1],
+   "lapsePatternB": [0, 1, 0, 0, 1, 0]
+  }
+ },
+ "dayPartFelt": {
+  "_note": "Saved 'rebuild your day' results for days 106-112.",
+  "days": [106, 107, 108, 109, 110, 111, 112],
+  "morning": ["good", "mixed", "good", "good", "mixed", "hard", "mixed"],
+  "afternoon": ["good", "good", "mixed", "good", "hard", "mixed", "good"],
+  "evening": ["hard", "hard", "mixed", "hard", "hard", "mixed", "hard"]
+ },
+ "day112BlockFelt": {"Sleep": "mixed", "Suit prep": "hard", "Experiments": "good", "Gym": null, "Call with Sam": "mixed"},
+ "markedMoments": [
+  {"day": 98, "min": 920},
+  {"day": 103, "min": 1205},
+  {"day": 109, "min": 1350},
+  {"day": 112, "min": 647},
+  {"day": 112, "min": 1274}
+ ],
+ "lightOnNights": {"week16": 2},
+ "anchorEntries": [
+  {"day": 16, "group": "work", "category": "Work", "felt": "good", "text": "First full run of the sample line without a stop. Ana timed it."},
+  {"day": 23, "group": "crew", "category": "Group Interaction", "felt": "good", "text": "Ravi lost at chess again and blamed the lighting."},
+  {"day": 30, "group": "home", "category": "Outside Communications", "felt": "good", "text": "Sam's video of the dog on the stairs. Watched it twice."},
+  {"day": 37, "group": "work", "category": "Equipment", "felt": "hard", "text": "The printer jammed on the third layer. Again."},
+  {"day": 40, "group": "crew", "category": "Group Interaction", "felt": "good", "text": "Dinner in the greenhouse module while the galley is in pieces. Best meal so far."},
+  {"day": 42, "group": "crew", "category": "Group Interaction", "felt": "good", "text": "Greenhouse dinner again. Mei brought the last of the hot sauce."},
+  {"day": 58, "group": "home", "category": "Outside Communications", "felt": "good", "text": "Mom's letter came through. She is repainting the hall."},
+  {"day": 65, "group": "home", "category": "Outside Communications", "felt": "good", "text": "Good call with Sam. Twenty-five minutes and it felt like five."},
+  {"day": 74, "group": "body", "category": "Sleep", "felt": "mixed", "text": "Slept in two pieces. Fine by ten."},
+  {"day": 86, "group": "work", "category": "Work", "felt": "mixed", "text": "Suit prep ran long. Nobody's fault, just long."},
+  {"day": 93, "group": "home", "category": "Outside Communications", "felt": "mixed", "text": "Missed the call window by eleven minutes. Sent a message instead."},
+  {"day": 96, "group": "home", "category": "Outside Communications", "felt": "hard", "text": "Wrote Sam three pages. Deleted two."},
+  {"day": 100, "group": "work", "category": "Work", "felt": "hard", "text": "Third long suit-prep day this week. My hands know the checklist better than I do."},
+  {"day": 103, "group": "home", "category": "Outside Communications", "felt": "mixed", "text": "Drew the kitchen at home from memory. Got the window wrong."},
+  {"day": 106, "group": "home", "category": "Outside Communications", "felt": "hard", "text": "Sam's birthday is in nine days and I will be in the airlock."},
+  {"day": 109, "group": "home", "category": "Outside Communications", "felt": "hard", "text": "I keep doing the math on when the call window lines up with her morning."},
+  {"day": 110, "group": "body", "category": "Sleep", "felt": "hard", "text": "Up past midnight again. Not doing anything, just up."},
+  {"day": 111, "group": "crew", "category": "Group Interaction", "felt": "mixed", "text": "Skipped dinner to finish the log. Jonas left a plate."},
+  {"day": 116, "branch": "A", "group": "home", "category": "Outside Communications", "felt": "good", "text": "Booked the long window. Sam picked the time."},
+  {"day": 117, "branch": "A", "group": "crew", "category": "Group Interaction", "felt": "good", "text": "Thursday dinner. Stayed for the washing up."}
+ ],
+ "sentenceBank": {"_note": "The builder writes src/data/sentences.ts: 6 sentences per group per felt value (7 groups x 3 felt x 6 = 126). Voice: first person, past tense, 6 to 16 words, concrete and physical, names of crew or objects, dry rather than emotional, no therapy words, no exclamation marks. Match the anchor entries. Every generated sentence carries origin 'ai-sample'."},
+ "profile": {
+  "writtenOnDay": -41,
+  "enjoys": ["Greenhouse time", "Chess with Ravi", "Sketching from memory", "Treadmill run with music", "Cooking the shared meal", "Reading history", "The cupola window"],
+  "dislikes": ["Guided meditation audio", "Group games"],
+  "supportMap": {"work": "ana", "home": "sam", "medical": "mei", "venting": "diary"},
+  "stressAnchors": {"1": "Nothing is pulling at me", "5": "Busy, but I'm steering", "10": "I can't hold all of it"},
+  "signs": [
+   {
+    "id": "light",
+    "quote": "I sleep with the cabin light on.",
+    "source": "Wearable: light and sleep",
+    "rule": {"metric": "lightOnNights", "window": "week", "atLeast": 2}
+   },
+   {
+    "id": "meal",
+    "quote": "I skip the second meal.",
+    "source": "Your taps after meals",
+    "rule": {"metric": "secondMealSkipped", "window": "week", "atLeast": 3}
+   },
+   {
+    "id": "letters",
+    "quote": "I stop opening letters from home.",
+    "source": "Your message log",
+    "rule": {"metric": "lettersUnopened", "window": "week", "atLeast": 3}
+   },
+   {
+    "id": "short",
+    "quote": "I get short with people over small things.",
+    "source": "Your taps after crew time",
+    "rule": {"metric": "crewTapsHard", "window": "week", "atLeast": 3, "minData": 5}
+   },
+   {
+    "id": "greenhouse",
+    "quote": "I stop going to the greenhouse.",
+    "source": "Your greenhouse log",
+    "rule": {"metric": "greenhouse", "window": "week", "atMost": 0}
+   },
+   {
+    "id": "midnight",
+    "quote": "I stay up past midnight three nights running.",
+    "source": "Wearable: sleep",
+    "rule": {"metric": "pastMidnightRun", "atLeast": 3},
+    "steps": ["Lights out by 23:30, whatever is left undone.", "Message Sam: “rough sleep week.”", "Skip the gym that morning."],
+    "shareRuleId": "midnight5"
+   }
+  ],
+  "signMetricsNote": "For the demo: secondMealSkipped = 0, lettersUnopened = 0, crewTapsHard has under 5 taps of data (result: cannot tell yet), greenhouse and pastMidnightRun come from the generated days, lightOnNights from lightOnNights above.",
+  "shareRules": [
+   {"id": "midnight5", "auto": true, "text": "If I stay up past midnight 5 nights running, tell my flight surgeon it happened, not what I wrote.", "metric": "pastMidnightRun", "atLeast": 5, "to": "fs", "message": "Automatic note agreed before launch: sleep started after midnight on 5 nights in a row. No diary content is included."},
+   {"id": "quiet10", "auto": false, "text": "If I write nothing for 10 days, ask me once whether I want to tell anyone. Do not tell anyone for me.", "metric": "daysWithoutEntry", "atLeast": 10}
+  ],
+  "reminders": [
+   {
+    "id": "winddown",
+    "text": "Wind-down at 21:00 on days with 6 or more hours of suit-prep",
+    "buzz": ["short", "short"],
+    "on": true,
+    "fromDay": 105,
+    "wristLabel": "Wind down",
+    "atMin": 1260
+   },
+   {
+    "id": "callwindow",
+    "text": "Call window starts in 10 minutes",
+    "buzz": ["long"],
+    "on": true,
+    "fromDay": 12,
+    "wristLabel": "Call window in 10"
+   },
+   {
+    "id": "dinner",
+    "text": "Crew dinner, if you have not had one in 3 days",
+    "buzz": ["short", "short", "short"],
+    "on": true,
+    "fromDay": 12,
+    "wristLabel": "Dinner with the crew?"
+   },
+   {
+    "id": "stretch",
+    "text": "Stand and stretch after 90 minutes seated",
+    "buzz": ["short"],
+    "on": false,
+    "fromDay": 12,
+    "wristLabel": "Stand and stretch"
+   }
+  ],
+  "reminderLimits": ["Silent during suit-up, EVA and sleep, and anything you mark as critical.", "At most 3 buzzes a day.", "A buzz you snooze is recorded as skipped. Only you see that count.", "Nothing here is sent to anyone."],
+  "copingMenu": [
+   {
+    "id": "green15",
+    "label": "Greenhouse time",
+    "minutes": 15,
+    "fits": ["stress", "lowmood", "boredom", "home"],
+    "fromPreferences": true,
+    "evidenceTag": "exp",
+    "evidence": "NASA is studying whether gardening eases isolation. No result yet."
+   },
+   {
+    "id": "run25",
+    "label": "Treadmill run with music",
+    "minutes": 25,
+    "fits": ["stress", "lowmood"],
+    "fromPreferences": true,
+    "evidenceTag": "earth",
+    "evidence": "Aerobic exercise is established on Earth for mild low mood and anxiety (NASA Behavioral Health evidence report 2025, p.87)."
+   },
+   {
+    "id": "chess30",
+    "label": "Chess with Ravi",
+    "minutes": 30,
+    "fits": ["boredom", "stress"],
+    "fromPreferences": true,
+    "evidenceTag": "exp",
+    "evidence": "From your own list. Not a tested treatment."
+   },
+   {
+    "id": "letter10",
+    "label": "Record a letter home",
+    "minutes": 10,
+    "fits": ["home"],
+    "fromPreferences": false,
+    "evidenceTag": "analog",
+    "evidence": "Weak: delayed messages may have raised felt closeness in Mars-500 (evidence report p.93)."
+   },
+   {
+    "id": "ps12",
+    "label": "Problem-solving sheet",
+    "minutes": 12,
+    "fits": ["stress", "lowmood", "work"],
+    "fromPreferences": false,
+    "evidenceTag": "earth",
+    "evidence": "Three weekly self-guided sessions cut moderate depression to mild in an Earth trial (evidence report p.93)."
+   },
+   {
+    "id": "conflict10",
+    "label": "Conflict and stress module",
+    "minutes": 10,
+    "fits": ["crew", "work"],
+    "fromPreferences": false,
+    "evidenceTag": "analog",
+    "evidence": "Rated highly by an analog crew (HI-SEAS, evidence report p.93)."
+   },
+   {
+    "id": "nap20",
+    "label": "Nap",
+    "minutes": 20,
+    "fits": ["fatigue"],
+    "fromPreferences": false,
+    "evidenceTag": "placeholder",
+    "evidence": "Common fatigue practice. Not tested by this tool."
+   },
+   {
+    "id": "mind8",
+    "label": "Breathing and attention",
+    "minutes": 8,
+    "fits": ["stress"],
+    "fromPreferences": false,
+    "evidenceTag": "earth",
+    "evidence": "Helps stress in healthy adults; study quality is questioned (evidence report p.90). You listed guided audio as a dislike, so it sits last."
+   }
+  ],
+  "helpedLog": [
+   {"taskId": "green15", "uses": 6, "medianChange": -2},
+   {"taskId": "run25", "uses": 4, "medianChange": -1},
+   {"taskId": "mind8", "uses": 2, "medianChange": 0},
+   {"taskId": "ps12", "uses": 1, "medianChange": -1}
+  ],
+  "helpedNote": "medianChange = stress dial after minus before. Negative means stress went down. Under 10 uses is shown as tentative."
+ },
+ "scriptedResolutions": [
+  {"day": 42, "cardKind": "ledger", "status": "not-right", "reason": "missing", "choice": "That’s not right", "effect": "It now counts dinners you log from your wrist too.", "setsFlag": "countWristDinners"},
+  {"day": 105, "cardKind": "ledger", "status": "acted", "choice": "Add a wrist reminder", "effect": "Your wrist buzzes at 21:00 on suit-prep days.", "enablesReminder": "winddown"}
+ ],
+ "chapters": [
+  {"id": "settling", "day": 12, "label": "Day 12 · Settling in", "route": "/today", "caption": "For the first 14 days the tool only observes. It suggests nothing until it knows your usual."},
+  {"id": "wrong", "day": 42, "label": "Day 42 · It gets one wrong", "route": "/today", "caption": "The mission timeline missed three dinners, so the tool says something untrue. You correct it in two taps, and it changes."},
+  {"id": "drift", "day": 98, "label": "Day 98 · A quiet drift", "route": "/patterns/mind", "caption": "Family is taking more of the diary and sleep is sliding later. One week is not a pattern, so the tool stays quiet."},
+  {"id": "noticed", "day": 112, "label": "Day 112 · Three things noticed", "route": "/today", "caption": "Three weeks in a row. Now the tool asks whether this matches, and you choose what happens next."},
+  {"id": "followed", "day": 119, "label": "Day 119 · What followed", "route": "/today", "captionA": "You acted. The ledger refilled, and the tool logged what followed.", "captionB": "You did nothing, which is allowed. On day 114 a line you set before launch was crossed, and your flight surgeon was told only that."}
+ ]
+}

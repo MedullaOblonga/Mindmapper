@@ -1,0 +1,513 @@
+{
+  "_note": "Journal taxonomy. The 24 categories are NASA's, from the ISS astronaut journals study (Stuster 2010, dataset H01). The 7 display groups and the keyword lists are ours (prototype). Keywords are lower-case stems matched with word-start matching (\\bstem). Extend the lists freely; do not rename categories. Category names, counts and tone values were checked against the NASA report file (NASA TM-2010-216130, in data/H01_Astronaut_Journals) on 15 Nov 2026.",
+  "groups": [
+    {
+      "id": "work",
+      "label": "Work",
+      "colorVar": "--t-work",
+      "ink": "dark"
+    },
+    {
+      "id": "home",
+      "label": "Family and home",
+      "short": "Family",
+      "colorVar": "--t-home",
+      "ink": "dark"
+    },
+    {
+      "id": "crew",
+      "label": "Crew",
+      "colorVar": "--t-crew",
+      "ink": "dark"
+    },
+    {
+      "id": "body",
+      "label": "Body and sleep",
+      "colorVar": "--t-body",
+      "ink": "dark"
+    },
+    {
+      "id": "timeoff",
+      "label": "Time off",
+      "colorVar": "--t-timeoff",
+      "ink": "dark"
+    },
+    {
+      "id": "self",
+      "label": "How I'm adjusting",
+      "short": "Adjusting",
+      "colorVar": "--t-self",
+      "ink": "dark"
+    },
+    {
+      "id": "space",
+      "label": "Living space",
+      "colorVar": "--t-space",
+      "ink": "light"
+    },
+    {
+      "id": "other",
+      "label": "Other",
+      "colorVar": "--t-other",
+      "ink": "light"
+    }
+  ],
+  "categories": [
+    {
+      "name": "Work",
+      "group": "work",
+      "keywords": [
+        "work",
+        "task",
+        "experiment",
+        "eva",
+        "suit",
+        "payload",
+        "sample",
+        "robotic",
+        "dock",
+        "maintenance",
+        "repair",
+        "shift",
+        "timeline",
+        "deadline",
+        "behind schedule"
+      ]
+    },
+    {
+      "name": "Equipment",
+      "group": "work",
+      "keywords": [
+        "equipment",
+        "tool",
+        "pump",
+        "valve",
+        "laptop",
+        "printer",
+        "broke",
+        "broken",
+        "fault",
+        "leak",
+        "jam",
+        "sensor",
+        "filter",
+        "hardware"
+      ]
+    },
+    {
+      "name": "Organization/Management",
+      "group": "work",
+      "keywords": [
+        "mission control",
+        "ground",
+        "flight director",
+        "planner",
+        "management",
+        "they changed",
+        "rescheduled",
+        "replanned",
+        "bureaucra"
+      ]
+    },
+    {
+      "name": "Procedures/Rituals",
+      "group": "work",
+      "keywords": [
+        "procedure",
+        "checklist",
+        "protocol",
+        "step by step",
+        "sign-off",
+        "routine check"
+      ]
+    },
+    {
+      "name": "Safety",
+      "group": "work",
+      "keywords": [
+        "safety",
+        "alarm",
+        "hazard",
+        "drill",
+        "emergency",
+        "depress",
+        "fire"
+      ]
+    },
+    {
+      "name": "Outside Communications",
+      "group": "home",
+      "keywords": [
+        "sam",
+        "mom",
+        "mum",
+        "dad",
+        "family",
+        "home",
+        "kids",
+        "call window",
+        "the call",
+        "letter",
+        "message from",
+        "video from",
+        "wife",
+        "husband",
+        "sister",
+        "brother",
+        "birthday",
+        "kitchen",
+        "house"
+      ]
+    },
+    {
+      "name": "Group Interaction",
+      "group": "crew",
+      "keywords": [
+        "crew",
+        "ana",
+        "ravi",
+        "mei",
+        "jonas",
+        "together",
+        "dinner",
+        "argument",
+        "laugh",
+        "joke",
+        "tension",
+        "snapped",
+        "team"
+      ]
+    },
+    {
+      "name": "Leadership",
+      "group": "crew",
+      "keywords": [
+        "commander",
+        "leader",
+        "decision was",
+        "overruled",
+        "in charge"
+      ]
+    },
+    {
+      "name": "Internal Communications",
+      "group": "crew",
+      "keywords": [
+        "briefing",
+        "debrief",
+        "handover",
+        "told me",
+        "nobody told",
+        "misunderst"
+      ]
+    },
+    {
+      "name": "Personnel Selection",
+      "group": "crew",
+      "keywords": [
+        "selection",
+        "selected",
+        "picked for",
+        "crew mix"
+      ]
+    },
+    {
+      "name": "Sleep",
+      "group": "body",
+      "keywords": [
+        "sleep",
+        "slept",
+        "awake",
+        "tired",
+        "nap",
+        "insomnia",
+        "woke",
+        "exhaust",
+        "bed"
+      ]
+    },
+    {
+      "name": "Exercise",
+      "group": "body",
+      "keywords": [
+        "gym",
+        "exercise",
+        "treadmill",
+        "bike",
+        "workout",
+        "resistance",
+        "stretch"
+      ]
+    },
+    {
+      "name": "Medical",
+      "group": "body",
+      "keywords": [
+        "headache",
+        "sick",
+        "pain",
+        "sore",
+        "medication",
+        "medical",
+        "doctor",
+        "nausea",
+        "rash",
+        "ache"
+      ]
+    },
+    {
+      "name": "Food",
+      "group": "body",
+      "keywords": [
+        "food",
+        "meal",
+        "eat",
+        "ate",
+        "hungry",
+        "coffee",
+        "taste",
+        "snack",
+        "ration"
+      ]
+    },
+    {
+      "name": "Personal Hygiene",
+      "group": "body",
+      "keywords": [
+        "shower",
+        "wash",
+        "shave",
+        "hygiene",
+        "haircut"
+      ]
+    },
+    {
+      "name": "Recreation/Leisure",
+      "group": "timeoff",
+      "keywords": [
+        "movie",
+        "film",
+        "music",
+        "guitar",
+        "book",
+        "reading",
+        "game",
+        "chess",
+        "window",
+        "photo",
+        "greenhouse",
+        "garden",
+        "hobby",
+        "drew",
+        "sketch"
+      ]
+    },
+    {
+      "name": "Event",
+      "group": "timeoff",
+      "keywords": [
+        "celebrat",
+        "holiday",
+        "anniversary",
+        "milestone",
+        "halfway",
+        "party"
+      ]
+    },
+    {
+      "name": "Adjustment",
+      "group": "self",
+      "keywords": [
+        "i feel",
+        "i felt",
+        "feeling",
+        "mood",
+        "morale",
+        "motivat",
+        "lonely",
+        "homesick",
+        "bored",
+        "monoton",
+        "cope",
+        "coping",
+        "used to it",
+        "missing",
+        "miss "
+      ]
+    },
+    {
+      "name": "Habitat Aesthetics",
+      "group": "space",
+      "keywords": [
+        "lighting",
+        "colour",
+        "color",
+        "decor",
+        "view",
+        "bland",
+        "grey walls"
+      ]
+    },
+    {
+      "name": "Habitat Hygiene",
+      "group": "space",
+      "keywords": [
+        "smell",
+        "dust",
+        "dirty",
+        "clean",
+        "mould",
+        "mold"
+      ]
+    },
+    {
+      "name": "Privacy/Personal Space",
+      "group": "space",
+      "keywords": [
+        "privacy",
+        "alone",
+        "my quarters",
+        "bunk",
+        "no space",
+        "cramped",
+        "personal space",
+        "noise",
+        "noisy",
+        "loud"
+      ]
+    },
+    {
+      "name": "Clothing",
+      "group": "space",
+      "keywords": [
+        "clothes",
+        "shirt",
+        "socks",
+        "laundry"
+      ]
+    },
+    {
+      "name": "Waste Management",
+      "group": "space",
+      "keywords": [
+        "toilet",
+        "waste",
+        "trash",
+        "garbage"
+      ]
+    },
+    {
+      "name": "Logistics/Storage",
+      "group": "space",
+      "keywords": [
+        "stowage",
+        "storage",
+        "inventory",
+        "can't find",
+        "missing item",
+        "locker"
+      ]
+    },
+    {
+      "name": "Uncategorised",
+      "group": "other",
+      "keywords": []
+    }
+  ],
+  "feltWords": {
+    "_note": "Guess only. The astronaut's tap always wins. 'felt' means how the writer judged the event (good, mixed, hard), not how cheerful the wording is.",
+    "good": [
+      "good",
+      "great",
+      "glad",
+      "happy",
+      "relief",
+      "relieved",
+      "proud",
+      "fun",
+      "enjoy",
+      "loved",
+      "laughed",
+      "worked",
+      "nailed",
+      "finally",
+      "best",
+      "calm",
+      "lovely",
+      "made my day"
+    ],
+    "hard": [
+      "hard",
+      "bad",
+      "awful",
+      "angry",
+      "annoy",
+      "frustrat",
+      "worried",
+      "worry",
+      "anxious",
+      "sad",
+      "missed",
+      "miss ",
+      "lonely",
+      "tired of",
+      "fed up",
+      "snapped",
+      "couldn't",
+      "can't",
+      "wrong",
+      "deleted",
+      "failed",
+      "guilty",
+      "useless"
+    ]
+  },
+  "h01NetToneByCategory": {
+    "_note": "Average net positivity/negativity of journal entries by category for the top 18 categories, read from the figure 'Average NPN of the Categories' (p.54) of NASA's ISS journals report (H01). Shown ONLY inside the 'Why is there no mood score?' explainer. Never used to judge the astronaut.",
+    "Recreation/Leisure": 0.687,
+    "Leadership": 0.463,
+    "Group Interaction": 0.406,
+    "Event": 0.38,
+    "Food": 0.265,
+    "Exercise": 0.247,
+    "Outside Communications": 0.238,
+    "Adjustment": 0.236,
+    "Privacy/Personal Space": 0.221,
+    "Procedures/Rituals": 0.028,
+    "Work": 0.011,
+    "Sleep": -0.07,
+    "Logistics/Storage": -0.222,
+    "Waste Management": -0.286,
+    "Safety": -0.296,
+    "Equipment": -0.416,
+    "Medical": -0.625,
+    "Organization/Management": -0.641
+  },
+  "h01CategoryCounts": {
+    "_note": "Numbers of primary, secondary and tertiary category assignments combined, ten ISS astronauts' journals, from the figure on p.9 of the same report. Shown only on the About screen and in the Why drawer as context. It is NOT a target or a norm, and the demo astronaut's own mix is simulated.",
+    "Work": 1523,
+    "Outside Communications": 1456,
+    "Adjustment": 1082,
+    "Group Interaction": 777,
+    "Recreation/Leisure": 533,
+    "Equipment": 497,
+    "Event": 435,
+    "Organization/Management": 413,
+    "Sleep": 263,
+    "Food": 245,
+    "Logistics/Storage": 242,
+    "Exercise": 176,
+    "Procedures/Rituals": 120,
+    "Leadership": 103,
+    "Safety": 69,
+    "Medical": 66,
+    "Waste Management": 52,
+    "Privacy/Personal Space": 36,
+    "Clothing": 28,
+    "Personnel Selection": 27,
+    "Internal Communications": 24,
+    "Habitat Aesthetics": 19,
+    "Personal Hygiene": 17,
+    "Habitat Hygiene": 10
+  }
+}

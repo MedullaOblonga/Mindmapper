@@ -1,0 +1,1094 @@
+{
+"source": "NASA Life Sciences Data Archive, Bed Rest Standard Measures: Performance Testing (BRSMPT), Campaign 1, ARES Simple Reaction Time; DOI 10.83263/7081-d617",
+"file": "BRSMPT_Campaign_1_Ares_Subject_1.csv",
+"subject": "C1G0001 (bed-rest volunteer, not an astronaut)",
+"note": "Each session is a short simple reaction-time test on a handheld (20 stimuli, about 34 seconds), not the 3-minute PVT-B. meanRtMs = mRTC (mean response time, correct responses). lapses = Lap and falseStarts = Imp as recorded by the ARES software; the file does not state its lapse threshold. The first 10 sessions are left out as practice. Sessions are in recorded order and are not re-ordered or edited.",
+"sessions": [
+{
+"session": 11,
+"meanRtMs": 193,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 12,
+"meanRtMs": 215,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 13,
+"meanRtMs": 249,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 14,
+"meanRtMs": 240,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 15,
+"meanRtMs": 221,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 16,
+"meanRtMs": 243,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 17,
+"meanRtMs": 233,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 18,
+"meanRtMs": 225,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 19,
+"meanRtMs": 245,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 20,
+"meanRtMs": 222,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 21,
+"meanRtMs": 224,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 22,
+"meanRtMs": 257,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 23,
+"meanRtMs": 229,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 24,
+"meanRtMs": 212,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 25,
+"meanRtMs": 237,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 26,
+"meanRtMs": 205,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 27,
+"meanRtMs": 211,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 28,
+"meanRtMs": 236,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 29,
+"meanRtMs": 233,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 30,
+"meanRtMs": 203,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 31,
+"meanRtMs": 257,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 32,
+"meanRtMs": 227,
+"lapses": 0,
+"falseStarts": 1,
+"trials": 19
+},
+{
+"session": 33,
+"meanRtMs": 210,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 34,
+"meanRtMs": 217,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 35,
+"meanRtMs": 218,
+"lapses": 0,
+"falseStarts": 1,
+"trials": 19
+},
+{
+"session": 36,
+"meanRtMs": 218,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 37,
+"meanRtMs": 215,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 38,
+"meanRtMs": 238,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 39,
+"meanRtMs": 203,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 40,
+"meanRtMs": 199,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 41,
+"meanRtMs": 228,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 42,
+"meanRtMs": 208,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 43,
+"meanRtMs": 200,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 44,
+"meanRtMs": 233,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 45,
+"meanRtMs": 225,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 46,
+"meanRtMs": 212,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 47,
+"meanRtMs": 239,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 48,
+"meanRtMs": 210,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 49,
+"meanRtMs": 222,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 50,
+"meanRtMs": 210,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 51,
+"meanRtMs": 213,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 52,
+"meanRtMs": 194,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 53,
+"meanRtMs": 228,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 54,
+"meanRtMs": 211,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 55,
+"meanRtMs": 230,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 56,
+"meanRtMs": 207,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 57,
+"meanRtMs": 208,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 58,
+"meanRtMs": 205,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 59,
+"meanRtMs": 201,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 60,
+"meanRtMs": 187,
+"lapses": 0,
+"falseStarts": 1,
+"trials": 19
+},
+{
+"session": 61,
+"meanRtMs": 221,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 62,
+"meanRtMs": 210,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 63,
+"meanRtMs": 205,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 64,
+"meanRtMs": 267,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 65,
+"meanRtMs": 239,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 66,
+"meanRtMs": 240,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 67,
+"meanRtMs": 217,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 68,
+"meanRtMs": 237,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 69,
+"meanRtMs": 215,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 70,
+"meanRtMs": 212,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 71,
+"meanRtMs": 209,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 72,
+"meanRtMs": 231,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 73,
+"meanRtMs": 195,
+"lapses": 0,
+"falseStarts": 1,
+"trials": 19
+},
+{
+"session": 74,
+"meanRtMs": 204,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 75,
+"meanRtMs": 199,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 76,
+"meanRtMs": 175,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 77,
+"meanRtMs": 226,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 78,
+"meanRtMs": 205,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 79,
+"meanRtMs": 210,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 80,
+"meanRtMs": 217,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 81,
+"meanRtMs": 257,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 82,
+"meanRtMs": 215,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 83,
+"meanRtMs": 226,
+"lapses": 0,
+"falseStarts": 1,
+"trials": 19
+},
+{
+"session": 84,
+"meanRtMs": 240,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 85,
+"meanRtMs": 187,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 86,
+"meanRtMs": 247,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 87,
+"meanRtMs": 230,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 88,
+"meanRtMs": 183,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 89,
+"meanRtMs": 205,
+"lapses": 0,
+"falseStarts": 1,
+"trials": 19
+},
+{
+"session": 90,
+"meanRtMs": 235,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 91,
+"meanRtMs": 353,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 92,
+"meanRtMs": 209,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 93,
+"meanRtMs": 218,
+"lapses": 0,
+"falseStarts": 1,
+"trials": 19
+},
+{
+"session": 94,
+"meanRtMs": 200,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 95,
+"meanRtMs": 202,
+"lapses": 0,
+"falseStarts": 1,
+"trials": 20
+},
+{
+"session": 96,
+"meanRtMs": 224,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 97,
+"meanRtMs": 214,
+"lapses": 1,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 98,
+"meanRtMs": 238,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 99,
+"meanRtMs": 246,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 100,
+"meanRtMs": 263,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 101,
+"meanRtMs": 239,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 102,
+"meanRtMs": 212,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 103,
+"meanRtMs": 190,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 104,
+"meanRtMs": 212,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 105,
+"meanRtMs": 210,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 106,
+"meanRtMs": 220,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 107,
+"meanRtMs": 191,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 108,
+"meanRtMs": 222,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 109,
+"meanRtMs": 190,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 110,
+"meanRtMs": 211,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 111,
+"meanRtMs": 219,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 112,
+"meanRtMs": 221,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 113,
+"meanRtMs": 206,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 114,
+"meanRtMs": 247,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 115,
+"meanRtMs": 219,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 116,
+"meanRtMs": 246,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 117,
+"meanRtMs": 245,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 118,
+"meanRtMs": 222,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 119,
+"meanRtMs": 229,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 120,
+"meanRtMs": 234,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 121,
+"meanRtMs": 235,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 122,
+"meanRtMs": 243,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 123,
+"meanRtMs": 197,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 124,
+"meanRtMs": 205,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 125,
+"meanRtMs": 246,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 126,
+"meanRtMs": 220,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 127,
+"meanRtMs": 213,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 128,
+"meanRtMs": 226,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 129,
+"meanRtMs": 234,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 130,
+"meanRtMs": 205,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 131,
+"meanRtMs": 222,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 132,
+"meanRtMs": 204,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 133,
+"meanRtMs": 207,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 134,
+"meanRtMs": 285,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 135,
+"meanRtMs": 244,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 136,
+"meanRtMs": 193,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 137,
+"meanRtMs": 219,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 138,
+"meanRtMs": 214,
+"lapses": 0,
+"falseStarts": 1,
+"trials": 19
+},
+{
+"session": 139,
+"meanRtMs": 266,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 140,
+"meanRtMs": 215,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 141,
+"meanRtMs": 219,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 142,
+"meanRtMs": 226,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 143,
+"meanRtMs": 227,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 144,
+"meanRtMs": 242,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 145,
+"meanRtMs": 196,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 146,
+"meanRtMs": 213,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 147,
+"meanRtMs": 244,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 148,
+"meanRtMs": 232,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 149,
+"meanRtMs": 212,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 150,
+"meanRtMs": 225,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 151,
+"meanRtMs": 227,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 152,
+"meanRtMs": 217,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 153,
+"meanRtMs": 226,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 154,
+"meanRtMs": 242,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 155,
+"meanRtMs": 254,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 156,
+"meanRtMs": 196,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 157,
+"meanRtMs": 210,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 158,
+"meanRtMs": 204,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 159,
+"meanRtMs": 200,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 160,
+"meanRtMs": 215,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 161,
+"meanRtMs": 221,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 162,
+"meanRtMs": 222,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 163,
+"meanRtMs": 197,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 164,
+"meanRtMs": 229,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+},
+{
+"session": 165,
+"meanRtMs": 207,
+"lapses": 0,
+"falseStarts": 0,
+"trials": 20
+}
+],
+"sessionsCount": 155
+}

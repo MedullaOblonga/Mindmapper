@@ -1,0 +1,5 @@
+/* Screen-level additions. Only variables from app.css may be used here. */
+.link-tap{font-weight:500;display:inline-flex;align-items:center;min-height:var(--tap)}
+.storybar-label{flex:none}
+.story-day{width:54px;text-align:center}
+.rail-item{position:relative}

@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reference mock: app shell and Today (mission day 112)</title>
+<!-- STATIC VISUAL REFERENCE ONLY. Sample data, no logic. Built with AI assistance.
+     The real app must reproduce this layout using the same classes from app.css. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <span class="t-label">Mission day 112 of 520</span>
+      <div class="mission-meter" role="img" aria-label="Mission 21.5 percent complete"><i style="width:21.5%"></i></div>
+    </div>
+    <div class="topbar-right">
+      <span class="private">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        <span>Stays on this device. Only you can see it.</span>
+      </span>
+      <a href="#share-log" class="t-head" style="font-weight:500;display:inline-flex;align-items:center;min-height:44px">Share log: nothing shared</a>
+    </div>
+  </header>
+
+  <!-- STORY BAR (demo mode only) -->
+  <nav class="storybar" aria-label="Demo story">
+    <span class="t-label" style="flex:none">Demo story · simulated</span>
+    <div class="story-chips">
+      <button class="story-chip">Day 12 · Settling in</button>
+      <button class="story-chip">Day 42 · It gets one wrong</button>
+      <button class="story-chip">Day 98 · A quiet drift</button>
+      <button class="story-chip" aria-current="true">Day 112 · Three things noticed</button>
+      <button class="story-chip">Day 119 · What followed</button>
+    </div>
+    <span class="story-step">
+      <button class="btn btn--sm" aria-label="Previous day">‹</button>
+      <span class="t-small num" style="width:54px;text-align:center">Day 112</span>
+      <button class="btn btn--sm" aria-label="Next day">›</button>
+    </span>
+  </nav>
+
+  <!-- LEFT RAIL -->
+  <nav class="rail" aria-label="Main">
+    <button class="rail-item" aria-current="page">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/></svg>Today</button>
+    <button class="rail-item">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11l3 3v13H5z"/><path d="M9 10h6M9 14h6"/></svg>Journal</button>
+    <button class="rail-item">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h9M4 12h16M4 17h6"/></svg>Patterns</button>
+    <button class="rail-item">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4h12v16l-6-3-6 3z"/></svg>My plan</button>
+    <span class="rail-spacer"></span>
+    <button class="rail-item">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>About</button>
+  </nav>
+
+  <!-- PAGE: TODAY -->
+  <main class="page">
+    <div class="page-head">
+      <div>
+        <h1 class="t-title">Does this match?</h1>
+        <p class="t-lede">Three things the tool noticed this week. Each one ends in something you can do, or in telling the tool it is wrong.</p>
+      </div>
+      <span class="note-pill">Based on entries from 41 of the last 56 days</span>
+    </div>
+
+    <div class="cols">
+      <!-- LEFT: the card -->
+      <div class="col col--wide">
+        <div class="stack" data-left="3">
+          <article class="card card-enter" aria-labelledby="card-stmt">
+            <div class="card-top"><span>1 of 3 this week</span><div class="pips" aria-hidden="true"><i class="on"></i><i></i><i></i></div></div>
+
+            <div style="display:flex;flex-direction:column;gap:10px" aria-label="Family mentions, first two weeks against the last two">
+              <div class="evidence-row"><div>Days 57 to 70<br>4 mentions</div><div class="mark-row" id="ev1"></div></div>
+              <div class="evidence-row"><div>Days 99 to 112<br>15 mentions</div><div class="mark-row" id="ev2"></div></div>
+            </div>
+
+            <p class="t-stmt" id="card-stmt">Family has come up nearly four times as often as in your first two weeks. More of it felt hard.</p>
+
+            <div class="btn-row" style="align-items:center;gap:16px">
+              <a href="#entries" class="t-head" style="font-weight:500;display:inline-flex;align-items:center;min-height:44px">See the 15 entries</a>
+              <a href="#why" class="t-head" style="font-weight:500;display:inline-flex;align-items:center;min-height:44px">Why this?</a>
+              <span class="tag">AI-written sample journal</span>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div class="t-small" style="font-weight:500">Do something with it, or tell the tool it is wrong.</div>
+              <div style="display:flex;gap:12px;flex-wrap:wrap">
+                <button class="btn btn--primary btn--lg">Write about it</button>
+                <button class="btn btn--lg">Book a call window</button>
+                <button class="btn btn--lg">Talk to someone</button>
+              </div>
+            </div>
+
+            <div class="btn-row btn-row--split">
+              <button class="btn btn--wrong">That’s not right</button>
+              <button class="btn btn--quiet">Skip for now</button>
+            </div>
+          </article>
+        </div>
+
+        <div class="panel panel--tight">
+          <div class="t-head">What the tool did with your answers</div>
+          <div class="rows" style="display:flex;flex-direction:column">
+            <div style="display:flex;gap:16px;align-items:baseline;justify-content:space-between">
+              <div><div class="t-head">Fewer dinners with crew</div><div class="t-small" style="color:var(--act)">Day 42. You said: That’s not right</div></div>
+              <p class="t-stmt-sm" style="font-size:17px;max-width:360px">It now counts dinners you log from your wrist too.</p>
+            </div>
+            <div style="display:flex;gap:16px;align-items:baseline;justify-content:space-between">
+              <div><div class="t-head">Fewer dinners with crew and more long suit-prep days</div><div class="t-small" style="color:var(--act)">Day 105. You chose: Add a wrist reminder</div></div>
+              <p class="t-stmt-sm" style="font-size:17px;max-width:360px">Your wrist buzzes at 21:00 on suit-prep days.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: tonight, check, wrist -->
+      <div class="col col--narrow">
+        <div class="panel panel--tight panel--act">
+          <div class="t-label" style="color:var(--act)">Tonight</div>
+          <p class="t-stmt-sm">Two moments you marked today are waiting.</p>
+          <div class="rows" style="display:flex;flex-direction:column">
+            <div style="display:flex;justify-content:space-between;gap:12px"><span><b class="num">10:47</b> &nbsp;during Suit prep</span><span class="t-small">Marked on your wrist</span></div>
+            <div style="display:flex;justify-content:space-between;gap:12px"><span><b class="num">21:14</b> &nbsp;during Call with Sam</span><span class="t-small">Marked on your wrist</span></div>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn--primary">Speak or write</button>
+            <button class="btn btn--quiet">Not tonight</button>
+          </div>
+          <div class="t-foot">Your diary is for you. Nobody else reads it, and it is not graded.</div>
+        </div>
+
+        <div class="panel panel--tight">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+            <div class="t-head">Scheduled check</div><span class="tag">Modelled on NASA’s Reaction Self-Test</span>
+          </div>
+          <div class="t-body">Every fourth day. Two dials and a 3-minute attention test, about 4 minutes.</div>
+          <div class="btn-row"><button class="btn">Start this evening’s check</button></div>
+        </div>
+
+        <div class="panel panel--tight" style="flex-direction:row;align-items:center;gap:20px">
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
+            <div class="t-head">Your wrist</div>
+            <div class="t-body">Press when something stirs a feeling. The time and what you were doing are kept for tonight.</div>
+            <div class="t-small">Next buzz: 21:00, wind down. A rule you set.</div>
+          </div>
+          <div class="wrist" style="position:relative" aria-label="Wrist device">
+            <div class="wrist-strap"></div>
+            <div class="wrist-face">
+              <div class="w-time num">19:42</div>
+              <div class="w-main">Press to mark a moment</div>
+              <div class="w-hint">Hold for something to do</div>
+            </div>
+            <button class="wrist-btn" aria-label="Wrist button"></button>
+            <div class="wrist-strap"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="t-foot">Sample data for illustration. Names are placeholders. Prototype built with AI assistance; not NASA software.</div>
+  </main>
+</div>
+
+<script>
+// Static decoration for the mock only.
+function marks(el, good, mixed, hard){
+  var h='';
+  for(var i=0;i<good;i++)  h+='<span class="mark mark--good"  style="--c:var(--t-home)" title="Felt good"></span>';
+  for(var j=0;j<mixed;j++) h+='<span class="mark mark--mixed" style="--c:var(--t-home)" title="Mixed"></span>';
+  for(var k=0;k<hard;k++)  h+='<span class="mark mark--hard"  style="--c:var(--t-home)" title="Felt hard"></span>';
+  el.innerHTML=h;
+}
+marks(document.getElementById('ev1'),4,0,0);
+marks(document.getElementById('ev2'),4,2,9);
+</script>
+</body>
+</html>
