@@ -286,3 +286,8 @@ h2.t-head{margin:0}
 .topbar .t-label,.topbar a{white-space:nowrap}
 @media (max-width:1499px){.topbar .private>span{display:none}.topbar-delay .topbar-wide:last-child{display:none}.topbar-left,.topbar-right{gap:var(--s4)}}
 @media (max-width:699px){.bedlight-chip{font-size:0;gap:0;padding:0 4px}.bedlight-chip .bedlight-go{font-size:12px}}
+
+/* demo: astronaut / flight surgeon view switch */
+.story-view{flex:none;display:flex;align-items:center;gap:var(--s2)}
+.private--earth{color:var(--ink)}
+@media (max-width:699px){.topbar .private--earth{display:flex}.topbar .private--earth span{display:inline;font-size:13px}}

@@ -48,7 +48,8 @@ export type CardEvidence =
 
 export interface Resolution { cardId: string; day: number; status: 'acted'|'not-right'|'skipped';
   title: string; choice: string; effect: string; }
-export interface ShareLogEntry { id: string; day: number; to: string; text: string; auto: boolean; }
+export interface ShareLogEntry { id: string; day: number; to: string; text: string; auto: boolean;
+  kind: 'message' | 'line' | 'rule-change'; ruleId?: string; }
 
 /* ---- mirrors of scenario-params.json ---- */
 export type RealGroup = Exclude<Group, 'other'>;
@@ -59,7 +60,7 @@ export interface WeekRow { week: number; days: number[]; segments: Record<RealGr
   ledger: WeekLedger; dials: { stress: number; sleepiness: number }; }
 export interface SignRule { metric: string; window?: string; atLeast?: number; atMost?: number; minData?: number; }
 export interface Sign { id: string; quote: string; source: string; rule: SignRule; steps?: string[]; shareRuleId?: string; }
-export interface ShareRule { id: string; auto: boolean; text: string; metric: string; atLeast: number; to?: string; message?: string; }
+export interface ShareRule { id: string; auto: boolean; fixed?: boolean; text: string; metric: string; atLeast: number; to?: string; message?: string; }
 export interface Reminder { id: string; text: string; buzz: string[]; on: boolean; fromDay: number; wristLabel: string; atMin?: number; }
 export interface CopingTask { id: string; label: string; minutes: number; fits: string[]; fromPreferences: boolean;
   evidenceTag: string; evidence: string; }

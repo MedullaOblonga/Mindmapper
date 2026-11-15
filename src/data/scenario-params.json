@@ -1414,6 +1414,16 @@
   "signMetricsNote": "For the demo: secondMealSkipped = 0, lettersUnopened = 0, crewTapsHard has under 5 taps of data (result: cannot tell yet), greenhouse and pastMidnightRun come from the generated days, lightOnNights from lightOnNights above.",
   "shareRules": [
    {
+    "id": "risk",
+    "auto": true,
+    "fixed": true,
+    "text": "If there is an imminent risk to my life or to someone else\u2019s, tell my crew medical officer at once, and my flight surgeon.",
+    "metric": "safetyReport",
+    "atLeast": 1,
+    "to": "fs",
+    "message": "Safety note agreed before launch: an imminent risk to self or others was reported on board. The crew medical officer has been told. No diary content is included."
+   },
+   {
     "id": "midnight5",
     "auto": true,
     "text": "If I stay up past midnight 5 nights running, tell my flight surgeon it happened, not what I wrote.",
@@ -1421,6 +1431,15 @@
     "atLeast": 5,
     "to": "fs",
     "message": "Automatic note agreed before launch: sleep started after midnight on 5 nights in a row. No diary content is included."
+   },
+   {
+    "id": "co2collar",
+    "auto": true,
+    "text": "If the CO2 at my collar is at or above 3.0 mmHg for 2 days or nights running, tell my flight surgeon it happened.",
+    "metric": "co2Run",
+    "atLeast": 2,
+    "to": "fs",
+    "message": "Automatic note agreed before launch: CO2 at the collar was at or above 3.0 mmHg for 2 days or nights in a row. No diary content is included."
    },
    {
     "id": "quiet10",

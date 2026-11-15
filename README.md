@@ -37,6 +37,19 @@ The collar CO2 readings are modelled on NASA's Personal CO2 Monitor and are simu
 
 **Header.** Every tab shows the one-way delay to Earth for the mission day, computed from the orbits of Earth and Mars with a minimum-energy outbound transfer (`src/lib/delay.ts`). It replaces the fixed 18 minutes used before: day 112 is 2 min 35 s.
 
+## Flight surgeon view, and what breaks confidentiality
+
+The Demo story bar has a switch: **Astronaut view / Flight surgeon view**. The flight surgeon view replaces the whole app with one page built only from share-log entries addressed to the flight surgeon. It shows the notes the astronaut chose to send, the lines agreed before launch with any note each one sent, and a list of what is not shared. It never shows the diary, cards, test results, body trends, notes to other people, or how close a line is to being crossed.
+
+| Line | Kind | Sends |
+|---|---|---|
+| Imminent risk to self or to someone else | Fixed. The same limit to confidentiality as on Earth. Cannot be changed or switched off | A note to the crew medical officer at once, and to the flight surgeon. Reported by the astronaut (Profile → Sharing → "Report a risk now") or the crew medical officer. The tool never infers it from the diary or any measurement |
+| CO2 at the collar at or above 3.0 mmHg, 2 days or nights running | Negotiable between astronaut and flight surgeon | An automatic note to the flight surgeon. In the demo it is crossed on day 100 |
+| Sleep starting past midnight, 5 nights running | Negotiable | An automatic note to the flight surgeon |
+| Nothing written for 10 days | Negotiable. Asks the astronaut first | Nothing. Not visible to the flight surgeon |
+
+A change to a negotiable line is itself sent to the flight surgeon.
+
 ## Run it locally
 
 Node 20 or newer.

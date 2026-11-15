@@ -6,6 +6,7 @@ import { pastMidnightRun } from '../../logic/signs';
 import { currentRule, withThreshold } from '../../logic/rules';
 import { delayMin, delayWords } from '../../lib/delay';
 import { missionDay } from '../../config';
+import { CMO_NAME, co2Runs } from '../../logic/lines';
 import { Sheet } from '../../components/ui';
 import { ShareLogList } from '../../components/shell/ShareLogDrawer';
 import type { ShareRule } from '../../types';
@@ -47,22 +48,46 @@ function RuleSheet({ rule, v, onClose }: { rule: ShareRule; v: View; onClose: ()
   );
 }
 
+function ReportSheet({ rule, v, onClose }: { rule: ShareRule; v: View; onClose: () => void }) {
+  const ui = useUI();
+  const send = () => {
+    appStore.getState().add({ type: 'safety', ruleId: rule.id });
+    onClose();
+    ui.showToast(`${CMO_NAME} has been told. The note is in your share log.`);
+  };
+  return (
+    <Sheet title="Report an imminent risk" onClose={onClose} width={560}>
+      <p className="t-body">Use this if you, or someone on board, is in immediate danger of serious harm.</p>
+      <p className="t-body">{`${CMO_NAME}, your crew medical officer, is told now and comes to you. Your flight surgeon is sent the note below. It takes about ${delayWords(delayMin(missionDay(v.day)))} to reach Earth, so ${CMO_NAME} is your first support.`}</p>
+      <p className="t-quote">{`\u201c${rule.message}\u201d`}</p>
+      <p className="t-small">This is the one line that cannot be changed or switched off. It is the same limit to confidentiality that applies on Earth.</p>
+      <div className="btn-row">
+        <button className="btn btn--primary" onClick={send}>Tell them now</button>
+        <button className="btn btn--quiet" onClick={onClose}>Cancel</button>
+      </div>
+    </Sheet>
+  );
+}
+
 const LEVELS = [
   { n: 1, head: 'Most weeks: nothing', body: 'The tool offers things you can do yourself. Nothing is sent to anyone.' },
   { n: 2, head: 'When you choose: a message you approve', body: 'From any card you can draft a note to a crewmate, the crew medical officer or the ground. You see and edit the exact words first.' },
-  { n: 3, head: 'Lines you set before launch', body: 'A few lines you agreed with your flight surgeon. They are checked every day, and the exact words are below.' },
+  { n: 3, head: 'Lines you set before launch', body: 'A few lines you agreed with your flight surgeon. They are checked every day, and the exact words are below. One is fixed: an imminent risk to you or to someone else.' },
 ];
 
 export function Sharing() {
   const v = useView();
   const [editing, setEditing] = useState<ShareRule | null>(null);
+  const [reporting, setReporting] = useState<ShareRule | null>(null);
+  const co2 = co2Runs(v.scenario, v.day)[v.day] ?? 0;
+  const reported = (id: string) => v.shareLog.find(e => e.kind === 'line' && e.ruleId === id && e.to === 'Flight surgeon');
   const run = pastMidnightRun(v.scenario.days, v.day, v.ignoreNights).run;
   const quiet = daysWithoutEntry(v);
 
   return (
     <>
       <div className="page-head"><div><h1 className="t-title">What leaves this device, and when</h1>
-        <p className="t-lede">Three levels. You set all of them before launch, and you can read every word that has ever been sent.</p></div>
+        <p className="t-lede">Three levels. You agreed all of them before launch, and you can read every word that has ever been sent.</p></div>
         <span className="note-pill">{`Earth is about ${delayWords(delayMin(missionDay(v.day)))} away today, each way`}</span></div>
       <ol className="levels">
         {LEVELS.map(l => (
@@ -83,13 +108,20 @@ export function Sharing() {
           <tbody>
             {v.scenario.profile.shareRules.map(r => {
               const cur = currentRule(r, v.events);
-              const now = r.metric === 'pastMidnightRun' ? run : quiet;
+              const now = r.metric === 'pastMidnightRun' ? run : r.metric === 'co2Run' ? co2 : quiet;
+              const rep = r.fixed ? reported(r.id) : undefined;
               return (
                 <tr key={r.id}>
-                  <td><p className="t-body rule-text">{cur.text}</p><span className="t-small">{r.auto ? `Automatic, to your flight surgeon` : 'Asks you first. Tells nobody for you.'}</span></td>
-                  <td className="t-small num">{now >= cur.atLeast ? `Crossed (${now} of ${cur.atLeast})` : now > 0 ? `At ${now} of ${cur.atLeast}` : 'Not crossed'}</td>
-                  <td>{r.auto && r.message ? <p className="t-quote">{`\u201c${r.message}\u201d`}</p> : <span className="t-small">Nothing is sent.</span>}</td>
-                  <td><button className="btn btn--sm" onClick={() => setEditing(r)}>Change this rule</button></td>
+                  <td><p className="t-body rule-text">{cur.text}</p>
+                    <span className="t-small">{r.fixed
+                      ? 'Fixed. The same limit to confidentiality as on Earth. The tool never judges this from your diary or your numbers: you report it, or your crew medical officer does.'
+                      : r.auto ? 'Automatic, to your flight surgeon' : 'Asks you first. Tells nobody for you.'}</span></td>
+                  <td className="t-small num">{r.fixed ? (rep ? `Reported on day ${rep.day}` : 'Not reported')
+                    : now >= cur.atLeast ? `Crossed (${now} of ${cur.atLeast})` : now > 0 ? `At ${now} of ${cur.atLeast}` : 'Not crossed'}</td>
+                  <td>{r.auto && r.message ? <p className="t-quote">{`\u201c${r.fixed ? r.message : withThreshold(r.message, r.atLeast, cur.atLeast)}\u201d`}</p> : <span className="t-small">Nothing is sent.</span>}</td>
+                  <td>{r.fixed
+                    ? <button className="btn btn--sm" onClick={() => setReporting(r)}>Report a risk now</button>
+                    : <button className="btn btn--sm" onClick={() => setEditing(r)}>Change this rule</button>}</td>
                 </tr>
               );
             })}
@@ -103,6 +135,7 @@ export function Sharing() {
       </section>
       <p className="t-foot">Prototype: nothing actually leaves this browser. ‘Sent’ means written to the share log.</p>
       {editing && <RuleSheet rule={editing} v={v} onClose={() => setEditing(null)} />}
+      {reporting && <ReportSheet rule={reporting} v={v} onClose={() => setReporting(null)} />}
     </>
   );
 }

@@ -17,6 +17,7 @@ const REAL: { feature: string; data: DataTag | null; evidence: EvidenceTag | nul
   { feature: 'Every threshold that raises a card', data: null, evidence: 'placeholder' },
   { feature: 'Body trends: wearable, cuff, blood and collar CO2 values', data: 'sim', evidence: null },
   { feature: 'Body trends: the reaction speed line, set from NASA bed-rest test records', data: 'nasa-method', evidence: 'exp' },
+  { feature: 'Flight surgeon view (demo switch): built only from notes addressed to the flight surgeon', data: 'sim', evidence: null },
   { feature: 'Delay to Earth in the header, computed from the orbits of Earth and Mars', data: 'sim', evidence: null },
   { feature: 'Your early signs and steps', data: 'sim', evidence: 'analog' },
   { feature: 'Coping tasks and their evidence lines', data: null, evidence: 'earth' },
@@ -39,6 +40,7 @@ const RESOURCES: { name: string; use: string; href?: string }[] = [
 
 const NOT_CLAIMED = [
   'It does not diagnose anything or detect any condition.',
+  'It does not judge risk to you or to others. The one fixed line is reported by a person, never inferred from your diary or your numbers.',
   'It does not prevent anything. It helps you notice a change early and choose what to do.',
   'It has not been tested on astronauts or in an analog mission.',
   'Its thresholds are placeholders. NASA lists validated thresholds as an open research gap.',
@@ -58,7 +60,7 @@ export function About() {
         <p className="t-lede">{`${APP_NAME}: a private self-check for long missions.`}</p></div></div>
       <section className="panel" aria-label="What this is">
         <h2 className="t-head">What this is</h2>
-        <p className="t-body">A private self-check that notices slow change against your own usual, asks before it assumes, and never gives you a score. Everything runs on this device; nothing is sent unless you send it.</p>
+        <p className="t-body">A private self-check that notices slow change against your own usual, asks before it assumes, and never gives you a score. Everything runs on this device; nothing is sent unless you send it, or a line agreed before launch is crossed.</p>
         <ul className="plain-list t-body">
           <li>No score. There is no overall number, index or ranking anywhere.</li>
           <li>Your own usual. Every comparison is with you, never with other people.</li>

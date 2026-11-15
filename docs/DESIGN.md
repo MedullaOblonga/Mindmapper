@@ -883,3 +883,11 @@ The reaction speed line (8% below the person's own usual, two tests in a row) is
 **Today.** The "Scheduled check" panel is now "Reaction speed test" and is always shown. Every fourth day it offers the scheduled check (dials plus test) and the test alone; on other days the test alone (`#/check?slot=am&test=1`).
 
 **Top bar.** After the mission meter: "DELAY TO EARTH {2 MIN 35 S} ONE WAY", from `src/lib/delay.ts`. The fixed `earthDelayMinutesOneWay` parameter is removed, and the Talk sheet and Sharing screen use the same computed value.
+
+## Addendum: flight surgeon view and fixed safety line
+
+**Demo switch.** The story bar carries a switch, "Astronaut view / Flight surgeon view" (`viewer` in the store). In flight surgeon view the shell shows the top bar, the story bar and one page, `src/screens/Surgeon.tsx`. The rail, overlays and every astronaut route are not rendered.
+
+**What the flight surgeon sees.** Only share-log entries whose recipient is the flight surgeon (`surgeonLog` in `src/logic/lines.ts`): notes the crew member chose to send, notes sent by agreed lines, and changes to those lines. Each shows the day it was sent and the one-way delay on that day. Lines that ask the crew member first (`auto: false`) are not listed. The view never shows how close a line is to being crossed.
+
+**Lines (§7 Sharing, level 3).** `ShareRule` gains `fixed`. One line is fixed: imminent risk to self or to others, the limit to confidentiality that applies on Earth. It cannot be edited. It is never inferred by the tool; it is sent when the crew member reports it ("Report a risk now" on the Sharing screen, event `safety`) and goes to the crew medical officer and the flight surgeon. All other lines are negotiable, including the new collar CO2 line (`co2Run`: at or above 3.0 mmHg on 2 days or nights running). This supersedes the earlier wording that every line is set by the astronaut alone.

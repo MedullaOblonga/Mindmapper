@@ -15,6 +15,7 @@ export type AppEvent = { id: string; day: number } & (
   | { type: 'coping'; taskId: string; phase: 'start' | 'done'; before?: number; after?: number }
   | { type: 'activity'; key: 'dinners' | 'greenhouse' | 'gym' | 'other'; label: string }
   | { type: 'rule-change'; ruleId: string; text: string; atLeast: number }
+  | { type: 'safety'; ruleId: string }
   | { type: 'dismiss'; what: 'tonight' | 'cue' }
   | { type: 'profile'; itemId: string; category?: string; text?: string; removed?: boolean });
 

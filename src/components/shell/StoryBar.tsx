@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { params } from '../../data/params';
 import { useApp, appStore } from '../../state/store';
+import { Toggle } from '../ui';
 import type { Branch } from '../../types';
 
 const DEFAULT_CAPTION = 'Simulated mission. Use the chapters, or step a day at a time.';
@@ -18,6 +19,17 @@ function useHoldRepeat(step: () => void) {
   };
 }
 
+function ViewSwitch() {
+  const viewer = useApp(s => s.viewer);
+  const set = (on: boolean) => appStore.getState().setViewer(on ? 'surgeon' : 'astronaut');
+  return (
+    <span className="story-view">
+      <Toggle on={viewer === 'surgeon'} onChange={set} label="Flight surgeon view" />
+      <span className="t-small">{viewer === 'surgeon' ? 'Flight surgeon view' : 'Astronaut view'}</span>
+    </span>
+  );
+}
+
 export function StoryBar({ branch }: { branch: Branch }) {
   const day = useApp(s => s.day), hidden = useApp(s => s.storyHidden), override = useApp(s => s.branchOverride);
   const nav = useNavigate();
@@ -29,6 +41,7 @@ export function StoryBar({ branch }: { branch: Branch }) {
   if (hidden) return (
     <nav className="storybar storybar--hidden" aria-label="Demo story">
       <button className="btn btn--quiet btn--strip" onClick={() => st.setStoryHidden(false)} aria-expanded="false">Demo story</button>
+      <ViewSwitch />
     </nav>
   );
   return (
@@ -50,6 +63,7 @@ export function StoryBar({ branch }: { branch: Branch }) {
         <button className="btn btn--sm" aria-label="Next day" disabled={day >= params.mission.lastDay} {...next}>›</button>
         <button className="btn btn--sm btn--quiet" onClick={() => st.setStoryHidden(true)} aria-expanded="true">Hide</button>
       </span>
+      <ViewSwitch />
       <p className="story-caption">{caption}{override && ch?.id !== 'followed' ? ` Story branch forced: ${override === 'A' ? 'you acted' : 'you did not'}.` : ''}</p>
     </nav>
   );
