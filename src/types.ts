@@ -20,7 +20,7 @@ export interface DayRecord { day: number; week: number; dayIndex: number;   // d
 
 export interface CheckSession { id: string; day: number; slot: 'am'|'pm'; trials: number;
   meanRtMs: number; speed: number; lapses: number; falseStarts: number;
-  durationS: number; counts: boolean; origin: DataTag; }
+  durationS: number; counts: boolean; origin: DataTag; dials?: Record<string, number>; }
 
 export type LedgerKey = 'sleep'|'suitPrepLong'|'daysSinceRest'|'callsMissed'|'noisyNights'
   |'dinners'|'callsSam'|'callsMom'|'gym'|'greenhouse'|'copingDone';
