@@ -911,3 +911,14 @@ This supersedes the earlier statement that the fixed line is never inferred from
 **Continuation.** `scenario-params.json` gains weeks 19 to 21 in each branch table and `weeksLater` for weeks 22 to 36 (to day 250). Branch A stays level; branch B recovers over weeks 19 to 21; both then sit at the early-mission usual. Diary text for these weeks comes from `LATER_SENTENCES`, under separate counters, so earlier days read as before. Reaction tests from day 128 replay the next real sessions of the NASA record in order. Simulated body measures use a second random stream after day 126, chosen so they stay inside their lines. One chapter is added: day 203, "Quiet weeks".
 
 **Delay.** `distanceAu(day)` gives the Earth to spacecraft distance on a mission day for a minimum-energy transfer leaving on day 0 and arriving on day 259; `delayMin` is that distance at the speed of light. Every screen uses the mission day directly.
+
+## Addendum: body trends are always shared; the diary is the only optional part
+
+This supersedes "nothing leaves this device unless you send it".
+
+- **Always shared with the flight surgeon:** the measured body trends. The flight surgeon view has a second page, Body trends (`<Body surgeon />`), with the same charts and lines, worded about the crew member and with no send buttons.
+- **Optional:** diary entries. They leave only when the crew member sends one.
+- **Exception:** the fixed line for imminent risk to self or others. A note says an entry matched or a risk was reported, never the diary's words.
+- **Still private:** diary topics and how things felt, cards and answers, wrist presses, the ledger, and notes to other people.
+
+Wording changed to match: the top bar reads "Your diary stays on this device. Only you can read it."; Sharing level 1 is "Always: what is measured" and level 2 is "Your diary: only when you choose"; the share log says it lists notes, not the routine body data. The day 98 chapter is renamed "Day 98 · Imminent risk reported" and opens the Journal.

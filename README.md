@@ -12,7 +12,7 @@ Use the **Demo story** bar at the top. It drives a simulated mission of 250 days
 
 1. **Day 12 · Settling in.** For the first 14 days the tool only watches.
 2. **Day 42 · It gets one wrong.** Tap *That's not right* → *The data is wrong* → *Tell the tool*. The tool changes.
-3. **Day 98 · A quiet drift.** Patterns → On your mind: family takes a widening share of the diary. One week is not a pattern, so no card is raised. But that night's diary entry matches the one fixed safety line: open Journal to see the notice, the exact note that was sent, and the relief steps. Switch to Flight surgeon view to see what Earth received.
+3. **Day 98 · Imminent risk reported.** Opens the Journal. That night's diary entry matches the one fixed safety line, so the crew medical officer is told at once and a note goes to the flight surgeon without the diary's words. The notice shows the exact note and the relief steps. Switch to Flight surgeon view to see what Earth received. Family is also taking more of the diary (Patterns → On your mind), but one week is not a pattern, so no card is raised.
 4. **Day 112 · Three things noticed.** Three cards, each with actions you choose.
 5. **Day 119 · What followed.** Choose *If you acted* or *If you didn't*. If you didn't, a line you set before launch was crossed and the exact message is shown.
 6. **Day 203 · Quiet weeks.** Nothing is far from the astronaut's usual, so the tool says nothing. Step on to day 250 and watch the delay to Earth grow.
@@ -53,7 +53,20 @@ Orbits are taken as circular and in one plane, so a real trajectory would differ
 
 ## Flight surgeon view, and what breaks confidentiality
 
-The Demo story bar has a switch: **Astronaut view / Flight surgeon view**. The flight surgeon view replaces the whole app with one page built only from share-log entries addressed to the flight surgeon. It shows the notes the astronaut chose to send, the lines agreed before launch with any note each one sent, and a list of what is not shared. It never shows the diary, cards, test results, body trends, notes to other people, or how close a line is to being crossed.
+The Demo story bar has a switch: **Astronaut view / Flight surgeon view**. The flight surgeon view has two pages.
+
+- **Received:** every note addressed to the flight surgeon, the lines agreed before launch with any note each one sent, and a list of what is not shared.
+- **Body trends:** always open to the flight surgeon. The same measured charts the astronaut sees, worded for the surgeon, with no send buttons because nothing needs sending.
+
+What is shared, and when:
+
+| | Shared with the flight surgeon |
+|---|---|
+| Body trends (sleep, reaction tests, heart rate, exercise, body mass, cuff, blood sugar, temperature, collar CO2) | Always, as routine medical monitoring |
+| Diary entries | Only if the astronaut chooses to send one |
+| Imminent risk to self or others | Always. A note says that it happened; the diary's words are never sent |
+
+The flight surgeon view never shows the diary, its topics, cards, wrist presses, the ledger, notes to other people, or how close a line is to being crossed.
 
 | Line | Kind | Sends |
 |---|---|---|

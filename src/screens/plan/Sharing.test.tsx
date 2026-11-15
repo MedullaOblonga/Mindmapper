@@ -9,7 +9,7 @@ it('sharing shows three levels and logs rule changes', async () => {
   const u = userEvent.setup();
   window.location.hash = '#/profile/sharing';
   render(<HashRouter><App /></HashRouter>);
-  for (const n of ['Most weeks: nothing', 'When you choose: a message you approve']) expect(screen.getByRole('heading', { name: n })).toBeInTheDocument();
+  for (const n of ['Always: what is measured', 'Your diary: only when you choose']) expect(screen.getByRole('heading', { name: n })).toBeInTheDocument();
   expect(screen.getByRole('region', { name: 'Lines you set before launch' })).toBeInTheDocument();
   expect(screen.getByText('“Automatic note agreed before launch: sleep started after midnight on 5 nights in a row. No diary content is included.”')).toBeInTheDocument();
   await u.click(screen.getAllByRole('button', { name: 'Change this rule' })[0]);

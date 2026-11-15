@@ -23,14 +23,14 @@ export function TopBar({ day, shared, onOpenLog, due, viewer = 'astronaut' }: { 
       </div>
       {viewer === 'surgeon' ? (
         <div className="topbar-right">
-          <span className="private private--earth"><Stethoscope size={16} aria-hidden="true" /><span>Flight surgeon view, on Earth. Shared notes only.</span></span>
+          <span className="private private--earth"><Stethoscope size={16} aria-hidden="true" /><span>Flight surgeon view, on Earth. The diary is not included.</span></span>
         </div>
       ) : (
         <div className="topbar-right">
           {due}
-          <span className="private" title="Stays on this device. Only you can see it.">
+          <span className="private" title="Your diary stays on this device. Only you can read it.">
             <Lock size={16} aria-hidden="true" />
-            <span>Stays on this device. Only you can see it.</span>
+            <span>Your diary stays on this device. Only you can read it.</span>
           </span>
           <a href="#share-log" className="t-head link-tap"
             onClick={e => { e.preventDefault(); onOpenLog?.(); }}>

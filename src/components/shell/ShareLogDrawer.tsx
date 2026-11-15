@@ -21,7 +21,7 @@ export function ShareLogDrawer({ log }: { log: ShareLogEntry[] }) {
   const ui = useUI();
   return (
     <Drawer title="Share log" onClose={() => ui.openShareLog(false)}>
-      <p className="t-small">Everything that has left this device, in full. If it is not here, it was not sent.</p>
+      <p className="t-small">Every note that has left this device, in full. If a note is not here, it was not sent. Body trends go to your flight surgeon as routine and are not listed one by one.</p>
       <ShareLogList log={log} />
     </Drawer>
   );

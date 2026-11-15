@@ -61,7 +61,7 @@ export function About() {
         <p className="t-lede">{`${APP_NAME}: a private self-check for long missions.`}</p></div></div>
       <section className="panel" aria-label="What this is">
         <h2 className="t-head">What this is</h2>
-        <p className="t-body">A private self-check that notices slow change against your own usual, asks before it assumes, and never gives you a score. Everything runs on this device; nothing is sent unless you send it, or a line agreed before launch is crossed.</p>
+        <p className="t-body">A private self-check that notices slow change against your own usual, asks before it assumes, and never gives you a score. Everything runs on this device. Your diary is never sent unless you send it. Measured body trends go to your flight surgeon as routine, and a note goes when a line agreed before launch is crossed.</p>
         <ul className="plain-list t-body">
           <li>No score. There is no overall number, index or ranking anywhere.</li>
           <li>Your own usual. Every comparison is with you, never with other people.</li>

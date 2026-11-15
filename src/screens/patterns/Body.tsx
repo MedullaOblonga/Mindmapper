@@ -5,7 +5,13 @@ import { useUI } from '../../state/ui';
 import { Tag, DATA_TAG } from '../../components/ui';
 import { TrendChart } from '../../components/TrendChart';
 import { BASIS_LABEL, NASA, bodyDraft, bodyReadings, fmt, rangeText, type Reading, type MeasureId } from '../../logic/body';
+import { delayMin, delayWords } from '../../lib/delay';
 import type { View } from '../../state/view';
+
+/** The same text, addressed to the flight surgeon about the crew member. */
+const their = (t: string) => t.replace(/\baround you\b/g, 'around the crew member').replace(/\bYour\b/g, 'Their').replace(/\byour\b/g, 'their').replace(/\byou\b/g, 'they');
+const forSurgeon = (r: Reading): Reading => ({ ...r, statusText: their(r.statusText),
+  def: { ...r.def, name: their(r.def.name), plain: their(r.def.plain), lineName: their(r.def.lineName), rule: their(r.def.rule), from: their(r.def.from) } });
 
 const pct = (x: number, dec = 0) => `${(x * 100).toFixed(dec)}%`;
 const ci = (c: number[], dec = 0) => `${(c[0] * 100).toFixed(dec)} to ${(c[1] * 100).toFixed(dec)}%`;
@@ -23,7 +29,7 @@ function Status({ r }: { r: Reading }) {
   return <span className={`trend-status ${r.status === 'sustained' ? 'trend-status--out' : ''}`}><i className={`pt ${ring ? 'pt--out' : 'pt--in'}`} aria-hidden="true" />{r.statusText}</span>;
 }
 
-function TrendCard({ r, v }: { r: Reading; v: View }) {
+function TrendCard({ r, v, surgeon }: { r: Reading; v: View; surgeon?: boolean }) {
   const range = rangeText(r);
   return (
     <section className="trend-card" aria-label={r.def.name}>
@@ -33,7 +39,7 @@ function TrendCard({ r, v }: { r: Reading; v: View }) {
       </div>
       <TrendChart r={r} day={v.day} />
       <Status r={r} />
-      {range && <div className="t-small num trend-range">{`Inside ${r.def.lineName}: ${range}.${r.usual !== null ? ` Your usual: ${fmt(r, r.usual)} ${r.def.unit}.` : ''}`}</div>}
+      {range && <div className="t-small num trend-range">{`Inside ${r.def.lineName}: ${range}.${r.usual !== null ? ` ${surgeon ? 'Their' : 'Your'} usual: ${fmt(r, r.usual)} ${r.def.unit}.` : ''}`}</div>}
       <p className="t-small">{r.def.plain}</p>
       <div className="trend-tags"><Tag>{originText(r, v)}</Tag><Tag>{BASIS_LABEL[r.def.basis]}</Tag></div>
     </section>
@@ -68,12 +74,12 @@ function TableView({ rs, day }: { rs: Reading[]; day: number }) {
 }
 
 /** Both collar CO2 readings on one chart: awake and asleep, against the same NASA limit. */
-function CO2Card({ day, night, v }: { day: Reading; night: Reading; v: View }) {
+function CO2Card({ day, night, v, surgeon }: { day: Reading; night: Reading; v: View; surgeon?: boolean }) {
   const worse = day.status === 'sustained' ? day : night.status === 'sustained' ? night : day.status === 'once' ? day : night;
   return (
-    <section className="trend-card" aria-label="CO2 around you">
+    <section className="trend-card" aria-label={surgeon ? 'CO2 around the crew member' : 'CO2 around you'}>
       <div className="trend-head">
-        <div><h3 className="t-head">CO2 around you</h3><div className="t-small">Collar-worn monitor, awake and asleep</div></div>
+        <div><h3 className="t-head">{surgeon ? 'CO2 around the crew member' : 'CO2 around you'}</h3><div className="t-small">Collar-worn monitor, awake and asleep</div></div>
         <div className="t-stmt-sm num trend-val">{`${day.last ? fmt(day, day.last.v) : '—'} / ${night.last ? fmt(night, night.last.v) : '—'}`} <span className="t-small">mmHg</span></div>
       </div>
       <TrendChart r={day} r2={night} names={['Awake', 'Asleep']} day={v.day} />
@@ -89,19 +95,24 @@ const SECTIONS: { id: string; title: string; ids: MeasureId[] }[] = [
   { id: 'exercise-mass-air', title: 'Exercise, body mass and the air around you', ids: ['exercise', 'mass', 'co2day', 'co2sleep'] },
 ];
 
-export function Body() {
+/** Body trends. The astronaut's own screen by default; with `surgeon`, the same measures as the flight surgeon sees them.
+    Measured values are shared with the flight surgeon as routine. Nothing here is written or rated by the astronaut. */
+export function Body({ surgeon = false }: { surgeon?: boolean }) {
   const v = useView();
   const ui = useUI();
   const [table, setTable] = useState(false);
-  const all = useMemo(() => bodyReadings(v.scenario, v.checks, v.day), [v.scenario, v.checks, v.day]);
+  const all = useMemo(() => { const rs = bodyReadings(v.scenario, v.checks, v.day); return surgeon ? rs.map(forSurgeon) : rs; }, [v.scenario, v.checks, v.day, surgeon]);
   const far = all.filter(r => r.status === 'sustained');
   const once = all.filter(r => r.status === 'once');
   const talk = (route: string) => ui.openTalk({ route, draft: bodyDraft(all, v.day) });
   return (
     <>
       <div className="page-head"><div><h1 className="t-title">Body trends</h1>
-        <p className="t-lede">Things that are measured, not rated by you. Each one sits against its own line, and nothing is added up into one number.</p></div>
-        <Tag data="sim" /></div>
+        <p className="t-lede">{surgeon
+          ? 'Measured values for this crew member, shared with you as routine medical monitoring. Nothing here is written or rated by them, and nothing is added up into one number.'
+          : 'Things that are measured, not rated by you. Each one sits against its own line, and nothing is added up into one number.'}</p>
+        {!surgeon && <p className="t-small">Your flight surgeon sees these measures as routine medical monitoring. Your diary is not part of it.</p>}</div>
+        {surgeon ? <span className="note-pill">{`As received: Earth is about ${delayWords(delayMin(v.day))} behind today`}</span> : <Tag data="sim" />}</div>
 
       <section className={`panel panel--tight ${far.length ? 'panel--act' : ''}`} aria-label="Worth a second look">
         <div className="t-label">Worth a second look</div>
@@ -109,9 +120,10 @@ export function Body() {
           ? <p className="t-stmt-sm">Everything measured here is inside its line.</p>
           : <ul className="plain-list">{far.map(r => <li key={r.def.id} className="t-stmt-sm">{`${r.def.name}: ${fmt(r, r.last!.v)} ${r.def.unit}. ${r.statusText}.`}</li>)}</ul>}
         {once.length > 0 && <p className="t-small">{`Left alone for now: ${once.map(r => r.def.name.toLowerCase()).join(', ')}. One reading outside a line is not a pattern.`}</p>}
-        {far.length > 0 && (
+        {surgeon && far.length > 0 && <p className="t-small">Outside a line is not a verdict. The crew member sees the same list and can add a note in their own words.</p>}
+        {!surgeon && far.length > 0 && (
           <>
-            <p className="t-small">Outside a line is not a verdict. You decide whether to send it. You see and edit the words first.</p>
+            <p className="t-small">Outside a line is not a verdict. Your flight surgeon already sees these numbers. You can add a note in your own words; you see and edit it first.</p>
             <div className="btn-row">
               <button className="btn btn--primary" onClick={() => talk('body')}>Crew medical officer</button>
               <button className="btn" onClick={() => talk('sharing')}>Flight surgeon</button>
@@ -121,7 +133,7 @@ export function Body() {
       </section>
 
       <div className="trend-tools">
-        <p className="t-small">Last 28 days. The shaded band is the inside of each line; the dashed line is your own usual. A ring marks a reading outside its line. Hover or tap a chart for values.</p>
+        <p className="t-small">{`Last 28 days. The shaded band is the inside of each line; the dashed line is ${surgeon ? 'the crew member’s' : 'your'} own usual. A ring marks a reading outside its line. Hover or tap a chart for values.`}</p>
         <button className="btn btn--sm" onClick={() => setTable(t => !t)}>{table ? 'Show charts' : 'Show as table'}</button>
       </div>
 
@@ -131,14 +143,14 @@ export function Body() {
         const rest = rs.filter(r => !co2.includes(r));
         const out = rs.filter(r => r.status === 'sustained').length;
         return (
-          <section key={sec.id} className="panel panel--tight trend-group" aria-label={sec.title}>
+          <section key={sec.id} className="panel panel--tight trend-group" aria-label={surgeon ? their(sec.title) : sec.title}>
             <div className="trend-section-head">
-              <h2 className="t-head trend-section-title">{sec.title}</h2>
+              <h2 className="t-head trend-section-title">{surgeon ? their(sec.title) : sec.title}</h2>
               <span className="t-small">{out ? `${out} worth a second look` : 'All inside their lines'}</span>
             </div>
             <div className="trend-grid">
-              {rest.map(r => <TrendCard key={r.def.id} r={r} v={v} />)}
-              {co2.length === 2 && <CO2Card day={co2[0]} night={co2[1]} v={v} />}
+              {rest.map(r => <TrendCard key={r.def.id} r={r} v={v} surgeon={surgeon} />)}
+              {co2.length === 2 && <CO2Card day={co2[0]} night={co2[1]} v={v} surgeon={surgeon} />}
             </div>
           </section>
         );

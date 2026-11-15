@@ -70,8 +70,8 @@ function ReportSheet({ rule, v, onClose }: { rule: ShareRule; v: View; onClose: 
 }
 
 const LEVELS = [
-  { n: 1, head: 'Most weeks: nothing', body: 'The tool offers things you can do yourself. Nothing is sent to anyone.' },
-  { n: 2, head: 'When you choose: a message you approve', body: 'From any card you can draft a note to a crewmate, the crew medical officer or the ground. You see and edit the exact words first.' },
+  { n: 1, head: 'Always: what is measured', body: 'Sleep, reaction tests, heart rate and the other body trends go to your flight surgeon as routine medical monitoring. Nothing you write or rate is included.' },
+  { n: 2, head: 'Your diary: only when you choose', body: 'Your diary stays with you. From any card you can draft a note to a crewmate, the crew medical officer or the ground. You see and edit the exact words first.' },
   { n: 3, head: 'Lines you set before launch', body: 'A few lines you agreed with your flight surgeon. They are checked every day, and the exact words are below. One is fixed: an imminent risk to you or to someone else.' },
 ];
 
@@ -130,7 +130,7 @@ export function Sharing() {
       </section>
       <section className="panel" aria-label="Share log">
         <h2 className="t-head">Share log</h2>
-        <p className="t-small">Everything that has left this device, in full. If it is not here, it was not sent.</p>
+        <p className="t-small">Every note that has left this device, in full. If a note is not here, it was not sent. Body trends go to your flight surgeon as routine and are not listed one by one.</p>
         <ShareLogList log={v.shareLog} />
       </section>
       <p className="t-foot">Prototype: nothing actually leaves this browser. ‘Sent’ means written to the share log.</p>

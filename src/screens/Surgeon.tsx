@@ -7,9 +7,9 @@ import { D } from '../config';
 import type { ShareLogEntry } from '../types';
 
 const NOT_SHARED = [
-  'The diary, its topics, and how anything felt. A safety note says an entry matched, never what it said.',
+  'Diary entries, unless the crew member chooses to send one. The only exception is the fixed line for imminent risk, which says that an entry matched and never what it said.',
+  'The diary’s topics, and how anything felt.',
   'What the tool noticed, and how the crew member answered.',
-  'Reaction test results and body trends, unless they are written into a note above.',
   'How close any line is to being crossed. You only learn that a line was crossed.',
   'Notes to crewmates, the crew medical officer, the ground psychologist or home.',
 ];
@@ -45,7 +45,7 @@ export function Surgeon() {
   return (
     <>
       <div className="page-head"><div><h1 className="t-title">Flight surgeon view</h1>
-        <p className="t-lede">Everything that has reached Earth from this crew member, word for word. If it is not here, it was not sent.</p></div>
+        <p className="t-lede">Every note that has reached Earth from this crew member, word for word. Body trends are shared as routine and sit on their own page. The diary is theirs to share or not.</p></div>
         <span className="note-pill">{`You are reading the past: Earth is about ${delayWords(delayMin(v.day))} behind today`}</span></div>
 
       <section className="panel" aria-label="Safety and agreed lines">

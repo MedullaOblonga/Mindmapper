@@ -16,7 +16,7 @@ it('the switch swaps the whole app for the flight surgeon view, and back', async
   expect(screen.getByRole('heading', { name: 'Flight surgeon view' })).toBeInTheDocument();
   expect(screen.queryByRole('navigation', { name: 'Main' })).toBeNull();
   expect(screen.queryByText(/Share log:/)).toBeNull();
-  expect(screen.getByText('Flight surgeon view, on Earth. Shared notes only.')).toBeInTheDocument();
+  expect(screen.getByText('Flight surgeon view, on Earth. The diary is not included.')).toBeInTheDocument();
   await toSurgeon(u);
   expect(screen.getByRole('heading', { name: 'Does this match?' })).toBeInTheDocument();
   expect(screen.getByRole('navigation', { name: 'Main' })).toBeInTheDocument();
@@ -66,4 +66,37 @@ it('reporting a risk tells the medical officer and reaches the surgeon view', as
   const row = within(screen.getByRole('region', { name: 'Safety and agreed lines' })).getAllByRole('row')[1];
   expect(within(row).getByText(/Sent on day 60/)).toBeInTheDocument();
   expect(within(row).getByText(/an imminent risk to self or others was reported on board/)).toBeInTheDocument();
+});
+
+it('body trends are always open to the flight surgeon, in their voice and without the diary', async () => {
+  const u = userEvent.setup();
+  open(112);
+  await toSurgeon(u);
+  const rail = screen.getByRole('navigation', { name: 'Flight surgeon' });
+  await u.click(within(rail).getByRole('button', { name: 'Body trends' }));
+  expect(screen.getByRole('heading', { name: 'Body trends' })).toBeInTheDocument();
+  expect(screen.getByText(/shared with you as routine medical monitoring/)).toBeInTheDocument();
+  expect(screen.getAllByRole('img', { name: /last 28 days/ }).length).toBeGreaterThanOrEqual(9);
+  const look = screen.getByRole('region', { name: 'Worth a second look' });
+  expect(within(look).getByText(/Sleep: .* h\. Outside the NASA line on 3 of the last 5 nights\./)).toBeInTheDocument();
+  expect(within(look).queryByRole('button')).toBeNull();          // nothing to send: it is already shared
+  const text = document.querySelector('main')!.textContent!;
+  expect(text).not.toMatch(/\b[Yy]our\b/);                        // addressed to the surgeon, about the crew member
+  for (const s of buildScenario('B').entries.flatMap(e => e.segments)) expect(text).not.toContain(s.text);
+  await u.click(within(rail).getByRole('button', { name: 'Received' }));
+  expect(screen.getByRole('heading', { name: 'Flight surgeon view' })).toBeInTheDocument();
+});
+
+it('the astronaut is told that body trends are shared and the diary is not', () => {
+  open(112, '#/patterns/body');
+  expect(screen.getByText('Your flight surgeon sees these measures as routine medical monitoring. Your diary is not part of it.')).toBeInTheDocument();
+  expect(screen.getByText(/Your diary stays on this device/)).toBeInTheDocument();
+});
+
+it('the day 98 chapter is named for the reported risk and opens the journal', async () => {
+  const u = userEvent.setup();
+  open(112);
+  await u.click(screen.getByRole('button', { name: 'Day 98 · Imminent risk reported' }));
+  expect(screen.getByRole('heading', { name: 'Your diary' })).toBeInTheDocument();
+  expect(screen.getByRole('region', { name: 'Safety line' })).toBeInTheDocument();
 });
