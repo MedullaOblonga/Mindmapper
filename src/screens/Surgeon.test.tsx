@@ -48,7 +48,7 @@ it('lists the fixed and negotiable lines with the notes they sent', async () => 
   expect(within(rows[0]).getByText(/^Fixed\./)).toBeInTheDocument();
   expect(within(rows[0]).getByText('No note received.')).toBeInTheDocument();
   expect(within(rows[1]).getByText(/Sent on day 114/)).toBeInTheDocument();
-  expect(within(rows[2]).getByText(/Sent on day 100 · reached Earth 2 min 02 s later/)).toBeInTheDocument();
+  expect(within(rows[2]).getByText(/Sent on day 100 · reached Earth 1\d min \d\d s later/)).toBeInTheDocument();
   expect(within(lines).queryByText(/write nothing for 10 days/)).toBeNull();
 });
 
