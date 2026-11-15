@@ -85,7 +85,7 @@ it('offers one rotating check at a time, with the reaction test among the others
   await u.click(within(panel).getByRole('button', { name: 'Other checks' }));
   const row = within(panel).getByText('Reaction speed test').closest('li')!;
   await u.click(within(row as HTMLElement).getByRole('button', { name: 'Take now' }));
-  expect(screen.getByText('Reaction speed test · day 230 · morning')).toBeInTheDocument();
+  expect(screen.getByText('Reaction speed test · day 106 · morning')).toBeInTheDocument();
   expect(screen.getByRole('button', { name: 'Start the test' })).toBeInTheDocument();   // no dials first
   r.unmount();
   window.location.hash = '#/today';

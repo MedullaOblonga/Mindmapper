@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { D } from '../../config';
+import { D, USUAL_DAYS } from '../../config';
 import { useNavigate } from 'react-router-dom';
 import { useView } from '../../state/useView';
 import { marksFor, moodWeek } from '../../state/view';
@@ -85,7 +85,7 @@ export function Moments() {
         <div className="col col--wide">
           <section className="panel" aria-label="Presses per day">
             <div className="trend-tools">
-              <p className="t-stmt-sm">{uhW === null ? `This week so far: ${now.high} high, ${now.low} low. Your usual appears after day 180.`
+              <p className="t-stmt-sm">{uhW === null ? `This week so far: ${now.high} high, ${now.low} low. Your usual appears after day ${D(56)}.`
                 : `This week so far: ${now.high} high, ${now.low} low. Your usual week: ${uhW} high, ${ulW} low.`}</p>
               <button className="btn btn--sm" aria-pressed={table} onClick={() => setTable(t => !t)}>{table ? 'Show as chart' : 'Show as table'}</button>
             </div>
@@ -95,7 +95,7 @@ export function Moments() {
                 <tbody>{[...rows].reverse().map(r => <tr key={r.day}><th scope="row">{`Day ${D(r.day)}`}</th><td>{r.high}</td><td>{r.low}</td></tr>)}</tbody>
               </table></div>
             ) : <DailyChart rows={rows} uh={uhW === null ? null : uhW / 7} ul={ulW === null ? null : ulW / 7} />}
-            <p className="t-small">The dashed lines are your usual day, from days 139 to 180. More low presses is not a verdict: it is a place to look.</p>
+            <p className="t-small">{`The dashed lines are your usual day, from ${USUAL_DAYS}. More low presses is not a verdict: it is a place to look.`}</p>
           </section>
         </div>
         <div className="col col--narrow">

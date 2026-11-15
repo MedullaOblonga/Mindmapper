@@ -26,7 +26,7 @@ it('day 112: sleep and reaction speed are worth a second look and can be sent, e
   expect(within(look).getByText(/Sleep: .* h\. Outside the NASA line on 3 of the last 5 nights\./)).toBeInTheDocument();
   expect(within(look).getByText(/Reaction speed: 3\.56 per s\. Outside the NASA line on 2 of the last 2 tests\./)).toBeInTheDocument();
   await u.click(within(look).getByRole('button', { name: 'Crew medical officer' }));
-  expect((screen.getByLabelText(/Your message/) as HTMLTextAreaElement).value).toMatch(/^Body trends, day 236\. Sleep: latest/);
+  expect((screen.getByLabelText(/Your message/) as HTMLTextAreaElement).value).toMatch(/^Body trends, day 112\. Sleep: latest/);
 });
 
 it('groups the two CO2 readings in one panel and switches to a table', async () => {
@@ -37,7 +37,7 @@ it('groups the two CO2 readings in one panel and switches to a table', async () 
   expect(within(air).getByText('Outside the NASA limit on 2 of the last 2 nights')).toBeInTheDocument();
   await u.click(screen.getByRole('button', { name: 'Show as table' }));
   expect(screen.getByRole('region', { name: 'Last 7 days as a table' })).toBeInTheDocument();
-  expect(screen.getByRole('columnheader', { name: 'Day 225' })).toBeInTheDocument();
+  expect(screen.getByRole('columnheader', { name: 'Day 101' })).toBeInTheDocument();
 });
 
 it('names where every line comes from', () => {

@@ -7,8 +7,8 @@ it('renders the three navigation regions', () => {
   expect(screen.getByRole('navigation', { name: 'Main' })).toBeInTheDocument();
   expect(screen.getByRole('navigation', { name: 'Demo story' })).toBeInTheDocument();
   expect(screen.getByText(/Stays on this device/)).toBeInTheDocument();
-  expect(screen.getByText(/^STARDATE 47[56]\d\d\.\d$/)).toBeInTheDocument();
-  expect(screen.getByRole('img', { name: /Mission day 236 of 520/ })).toBeInTheDocument();
+  expect(screen.getByText(/^STARDATE 473\d\d\.\d$/)).toBeInTheDocument();
+  expect(screen.getByRole('img', { name: /Mission day 112 of 520/ })).toBeInTheDocument();
   expect(screen.getByTitle(/One-way light time/)).toHaveTextContent(/Delay to Earth 11 min \d\d s one way/);
 });
 
