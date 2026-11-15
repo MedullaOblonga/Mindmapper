@@ -103,7 +103,7 @@ export function Signs() {
             <section className="panel panel--tight" aria-label="Agreed before launch">
               <div className="panel-title-row"><h2 className="t-head icon-head"><Lock size={16} aria-hidden="true" />Agreed before launch</h2></div>
               <p className="t-body">{`At ${cur.atLeast} nights, your flight surgeon is told it happened, not what you wrote. At ${run} now.`}</p>
-              <div className="btn-row"><button className="btn" onClick={() => nav('/plan/sharing')}>Change this rule</button></div>
+              <div className="btn-row"><button className="btn" onClick={() => nav('/profile/sharing')}>Change this rule</button></div>
             </section>
           )}
         </div>

@@ -57,7 +57,7 @@ function LineCrossed({ v }: { v: View }) {
       <p className="t-quote">{`“${v.lineCrossed.message}”`}</p>
       <div className="btn-row">
         <button className="btn" onClick={() => ui.openShareLog(true)}>Open share log</button>
-        <button className="btn btn--quiet" onClick={() => nav('/plan/sharing')}>Change this rule</button>
+        <button className="btn btn--quiet" onClick={() => nav('/profile/sharing')}>Change this rule</button>
       </div>
     </section>
   );

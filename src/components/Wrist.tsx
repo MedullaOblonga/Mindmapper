@@ -24,7 +24,7 @@ export function WristDock({ v }: { v: View }) {
     ui.showToast(`Marked a ${mood} moment at ${fmtClock(m.min)}${m.blockLabel ? `, during ${m.blockLabel}` : ''}. It will be waiting tonight.`);
   };
   return (
-    <div className="wrist-dock" role="group" aria-label="Wrist">
+    <div className="wrist-rail" role="group" aria-label="Wrist">
       {open && free && (
         <div className="wrist-pop panel panel--tight">
           <div className="t-head">{`Free until ${fmtClock(free.endMin)}`}</div>

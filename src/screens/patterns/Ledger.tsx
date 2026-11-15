@@ -90,7 +90,7 @@ export function Ledger() {
         <section className="panel panel--tight col" aria-label="Agreed before launch">
           <div className="t-head">Agreed before launch</div>
           <p className="t-body">{`You and your flight surgeon set what is shared automatically. ${v.lineCrossed ? `One line was crossed on day ${v.lineCrossed.day}.` : 'Nothing this week has crossed it.'}`}</p>
-          <a href="#/plan/sharing" className="t-head link-tap" onClick={e => { e.preventDefault(); nav('/plan/sharing'); }}>See the rules</a>
+          <a href="#/profile/sharing" className="t-head link-tap" onClick={e => { e.preventDefault(); nav('/profile/sharing'); }}>See the rules</a>
         </section>
       </div>
     </>

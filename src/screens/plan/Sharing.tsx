@@ -4,7 +4,7 @@ import { useUI } from '../../state/ui';
 import { appStore } from '../../state/store';
 import { pastMidnightRun } from '../../logic/signs';
 import { currentRule, withThreshold } from '../../logic/rules';
-import { params } from '../../data/params';
+import { earthDelayMin } from '../../lib/stardate';
 import { Sheet } from '../../components/ui';
 import { ShareLogList } from '../../components/shell/ShareLogDrawer';
 import type { ShareRule } from '../../types';
@@ -46,42 +46,55 @@ function RuleSheet({ rule, v, onClose }: { rule: ShareRule; v: View; onClose: ()
   );
 }
 
+const LEVELS = [
+  { n: 1, head: 'Most weeks: nothing', body: 'The tool offers things you can do yourself. Nothing is sent to anyone.' },
+  { n: 2, head: 'When you choose: a message you approve', body: 'From any card you can draft a note to a crewmate, the crew medical officer or the ground. You see and edit the exact words first.' },
+  { n: 3, head: 'Lines you set before launch', body: 'A few lines you agreed with your flight surgeon. They are checked every day, and the exact words are below.' },
+];
+
 export function Sharing() {
   const v = useView();
   const [editing, setEditing] = useState<ShareRule | null>(null);
   const run = pastMidnightRun(v.scenario.days, v.day, v.ignoreNights).run;
   const quiet = daysWithoutEntry(v);
+  const delay = Math.round(earthDelayMin(v.day));
   return (
     <>
       <div className="page-head"><div><h1 className="t-title">What leaves this device, and when</h1>
-        <p className="t-lede">Three levels. You set all of them before launch, and you can read every word that has ever been sent.</p></div></div>
-      <div className="cols cols--three">
-        <section className="panel panel--tight col" aria-label="Most weeks: nothing">
-          <h2 className="t-head">Most weeks: nothing</h2>
-          <p className="t-body">The tool offers things you can do yourself. Nothing is sent to anyone.</p>
-        </section>
-        <section className="panel panel--tight col" aria-label="When you choose">
-          <h2 className="t-head">When you choose: a message you approve</h2>
-          <p className="t-body">{`From any card you can draft a note to a crewmate, the crew medical officer or the ground. You see and edit the exact words. Messages to Earth take about ${params.mission.earthDelayMinutesOneWay} minutes each way.`}</p>
-        </section>
-        <section className="panel panel--tight panel--act col" aria-label="Lines you set before launch">
-          <h2 className="t-head">Lines you set before launch</h2>
-          <div className="rows">
+        <p className="t-lede">Three levels. You set all of them before launch, and you can read every word that has ever been sent.</p></div>
+        <span className="note-pill">{`Earth is about ${delay} minutes away today, each way`}</span></div>
+      <ol className="levels">
+        {LEVELS.map(l => (
+          <li key={l.n} className={`panel panel--tight level ${l.n === 3 ? 'panel--act' : ''}`}>
+            <span className="level-n t-label">{`Level ${l.n}`}</span>
+            <h2 className="t-head">{l.head}</h2>
+            <p className="t-small">{l.body}</p>
+          </li>
+        ))}
+      </ol>
+      <section className="panel" aria-label="Lines you set before launch">
+        <h2 className="t-head">Lines you set before launch</h2>
+        <table className="rules-table">
+          <thead><tr>
+            <th scope="col" className="t-label">The line</th><th scope="col" className="t-label">Now</th>
+            <th scope="col" className="t-label">What is sent, word for word</th><th scope="col"><span className="sr-only">Change</span></th>
+          </tr></thead>
+          <tbody>
             {v.scenario.profile.shareRules.map(r => {
               const cur = currentRule(r, v.events);
               const now = r.metric === 'pastMidnightRun' ? run : quiet;
               return (
-                <div key={r.id} className="rule-row">
-                  <p className="t-stmt-sm">{cur.text}</p>
-                  <p className="t-small">{now >= cur.atLeast ? `Crossed. At ${now} of ${cur.atLeast} now.` : now > 0 ? `At ${now} of ${cur.atLeast} now.` : 'Not crossed.'}</p>
-                  {r.auto && r.message && <p className="t-quote">{`“${r.message}”`}</p>}
-                  <div className="btn-row"><button className="btn btn--sm" onClick={() => setEditing(r)}>Change this rule</button></div>
-                </div>
+                <tr key={r.id}>
+                  <td><p className="t-body rule-text">{cur.text}</p><span className="t-small">{r.auto ? `Automatic, to your flight surgeon` : 'Asks you first. Tells nobody for you.'}</span></td>
+                  <td className="t-small num">{now >= cur.atLeast ? `Crossed (${now} of ${cur.atLeast})` : now > 0 ? `At ${now} of ${cur.atLeast}` : 'Not crossed'}</td>
+                  <td>{r.auto && r.message ? <p className="t-quote">{`\u201c${r.message}\u201d`}</p> : <span className="t-small">Nothing is sent.</span>}</td>
+                  <td><button className="btn btn--sm" onClick={() => setEditing(r)}>Change this rule</button></td>
+                </tr>
               );
             })}
-          </div>
-        </section>
-      </div>
+          </tbody>
+        </table>
+      </section>
       <section className="panel" aria-label="Share log">
         <h2 className="t-head">Share log</h2>
         <p className="t-small">Everything that has left this device, in full. If it is not here, it was not sent.</p>

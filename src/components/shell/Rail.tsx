@@ -1,14 +1,14 @@
-import { Sun, NotebookPen, AlignLeft, Bookmark, Info } from 'lucide-react';
+import { Sun, NotebookPen, AlignLeft, UserRound, Info } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const ITEMS = [
   { to: '/today', match: '/today', label: 'Today', Icon: Sun },
   { to: '/journal', match: '/journal', label: 'Journal', Icon: NotebookPen },
   { to: '/patterns/mind', match: '/patterns', label: 'Patterns', Icon: AlignLeft },
-  { to: '/plan/signs', match: '/plan', label: 'My plan', Icon: Bookmark },
+  { to: '/profile/about', match: '/profile', label: 'Profile', Icon: UserRound },
 ];
 
-export function Rail({ dot = false }: { dot?: boolean }) {
+export function Rail({ dot = false, wrist }: { dot?: boolean; wrist?: React.ReactNode }) {
   const loc = useLocation();
   const nav = useNavigate();
   const item = (it: typeof ITEMS[number] | { to: string; match: string; label: string; Icon: typeof Info }, showDot: boolean) => {
@@ -25,6 +25,7 @@ export function Rail({ dot = false }: { dot?: boolean }) {
   return (
     <nav className="rail" aria-label="Main">
       {ITEMS.map(it => item(it, it.match === '/today' && dot && !onToday))}
+      {wrist}
       <span className="rail-spacer" />
       {item({ to: '/about', match: '/about', label: 'About', Icon: Info }, false)}
     </nav>

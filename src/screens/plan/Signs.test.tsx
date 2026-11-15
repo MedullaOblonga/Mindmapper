@@ -6,7 +6,7 @@ import { appStore } from '../../state/store';
 
 it('day 112 signs', async () => {
   const u = userEvent.setup();
-  window.location.hash = '#/plan/signs';
+  window.location.hash = '#/profile/signs';
   render(<HashRouter><App /></HashRouter>);
   const list = screen.getByRole('region', { name: 'Your signs' });
   expect(within(list).getAllByRole('listitem')).toHaveLength(6);

@@ -53,18 +53,26 @@ export function DayBuilder({ v, onWrite, compact }: { v: View; onWrite: (prefill
   const [adding, setAdding] = useState(false);
   const list = useRef<HTMLDivElement>(null);
   const fromScroll = useRef(false);
+  const busyUntil = useRef(0);
+  const settle = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => { setSel(cueIdx); }, [v.day]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => () => { if (settle.current) clearTimeout(settle.current); }, []);
   useEffect(() => {
     if (fromScroll.current) { fromScroll.current = false; return; }
-    const el = list.current?.children[sel] as HTMLElement | undefined;
-    if (el && typeof el.scrollIntoView === 'function') el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    const box = list.current, el = box?.children[sel] as HTMLElement | undefined;
+    if (!box || !el || typeof box.scrollTo !== 'function') return;
+    busyUntil.current = Date.now() + 700;
+    box.scrollTo({ left: el.offsetLeft - box.offsetLeft - (box.clientWidth - el.offsetWidth) / 2, behavior: 'smooth' });
   }, [sel]);
   const onScroll = () => {
-    const box = list.current; if (!box) return;
-    const mid = box.scrollLeft + box.clientWidth / 2;
-    let best = 0, dist = Infinity;
-    Array.from(box.children).forEach((c, i) => { const el = c as HTMLElement; const d = Math.abs(el.offsetLeft + el.offsetWidth / 2 - mid); if (d < dist) { dist = d; best = i; } });
-    if (best !== sel) { fromScroll.current = true; setSel(best); }
+    if (settle.current) clearTimeout(settle.current);
+    settle.current = setTimeout(() => {
+      const box = list.current; if (!box || Date.now() < busyUntil.current) return;
+      const mid = box.scrollLeft + box.clientWidth / 2;
+      let best = 0, dist = Infinity;
+      Array.from(box.children).forEach((c, i) => { const el = c as HTMLElement; const d = Math.abs(el.offsetLeft - box.offsetLeft + el.offsetWidth / 2 - mid); if (d < dist) { dist = d; best = i; } });
+      if (best !== sel) { fromScroll.current = true; setSel(best); }
+    }, 140);
   };
   const late = rec.onsetMin - usualOnset(s);
   const cueOff = v.events.some(e => e.type === 'dismiss' && e.what === 'cue');

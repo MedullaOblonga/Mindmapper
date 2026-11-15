@@ -1,28 +1,36 @@
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Tabs } from '../../components/ui';
+import { AboutYou } from './AboutYou';
 import { Signs } from './Signs';
 import { Sharing } from './Sharing';
 import { Reminders } from './Reminders';
 import { Helped } from './Helped';
 
-export const PLAN_TABS = [
+export const PROFILE_TABS = [
+  { id: 'about', label: 'About you' },
   { id: 'signs', label: 'Early signs' },
-  { hidden: true, id: 'reminders', label: 'Wrist reminders' },
   { id: 'sharing', label: 'Sharing' },
+  { hidden: true, id: 'reminders', label: 'Wrist reminders' },
   { hidden: true, id: 'helped', label: 'What has helped' },
 ];
 
-export function Plan() {
-  const { tab = 'signs' } = useParams();
+export function Profile() {
+  const { tab = 'about' } = useParams();
   const nav = useNavigate();
-  if (!PLAN_TABS.some(t => t.id === tab)) return <Navigate to="/plan/signs" replace />;
+  if (!PROFILE_TABS.some(t => t.id === tab)) return <Navigate to="/profile/about" replace />;
   return (
     <>
-      <Tabs label="My plan" tabs={PLAN_TABS.filter(t => !('hidden' in t))} current={tab} onPick={id => nav(`/plan/${id}`)} />
+      <Tabs label="Profile" tabs={PROFILE_TABS.filter(t => !('hidden' in t))} current={tab} onPick={id => nav(`/profile/${id}`)} />
+      {tab === 'about' && <AboutYou />}
       {tab === 'signs' && <Signs />}
       {tab === 'reminders' && <Reminders />}
       {tab === 'sharing' && <Sharing />}
       {tab === 'helped' && <Helped />}
     </>
   );
+}
+
+export function LegacyPlan() {
+  const { tab = 'about' } = useParams();
+  return <Navigate to={`/profile/${tab}`} replace />;
 }

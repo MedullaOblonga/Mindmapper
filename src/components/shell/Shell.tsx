@@ -41,12 +41,11 @@ export function Shell({ children }: { children: ReactNode }) {
       <BedtimeLight v={v} />
       <TopBar day={v.day} shared={v.shareLog.length} onOpenLog={() => ui.openShareLog(true)} />
       <StoryBar branch={v.branch} />
-      <Rail dot={v.openCards.length > 0} />
+      <Rail dot={v.openCards.length > 0} wrist={<WristDock v={v} />} />
       <main className="page">
         {children}
         <Footer />
       </main>
-      <WristDock v={v} />
       <Overlays />
     </div>
   );
