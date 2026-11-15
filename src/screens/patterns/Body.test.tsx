@@ -11,9 +11,9 @@ it('shows measured things only, each with a chart', () => {
   expect(screen.getByRole('button', { name: 'Body trends' })).toHaveAttribute('aria-current', 'page');
   for (const n of ['Sleep', 'Reaction speed', 'Resting heart rate', 'Body mass', 'CO2 around you'])
     expect(screen.getByRole('region', { name: n })).toBeInTheDocument();
-  for (const n of ['Sleep and attention', 'Heart and blood', 'Body', 'Air around you'])
+  for (const n of ['Sleep, temperature and reaction speed', 'Resting heart rate, blood pressure and blood sugar', 'Exercise, body mass and the air around you'])
     expect(screen.getByRole('heading', { name: n })).toBeInTheDocument();
-  expect(screen.getAllByRole('img', { name: /last 28 days/ })).toHaveLength(10);
+  expect(screen.getAllByRole('img', { name: /last 28 days/ })).toHaveLength(9);
   const text = document.querySelector('main')!.textContent!;
   expect(text).not.toMatch(/\b(mood|stress|fatigue)\b/i);
   expect(text).not.toMatch(/cabin CO2/i);
@@ -26,19 +26,18 @@ it('day 112: sleep and reaction speed are worth a second look and can be sent, e
   expect(within(look).getByText(/Sleep: .* h\. Outside the NASA line on 3 of the last 5 nights\./)).toBeInTheDocument();
   expect(within(look).getByText(/Reaction speed: 3\.56 per s\. Outside the NASA line on 2 of the last 2 tests\./)).toBeInTheDocument();
   await u.click(within(look).getByRole('button', { name: 'Crew medical officer' }));
-  expect((screen.getByLabelText(/Your message/) as HTMLTextAreaElement).value).toMatch(/^Body trends, day 112\. Sleep: latest/);
+  expect((screen.getByLabelText(/Your message/) as HTMLTextAreaElement).value).toMatch(/^Body trends, day 236\. Sleep: latest/);
 });
 
 it('groups the two CO2 readings in one panel and switches to a table', async () => {
   const u = userEvent.setup();
   open(101);
-  const air = screen.getByRole('region', { name: 'Air around you' });
-  expect(within(air).getAllByRole('img', { name: /last 28 days/ })).toHaveLength(2);
-  expect(within(air).getAllByRole('region')).toHaveLength(1);
+  const air = screen.getByRole('region', { name: 'CO2 around you' });
+  expect(within(air).getAllByRole('img', { name: /Awake and Asleep, last 28 days/ })).toHaveLength(1);
   expect(within(air).getByText('Outside the NASA limit on 2 of the last 2 nights')).toBeInTheDocument();
   await u.click(screen.getByRole('button', { name: 'Show as table' }));
   expect(screen.getByRole('region', { name: 'Last 7 days as a table' })).toBeInTheDocument();
-  expect(screen.getByRole('columnheader', { name: 'Day 101' })).toBeInTheDocument();
+  expect(screen.getByRole('columnheader', { name: 'Day 225' })).toBeInTheDocument();
 });
 
 it('names where every line comes from', () => {

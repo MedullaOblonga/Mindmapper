@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { D } from '../config';
 import { useNavigate } from 'react-router-dom';
 import { useView } from '../state/useView';
 import { useApp, appStore } from '../state/store';
@@ -38,7 +39,7 @@ function WhatTheToolDid({ v }: { v: View }) {
           {last.map(r => (
             <div className="did-row" key={r.cardId}>
               <div><div className="t-head">{r.title}</div>
-                <div className="t-small act-text">{r.status === 'not-right' ? `Day ${r.day}. You said: ${r.choice}` : `Day ${r.day}. You chose: ${r.choice}`}</div></div>
+                <div className="t-small act-text">{r.status === 'not-right' ? `Day ${D(r.day)}. You said: ${r.choice}` : `Day ${D(r.day)}. You chose: ${r.choice}`}</div></div>
               <p className="t-stmt-sm did-effect">{r.effect}</p>
             </div>
           ))}
@@ -59,7 +60,7 @@ function LineCrossed({ v }: { v: View }) {
       {c && !c.fixed && (
         <section className="panel panel--act" aria-label="Agreed before launch">
           <div className="t-label act-text">Agreed before launch</div>
-          <p className="t-stmt-sm">{`On day ${c.day} a line you set before launch was crossed. Your flight surgeon was told this, and only this:`}</p>
+          <p className="t-stmt-sm">{`On day ${D(c.day)} a line you set before launch was crossed. Your flight surgeon was told this, and only this:`}</p>
           <p className="t-quote">{`“${c.message}”`}</p>
           <div className="btn-row">
             <button className="btn" onClick={() => ui.openShareLog(true)}>Open share log</button>
@@ -89,7 +90,7 @@ function Tonight({ v }: { v: View }) {
   const sleep = v.scenario.days[v.day - 1];
   return (
     <section className="panel panel--tight panel--act" aria-label="Your day">
-      <div className="panel-title-row"><div className="t-label act-text">{`Your day ${v.day}`}</div>
+      <div className="panel-title-row"><div className="t-label act-text">{`Your day ${D(v.day)}`}</div>
         <a href="#/journal" className="t-head link-tap" onClick={e => { e.preventDefault(); nav('/journal'); }}>Open your journal</a></div>
       <p className="t-stmt-sm">{daySummary(v)}</p>
       <p className="t-small num">{`Slept ${fmtClock(sleep.onsetMin)} to ${fmtClock(sleep.wakeMin)}, from your wearable.`}</p>
@@ -163,8 +164,8 @@ export function Today() {
     wide = (
       <>
         <section className="panel" aria-label="Settling in">
-          <div className="dots" role="img" aria-label={`Day ${day} of 14`}>{Array.from({ length: 14 }, (_, i) => <i key={i} className={i < day ? 'on' : ''} />)}</div>
-          <p className="t-stmt-sm num">{`Day ${day} of 14.`}</p>
+          <div className="dots" role="img" aria-label={`Learning day ${day} of 14`}>{Array.from({ length: 14 }, (_, i) => <i key={i} className={i < day ? 'on' : ''} />)}</div>
+          <p className="t-stmt-sm num">{`Learning day ${day} of 14.`}</p>
         </section>
         <WhatTheToolDid v={v} />
       </>

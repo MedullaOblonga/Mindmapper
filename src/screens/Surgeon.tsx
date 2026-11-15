@@ -3,7 +3,7 @@ import { currentRule } from '../logic/rules';
 import { surgeonLog } from '../logic/lines';
 import { reliefSteps, type ReliefStep } from '../logic/safety';
 import { delayMin, delayWords, fmtDelay } from '../lib/delay';
-import { missionDay } from '../config';
+import { missionDay, D } from '../config';
 import type { ShareLogEntry } from '../types';
 
 const NOT_SHARED = [
@@ -14,7 +14,7 @@ const NOT_SHARED = [
   'Notes to crewmates, the crew medical officer, the ground psychologist or home.',
 ];
 
-const when = (e: ShareLogEntry) => `Sent on day ${e.day} · reached Earth ${fmtDelay(delayMin(missionDay(e.day)))} later`;
+const when = (e: ShareLogEntry) => `Sent on day ${D(e.day)} · reached Earth ${fmtDelay(delayMin(missionDay(e.day)))} later`;
 
 function Notes({ items, empty, relief }: { items: ShareLogEntry[]; empty: string; relief?: ReliefStep[] }) {
   if (!items.length) return <p className="t-small">{empty}</p>;

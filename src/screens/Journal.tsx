@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { D } from '../config';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useView } from '../state/useView';
 import { appStore } from '../state/store';
@@ -10,6 +11,7 @@ import { Mark, MarkLegend, Tag, cssVars, topicVar } from '../components/ui';
 import { canListen, listen } from '../lib/speech';
 import type { Block, Entry, Felt, Group, MoodMark, Segment } from '../types';
 import { DayBuilder } from '../components/DayBuilder';
+import { bedtimeOf, withFreeTime } from '../logic/ring';
 import { SafetyNotice } from '../components/SafetyNotice';
 import { entryMatches } from '../logic/safety';
 import { MoodGlyph, BLOCK_VAR } from '../components/DayRing';
@@ -99,23 +101,20 @@ function Composer({ day, marks, blocks, text, setText, focus, apiRef }: { day: n
   };
   return (
     <section className="panel" aria-label="Write">
-      <label className="t-label" htmlFor="composer">{`Day ${day} · private diary`}</label>
+      <label className="t-label" htmlFor="composer">{`Day ${D(day)} · private diary`}</label>
       {blocks.length > 0 && (
         <div className="chip-row" role="group" aria-label="Insert an activity">
-          <span className="t-label chip-row-label">Activities</span>
-          {blocks.map(b => (
-            <button key={b.id} className="btn btn--sm" onClick={() => insert(`During ${b.label.toLowerCase()} (${fmtClock(b.startMin)} to ${fmtClock(b.endMin)}): `)}>
-              <i className="swatch" style={{ background: BLOCK_VAR[b.kind] }} />{b.label}</button>
-          ))}
-        </div>
-      )}
-      {marks.length > 0 && (
-        <div className="chip-row" role="group" aria-label="Insert a wrist press">
-          <span className="t-label chip-row-label">Presses</span>
-          {marks.map((m, i) => (
-            <button key={i} className="btn btn--sm" onClick={() => insert(`At ${fmtClock(m.min)}${m.blockLabel ? `, during ${m.blockLabel}` : ''} (${m.mood}): `)}>
-              <MoodGlyph mood={m.mood} />{`${fmtClock(m.min)}${m.blockLabel ? ` · ${m.blockLabel}` : ''}`}</button>
-          ))}
+          {blocks.map(b => {
+            const ms = marks.filter(m => m.min >= b.startMin && m.min < b.endMin);
+            const presses = ms.map(m => `${m.mood} at ${fmtClock(m.min)}`).join(', ');
+            return (
+              <button key={b.id} className="btn btn--sm act-chip" title={presses ? `Presses: ${presses}` : undefined}
+                onClick={() => insert(`During ${b.label.toLowerCase()} (${fmtClock(b.startMin)} to ${fmtClock(b.endMin)})${presses ? `, pressed ${presses}` : ''}: `)}>
+                <i className="swatch" style={{ background: BLOCK_VAR[b.kind] }} />{b.label}
+                {ms.map((m, i) => <MoodGlyph key={i} mood={m.mood} />)}
+              </button>
+            );
+          })}
         </div>
       )}
       <textarea id="composer" ref={ta} className="paper" rows={6} value={text} onChange={e => setText(e.target.value)} placeholder="What happened, and how did it sit with you?" />
@@ -147,7 +146,7 @@ function Earlier({ entries, day, filter, clearFilter, matched }: { entries: Entr
     <section className="panel panel--tight" aria-label="Earlier entries">
       <h2 className="t-head">Earlier entries</h2>
       {filter ? (
-        <p className="t-small">{`Showing ${filter.ids.length} entries about ${filter.topic.toLowerCase()}, days ${filter.from} to ${filter.to}. `}
+        <p className="t-small">{`Showing ${filter.ids.length} entries about ${filter.topic.toLowerCase()}, days ${D(filter.from)} to ${D(filter.to)}. `}
           <a href="#/journal" onClick={e => { e.preventDefault(); clearFilter(); }}>Clear</a></p>
       ) : (
         <div className="btn-row" role="group" aria-label="Filter by topic">
@@ -160,7 +159,7 @@ function Earlier({ entries, day, filter, clearFilter, matched }: { entries: Entr
         {list.length === 0 && <p className="t-small">No entries yet.</p>}
         {list.slice(0, 40).map(([d, segs]) => (
           <details key={d} className="earlier-day" open={!!filter || d >= day - 3}>
-            <summary className="t-label earlier-sum">{`Day ${d}`}{matched.has(d) && <span className="tag">Matched the safety line</span>}<span className="earlier-swatches" aria-hidden="true">{segs.map(s => <i key={s.id} className="swatch" style={{ background: topicVar(s.group) }} />)}</span></summary>
+            <summary className="t-label earlier-sum">{`Day ${D(d)}`}{matched.has(d) && <span className="tag">Matched the safety line</span>}<span className="earlier-swatches" aria-hidden="true">{segs.map(s => <i key={s.id} className="swatch" style={{ background: topicVar(s.group) }} />)}</span></summary>
             <p className="earlier-prose">{segs.map(s => s.text).join(' ')}</p>
             <div className="earlier-tags">{segs.map(s => (
               <span key={s.id} className="earlier-tag t-small"><i className="swatch" style={{ background: topicVar(s.group) }} />{groupShort(s.group)}<Mark felt={s.felt} group={s.group} /></span>
@@ -191,7 +190,7 @@ export function Journal() {
       <DayBuilder v={v} />
       <div className="cols">
         <div className="col col--wide">
-          <Composer key={`${v.day}-${loc.key}`} day={v.day} marks={v.marksToday} blocks={v.blocksToday.filter(b => b.kind !== 'sleep')} text={text} setText={setText} focus={!!st.focus || !!st.prefill} apiRef={api} />
+          <Composer key={`${v.day}-${loc.key}`} day={v.day} marks={v.marksToday} blocks={withFreeTime(v.blocksToday, v.scenario.days[v.day - 1].wakeMin, bedtimeOf(v.scenario, v.day), v.day).filter(b => b.kind !== 'sleep' && (b.kind !== 'free' || v.marksToday.some(m => m.min >= b.startMin && m.min < b.endMin)))} text={text} setText={setText} focus={!!st.focus || !!st.prefill} apiRef={api} />
           {latest && <TaggedEntry entry={latest} />}
         </div>
         <div className="col col--narrow">

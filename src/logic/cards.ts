@@ -1,4 +1,5 @@
 import { params } from '../data/params';
+import { D } from '../config';
 import { groupShort } from '../data/topics';
 import { median } from '../lib/stats';
 import { fmtClock, fmtLater, weekDays } from '../lib/time';
@@ -64,8 +65,8 @@ function topicShift(_s: Scenario, week: number, ctx: CardContext, g: Group): Car
   return { id: `${week}-topic-shift-${g}`, week, day: 7 * week, kind: 'topic-shift', subject: g,
     title: `${topic} is coming up more`, statement,
     evidence: { type: 'marks', group: g, rows: [
-      { label: `Days ${a1} to ${b1}`, ...first },
-      { label: `Days ${a2} to ${b2}`, ...last }] },
+      { label: `Days ${D(a1)} to ${D(b1)}`, ...first },
+      { label: `Days ${D(a2)} to ${D(b2)}`, ...last }] },
     actions: dedupe(actions), whyKey: 'why.topic-shift', dataTag: 'ai-sample' };
 }
 
@@ -78,7 +79,7 @@ function ownSign(s: Scenario, week: number, ctx: CardContext): Card | null {
   const withLine = showed.find(x => signs.find(z => z.id === x.id)?.shareRuleId);
   const pick = withLine ?? [...showed].sort((a, b) => (b.days?.length ?? 0) - (a.days?.length ?? 0))[0];
   const sign = signs.find(z => z.id === pick.id)!;
-  const when = pick.days?.length ? `It showed up on days ${listWords(pick.days)}.` : `It showed up this week. ${pick.text}.`;
+  const when = pick.days?.length ? `It showed up on days ${listWords(pick.days.map(D))}.` : `It showed up this week. ${pick.text}.`;
   const actions: CardAction[] = [];
   if (sign.steps?.length) {
     actions.push({ id: 'own-step', kind: 'own-step', label: 'Start step 1 tonight', payload: { text: sign.steps[0] } });

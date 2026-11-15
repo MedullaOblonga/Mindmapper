@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { D } from '../../config';
 import { useView } from '../../state/useView';
 import { useUI } from '../../state/ui';
 import { Tag, DATA_TAG } from '../../components/ui';
@@ -25,14 +26,14 @@ function Status({ r }: { r: Reading }) {
 function TrendCard({ r, v }: { r: Reading; v: View }) {
   const range = rangeText(r);
   return (
-    <section className="panel panel--tight trend-card" aria-label={r.def.name}>
+    <section className="trend-card" aria-label={r.def.name}>
       <div className="trend-head">
         <div><h3 className="t-head">{r.def.name}</h3><div className="t-small">{r.def.source}</div></div>
         {r.last && <div className="t-stmt-sm num trend-val">{fmt(r, r.last.v)} <span className="t-small">{r.def.unit}</span></div>}
       </div>
       <TrendChart r={r} day={v.day} />
       <Status r={r} />
-      {range && <div className="t-small num">{`Inside ${r.def.lineName}: ${range}.${r.usual !== null ? ` Your usual: ${fmt(r, r.usual)} ${r.def.unit}.` : ''}`}</div>}
+      {range && <div className="t-small num trend-range">{`Inside ${r.def.lineName}: ${range}.${r.usual !== null ? ` Your usual: ${fmt(r, r.usual)} ${r.def.unit}.` : ''}`}</div>}
       <p className="t-small">{r.def.plain}</p>
       <div className="trend-tags"><Tag>{originText(r, v)}</Tag><Tag>{BASIS_LABEL[r.def.basis]}</Tag></div>
     </section>
@@ -46,7 +47,7 @@ function TableView({ rs, day }: { rs: Reading[]; day: number }) {
       <h2 className="t-head">Last 7 days as a table</h2>
       <div className="table-scroll">
         <table className="real-table num">
-          <thead><tr><th className="t-label" scope="col">Measure</th>{days.map(d => <th key={d} className="t-label" scope="col">{`Day ${d}`}</th>)}<th className="t-label" scope="col">Inside its line</th></tr></thead>
+          <thead><tr><th className="t-label" scope="col">Measure</th>{days.map(d => <th key={d} className="t-label" scope="col">{`Day ${D(d)}`}</th>)}<th className="t-label" scope="col">Inside its line</th></tr></thead>
           <tbody>
             {rs.map(r => (
               <tr key={r.def.id}>
@@ -66,34 +67,26 @@ function TableView({ rs, day }: { rs: Reading[]; day: number }) {
   );
 }
 
-/** Both collar CO2 readings in one panel: awake and asleep, each against the same NASA limit. */
+/** Both collar CO2 readings on one chart: awake and asleep, against the same NASA limit. */
 function CO2Card({ day, night, v }: { day: Reading; night: Reading; v: View }) {
+  const worse = day.status === 'sustained' ? day : night.status === 'sustained' ? night : day.status === 'once' ? day : night;
   return (
-    <section className="panel panel--tight trend-card trend-card--wide" aria-label="CO2 around you">
+    <section className="trend-card" aria-label="CO2 around you">
       <div className="trend-head">
-        <div><h3 className="t-head">CO2 around you</h3><div className="t-small">Collar-worn CO2 monitor, awake and asleep</div></div>
-        <div className="t-stmt-sm num trend-val">{`${day.last ? fmt(day, day.last.v) : '—'} / ${night.last ? fmt(night, night.last.v) : '—'}`} <span className="t-small">mmHg, awake / asleep</span></div>
+        <div><h3 className="t-head">CO2 around you</h3><div className="t-small">Collar-worn monitor, awake and asleep</div></div>
+        <div className="t-stmt-sm num trend-val">{`${day.last ? fmt(day, day.last.v) : '—'} / ${night.last ? fmt(night, night.last.v) : '—'}`} <span className="t-small">mmHg</span></div>
       </div>
-      <div className="co2-pair">
-        {[['Awake', day], ['Asleep', night]].map(([label, r]) => (
-          <div key={label as string} className="co2-half">
-            <div className="t-label">{label as string}</div>
-            <TrendChart r={r as Reading} day={v.day} />
-            <Status r={r as Reading} />
-          </div>
-        ))}
-      </div>
-      <p className="t-small">{day.def.plain}</p>
+      <TrendChart r={day} r2={night} names={['Awake', 'Asleep']} day={v.day} />
+      <Status r={worse} />
       <div className="trend-tags"><Tag>{originText(day, v)}</Tag><Tag>{BASIS_LABEL[day.def.basis]}</Tag></div>
     </section>
   );
 }
 
-const SECTIONS: { id: string; title: string; note: string; ids: MeasureId[] }[] = [
-  { id: 'sleep-attention', title: 'Sleep and attention', note: 'Short sleep slows reactions, so these two sit together.', ids: ['sleep', 'speed'] },
-  { id: 'heart', title: 'Heart and blood', note: 'Every day from your wrist, and weekly from the arm cuff.', ids: ['rhr', 'sbp'] },
-  { id: 'body', title: 'Body', note: 'Exercise log, and the weekly body check.', ids: ['exercise', 'mass', 'glucose', 'temp'] },
-  { id: 'air', title: 'Air around you', note: 'One monitor worn at the collar by day and clipped in the sleep station at night.', ids: ['co2day', 'co2sleep'] },
+const SECTIONS: { id: string; title: string; ids: MeasureId[] }[] = [
+  { id: 'sleep-temp-reaction', title: 'Sleep, temperature and reaction speed', ids: ['sleep', 'temp', 'speed'] },
+  { id: 'heart-blood', title: 'Resting heart rate, blood pressure and blood sugar', ids: ['rhr', 'sbp', 'glucose'] },
+  { id: 'exercise-mass-air', title: 'Exercise, body mass and the air around you', ids: ['exercise', 'mass', 'co2day', 'co2sleep'] },
 ];
 
 export function Body() {
@@ -128,25 +121,24 @@ export function Body() {
       </section>
 
       <div className="trend-tools">
-        <nav className="btn-row" aria-label="Sections">
-          {SECTIONS.map(sec => <a key={sec.id} className="btn btn--sm" href={`#${sec.id}`} onClick={e => { e.preventDefault(); document.getElementById(sec.id)?.scrollIntoView?.({ behavior: 'smooth', block: 'start' }); }}>{sec.title}</a>)}
-        </nav>
+        <p className="t-small">Last 28 days. The shaded band is the inside of each line; the dashed line is your own usual. A ring marks a reading outside its line. Hover or tap a chart for values.</p>
         <button className="btn btn--sm" onClick={() => setTable(t => !t)}>{table ? 'Show charts' : 'Show as table'}</button>
       </div>
-      <p className="t-small">Last 28 days. The shaded band is the inside of each line and the dashed line is your own usual, taken from days 15 to 56. A ring marks a reading outside its line. Hover or tap a chart for values.</p>
 
       {table ? <TableView rs={all} day={v.day} /> : SECTIONS.map(sec => {
         const rs = sec.ids.map(id => all.find(r => r.def.id === id)).filter((r): r is Reading => !!r);
+        const co2 = rs.filter(r => r.def.id === 'co2day' || r.def.id === 'co2sleep');
+        const rest = rs.filter(r => !co2.includes(r));
         const out = rs.filter(r => r.status === 'sustained').length;
         return (
-          <section key={sec.id} id={sec.id} className="trend-section" aria-label={sec.title}>
+          <section key={sec.id} className="panel panel--tight trend-group" aria-label={sec.title}>
             <div className="trend-section-head">
               <h2 className="t-head trend-section-title">{sec.title}</h2>
               <span className="t-small">{out ? `${out} worth a second look` : 'All inside their lines'}</span>
             </div>
-            <p className="t-small">{sec.note}</p>
             <div className="trend-grid">
-              {sec.id === 'air' && rs.length === 2 ? <CO2Card day={rs[0]} night={rs[1]} v={v} /> : rs.map(r => <TrendCard key={r.def.id} r={r} v={v} />)}
+              {rest.map(r => <TrendCard key={r.def.id} r={r} v={v} />)}
+              {co2.length === 2 && <CO2Card day={co2[0]} night={co2[1]} v={v} />}
             </div>
           </section>
         );

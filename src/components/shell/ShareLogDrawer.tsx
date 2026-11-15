@@ -1,4 +1,5 @@
 import { Drawer } from '../ui';
+import { D } from '../../config';
 import { useUI } from '../../state/ui';
 import type { ShareLogEntry } from '../../types';
 
@@ -8,7 +9,7 @@ export function ShareLogList({ log }: { log: ShareLogEntry[] }) {
     <ol className="rows log-list">
       {log.map(e => (
         <li key={e.id}>
-          <div className="t-small num">{`Day ${e.day} · to ${e.to}${e.auto ? ' · agreed before launch' : ''}`}</div>
+          <div className="t-small num">{`Day ${D(e.day)} · to ${e.to}${e.auto ? ' · agreed before launch' : ''}`}</div>
           <p className="t-quote pre">{e.text}</p>
         </li>
       ))}

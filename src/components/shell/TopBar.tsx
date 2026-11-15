@@ -13,7 +13,7 @@ export function TopBar({ day, shared, onOpenLog, due, viewer = 'astronaut' }: { 
   return (
     <header className="topbar">
       <div className="topbar-left">
-        <span className="t-label num" title={`Mission day ${md} of ${MISSION_LENGTH}. Day ${day} with this tool.`}>{`STARDATE ${stardate(md, clock)}`}</span>
+        <span className="t-label num" title={`Mission day ${md} of ${MISSION_LENGTH}`}>{`STARDATE ${stardate(md, clock)}`}</span>
         <div className="mission-meter" role="img" aria-label={`Mission day ${md} of ${MISSION_LENGTH}, ${pct} percent complete`}>
           <i style={{ width: `${pct}%` }} />
         </div>

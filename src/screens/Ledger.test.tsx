@@ -18,5 +18,5 @@ it('day 112 ledger', () => {
 
 it('day 10 ledger has no usual yet', () => {
   open(10);
-  expect(screen.getByText('Your usual appears after day 14.')).toBeInTheDocument();
+  expect(screen.getByText('Your usual appears after day 138.')).toBeInTheDocument();
 });

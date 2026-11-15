@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { D } from '../../config';
 import { useNavigate } from 'react-router-dom';
 import { useView } from '../../state/useView';
 import { marksFor, moodWeek } from '../../state/view';
@@ -29,8 +30,8 @@ function DailyChart({ rows, uh, ul }: { rows: { day: number; high: number; low: 
   const h = hover !== null ? rows[hover] : null;
   return (
     <div className="tc">
-      <p className="t-small tc-readout num" aria-live="polite">{h ? `Day ${h.day}: ${h.high} high, ${h.low} low` : 'Hover or tap a day for its count.'}</p>
-      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`High and low presses per day, days ${rows[0]?.day} to ${rows[rows.length - 1]?.day}. ${rows.map(r => `Day ${r.day}: ${r.high} high, ${r.low} low`).join('; ')}`}
+      <p className="t-small tc-readout num" aria-live="polite">{h ? `Day ${D(h.day)}: ${h.high} high, ${h.low} low` : 'Hover or tap a day for its count.'}</p>
+      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`High and low presses per day, days ${D(rows[0]?.day ?? 1)} to ${D(rows[rows.length - 1]?.day ?? 1)}. ${rows.map(r => `Day ${D(r.day)}: ${r.high} high, ${r.low} low`).join('; ')}`}
         onMouseLeave={() => setHover(null)}>
         <line x1={L} x2={W - R} y1={mid} y2={mid} className="tc-axis" />
         {uh !== null && <line x1={L} x2={W - R} y1={mid - y(uh)} y2={mid - y(uh)} className="tc-usual" />}
@@ -46,7 +47,7 @@ function DailyChart({ rows, uh, ul }: { rows: { day: number; high: number; low: 
               {r.high > 0 && <rect x={x} y={mid - y(r.high)} width={bw} height={Math.max(1, y(r.high) - 1)} rx={2} className="mb-high" />}
               {r.low > 0 && <rect x={x} y={mid + 1} width={bw} height={Math.max(1, y(r.low) - 1)} rx={2} className="mb-low" />}
               {hover === i && <rect x={L + i * step} y={T} width={step} height={H - T - B} className="mb-hover" />}
-              {(r.day % 7 === 1 || i === rows.length - 1) && <text x={L + i * step + step / 2} y={H - 10} textAnchor="middle" className="tc-ax">{`Day ${r.day}`}</text>}
+              {(r.day % 7 === 1 || i === rows.length - 1) && <text x={L + i * step + step / 2} y={H - 10} textAnchor="middle" className="tc-ax">{`Day ${D(r.day)}`}</text>}
             </g>
           );
         })}
@@ -84,17 +85,17 @@ export function Moments() {
         <div className="col col--wide">
           <section className="panel" aria-label="Presses per day">
             <div className="trend-tools">
-              <p className="t-stmt-sm">{uhW === null ? `This week so far: ${now.high} high, ${now.low} low. Your usual appears after day 56.`
+              <p className="t-stmt-sm">{uhW === null ? `This week so far: ${now.high} high, ${now.low} low. Your usual appears after day 180.`
                 : `This week so far: ${now.high} high, ${now.low} low. Your usual week: ${uhW} high, ${ulW} low.`}</p>
               <button className="btn btn--sm" aria-pressed={table} onClick={() => setTable(t => !t)}>{table ? 'Show as chart' : 'Show as table'}</button>
             </div>
             {table ? (
               <div className="table-scroll"><table className="real-table num">
                 <thead><tr><th scope="col" className="t-label">Day</th><th scope="col" className="t-label">High</th><th scope="col" className="t-label">Low</th></tr></thead>
-                <tbody>{[...rows].reverse().map(r => <tr key={r.day}><th scope="row">{`Day ${r.day}`}</th><td>{r.high}</td><td>{r.low}</td></tr>)}</tbody>
+                <tbody>{[...rows].reverse().map(r => <tr key={r.day}><th scope="row">{`Day ${D(r.day)}`}</th><td>{r.high}</td><td>{r.low}</td></tr>)}</tbody>
               </table></div>
             ) : <DailyChart rows={rows} uh={uhW === null ? null : uhW / 7} ul={ulW === null ? null : ulW / 7} />}
-            <p className="t-small">The dashed lines are your usual day, from days 15 to 56. More low presses is not a verdict: it is a place to look.</p>
+            <p className="t-small">The dashed lines are your usual day, from days 139 to 180. More low presses is not a verdict: it is a place to look.</p>
           </section>
         </div>
         <div className="col col--narrow">

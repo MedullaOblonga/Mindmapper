@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { D } from '../config';
 import { appStore } from '../state/store';
 import { bedtimeOf, blockRange, SOURCE_TEXT, withFreeTime } from '../logic/ring';
 import { usualOnset } from '../logic/cards';
@@ -40,10 +41,10 @@ export function DayBuilder({ v }: { v: View }) {
   const ringBlocks = blocks.map(x => (x.id === b.id ? { ...x, felt: guess } : x.felt === null || !tapped.has(x.id) ? { ...x, felt: feltFromPresses(marks.filter(m => inBlock(m, x))) ?? x.felt } : x));
   return (
     <section className="panel builder" aria-label="Rebuild your day">
-      <div className="panel-title-row"><h2 className="t-head">{`Your day ${v.day}`}</h2>
+      <div className="panel-title-row"><h2 className="t-head">{`Your day ${D(v.day)}`}</h2>
         {lowCue.length > 0 && <span className="t-small cue">{`You pressed low at ${fmtClock(lowCue[0].min)} during ${blocks[cueIdx].label}.`}</span>}</div>
       <div className="builder-grid">
-        <DayRing blocks={ringBlocks} marks={marks} selected={sel} onSelect={setSel} title={`Day ${v.day}`} sub={`${b.label} · ${blockRange(b)}`} />
+        <DayRing blocks={ringBlocks} marks={marks} selected={sel} onSelect={setSel} title={`Day ${D(v.day)}`} sub={`${b.label} · ${blockRange(b)}`} />
         <div className="flip-wrap">
           <article key={b.id} className="block-card block-card--flip card-enter" onClick={next} aria-live="polite"
             aria-label={`${b.label}, ${blockRange(b)}. Part ${sel + 1} of ${blocks.length}. Tap for the next part.`}>

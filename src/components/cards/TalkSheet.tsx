@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { D } from '../../config';
 import { Sheet } from '../ui';
 import { useUI, type TalkRequest } from '../../state/ui';
 import { appStore, useApp } from '../../state/store';
@@ -39,7 +40,7 @@ export function TalkSheet({ req }: { req: TalkRequest }) {
   const r = list.find(x => x.id === who) ?? list[0];
   const close = () => ui.openTalk(null);
   const send = () => {
-    const full = attach && req.attach?.length ? `${text}\n\n${req.attach.map(s => `Day ${s.day}: ${s.text}`).join('\n')}` : text;
+    const full = attach && req.attach?.length ? `${text}\n\n${req.attach.map(s => `Day ${D(s.day)}: ${s.text}`).join('\n')}` : text;
     appStore.getState().add({ type: 'share', to: r.to, text: full });
     if (req.card) resolveCard(req.card, 'acted', req.actionLabel ?? 'Talk to someone', `You sent a note to ${r.to}. It is in your share log.`);
     close();
@@ -56,7 +57,7 @@ export function TalkSheet({ req }: { req: TalkRequest }) {
         <div className="attach">
           <label className="radio-row radio-row--sm"><input type="checkbox" checked={attach} onChange={e => setAttach(e.target.checked)} />
             <span>{`Attach the ${req.attach.length} diary entries`}</span></label>
-          {attach && <ul className="attach-list">{req.attach.map(s => <li key={s.id} className="t-small">{`Day ${s.day}: ${s.text}`}</li>)}</ul>}
+          {attach && <ul className="attach-list">{req.attach.map(s => <li key={s.id} className="t-small">{`Day ${D(s.day)}: ${s.text}`}</li>)}</ul>}
         </div>
       )}
       {r.earth && <p className="t-small">{`Reaches Earth in about ${delayWords(delayMin(missionDay(day)))}. A reply takes at least as long again.`}</p>}

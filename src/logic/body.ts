@@ -1,4 +1,5 @@
 import cut from '../data/nasa/body_cutoffs.json';
+import { D, USUAL_DAYS } from '../config';
 import { median } from '../lib/stats';
 import { mulberry32 } from '../lib/prng';
 import { T } from './thresholds';
@@ -60,12 +61,12 @@ export const MEASURES: MeasureDef[] = [
     source: 'Wrist wearable, every day', plain: 'Heart rate at rest. Exercise, illness and adapting to flight all move it.', origin: 'sim',
     line: { type: 'spread', k: OWN_K }, need: 3, of: 5, basis: 'own', lineName: 'your usual range',
     rule: 'Above your own usual range on 3 of the last 5 days.',
-    from: 'Your own readings from days 15 to 56. No NASA cutoff was found for this measure.' },
+    from: `Your own readings from ${USUAL_DAYS}. No NASA cutoff was found for this measure.` },
   { id: 'exercise', name: 'Exercise, last 7 days', unit: 'min', dec: 0, system: 'body', worse: 'low', per: 'days', minForUsual: 14,
     source: 'Exercise device log', plain: 'Minutes of exercise over the last seven days. Exercise protects bone, muscle and heart in low gravity.', origin: 'sim',
     line: { type: 'pct-usual', drop: 1 - 1 / T.ledgerRatio }, need: 3, of: 5, basis: 'own', lineName: 'your usual range',
     rule: 'Under half your own usual on 3 of the last 5 days.',
-    from: 'Your own usual from days 15 to 56, with the same placeholder rule as the ledger. No NASA cutoff was found for this measure.' },
+    from: `Your own usual from ${USUAL_DAYS}, with the same placeholder rule as the ledger. No NASA cutoff was found for this measure.` },
   { id: 'mass', name: 'Body mass', unit: 'kg', dec: 1, system: 'body', worse: 'low', per: 'weeks', minForUsual: 3,
     source: 'Body mass device, weekly', plain: 'Measured once a week. A steady fall can mean too little food or loss of muscle.', origin: 'sim',
     line: { type: 'pct-first', drop: MASS_LOSS }, need: 2, of: 2, basis: 'nasa-data', lineName: 'the NASA range',
@@ -190,7 +191,7 @@ export function rangeText(r: Reading): string {
 /** A note built from the numbers only. */
 export function bodyDraft(readings: Reading[], day: number): string {
   const far = readings.filter(r => r.status === 'sustained');
-  if (!far.length) return `Body trends, day ${day}: everything measured is inside its line.`;
+  if (!far.length) return `Body trends, day ${D(day)}: everything measured is inside its line.`;
   const lower = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
-  return `Body trends, day ${day}. ${far.map(r => `${r.def.name}: latest ${fmt(r, r.last!.v)} ${r.def.unit}, ${lower(r.statusText)}.`).join(' ')} I would like to talk it through.`;
+  return `Body trends, day ${D(day)}. ${far.map(r => `${r.def.name}: latest ${fmt(r, r.last!.v)} ${r.def.unit}, ${lower(r.statusText)}.`).join(' ')} I would like to talk it through.`;
 }

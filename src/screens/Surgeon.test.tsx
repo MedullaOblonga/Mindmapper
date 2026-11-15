@@ -46,9 +46,9 @@ it('lists the fixed and negotiable lines with the notes they sent', async () => 
   expect(rows).toHaveLength(3);                     // the "ask me first" line is not the surgeon's to see
   expect(within(rows[0]).getByText(/imminent risk to my life or to someone else/)).toBeInTheDocument();
   expect(within(rows[0]).getByText(/^Fixed\./)).toBeInTheDocument();
-  expect(within(rows[0]).getByText(/Sent on day 98/)).toBeInTheDocument();
-  expect(within(rows[1]).getByText(/Sent on day 114/)).toBeInTheDocument();
-  expect(within(rows[2]).getByText(/Sent on day 100 · reached Earth 1\d min \d\d s later/)).toBeInTheDocument();
+  expect(within(rows[0]).getByText(/Sent on day 222/)).toBeInTheDocument();
+  expect(within(rows[1]).getByText(/Sent on day 238/)).toBeInTheDocument();
+  expect(within(rows[2]).getByText(/Sent on day 224 · reached Earth 1\d min \d\d s later/)).toBeInTheDocument();
   expect(within(lines).queryByText(/write nothing for 10 days/)).toBeNull();
 });
 
@@ -59,11 +59,11 @@ it('reporting a risk tells the medical officer and reaches the surgeon view', as
   await u.click(screen.getByRole('button', { name: 'Report a risk now' }));
   expect(screen.getByText(/Mei, your crew medical officer, is told now and comes to you\./)).toBeInTheDocument();
   await u.click(screen.getByRole('button', { name: 'Tell them now' }));
-  expect(screen.getByText('Reported on day 60')).toBeInTheDocument();
+  expect(screen.getByText('Reported on day 184')).toBeInTheDocument();
   const to = appStore.getState().events.filter(e => e.type === 'safety');
   expect(to).toHaveLength(1);
   await toSurgeon(u);
   const row = within(screen.getByRole('region', { name: 'Safety and agreed lines' })).getAllByRole('row')[1];
-  expect(within(row).getByText(/Sent on day 60/)).toBeInTheDocument();
+  expect(within(row).getByText(/Sent on day 184/)).toBeInTheDocument();
   expect(within(row).getByText(/an imminent risk to self or others was reported on board/)).toBeInTheDocument();
 });

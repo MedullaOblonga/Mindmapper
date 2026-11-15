@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { D } from '../../config';
 import { useView } from '../../state/useView';
 import { useUI } from '../../state/ui';
 import { weekShares, feltCounts, usualShare, SHARE_GROUPS } from '../../logic/shares';
@@ -41,7 +42,7 @@ function quotes(v: View, g: Group): Segment[] {
 
 function WeekRow({ v, w, sel }: { v: View; w: number; sel: Group }) {
   const [a, b] = weekDays(w);
-  const label = `Days ${a} to ${Math.min(b, v.day)}`;
+  const label = `Days ${D(a)} to ${D(Math.min(b, v.day))}`;
   const sh = weekShares(v.entries, w);
   return (
     <div className="week-row">
@@ -105,19 +106,19 @@ export function Mind() {
             <p className="t-stmt-sm">{`${oneInN(p1)} of your entries in the first of these ${nWord} weeks. ${oneInN(p2)} now.`}</p>
             {[[first, p1], [last, p2]].map(([w, p]) => (
               <div className="usual-item" key={w}>
-                <div className="usual-item-head"><span className="t-small">{`Days ${weekDays(w)[0]} to ${Math.min(weekDays(w)[1], v.day)}`}</span><span className="t-small num">{`${p}%`}</span></div>
+                <div className="usual-item-head"><span className="t-small">{`Days ${D(weekDays(w)[0])} to ${D(Math.min(weekDays(w)[1], v.day))}`}</span><span className="t-small num">{`${p}%`}</span></div>
                 <div className="usual" role="img" aria-label={`${p} percent`} style={cssVars({ '--c': topicVar(sel) })}><i style={{ width: `${p}%` }} /></div>
               </div>
             ))}
             <div className="t-label">How it felt to you</div>
             <div className="evidence">
-              <div className="evidence-row"><div>{`Days ${f1a} to ${f1b}`}<br />{`${fc1.count} mentions`}</div><MarkRow {...fc1} group={sel} /></div>
-              <div className="evidence-row"><div>{`Days ${l2a} to ${l2b}`}<br />{`${fc2.count} mentions`}</div><MarkRow {...fc2} group={sel} /></div>
+              <div className="evidence-row"><div>{`Days ${D(f1a)} to ${D(f1b)}`}<br />{`${fc1.count} mentions`}</div><MarkRow {...fc1} group={sel} /></div>
+              <div className="evidence-row"><div>{`Days ${D(l2a)} to ${D(l2b)}`}<br />{`${fc2.count} mentions`}</div><MarkRow {...fc2} group={sel} /></div>
             </div>
             <MarkLegend group={sel} />
             {qs.length > 0 && <>
               <div className="t-label">Your sentences</div>
-              {qs.map(q => <div key={q.id} className="quote-row"><p className="t-quote">{`“${q.text}”`}</p><span className="t-small num">{`Day ${q.day}`}</span></div>)}
+              {qs.map(q => <div key={q.id} className="quote-row"><p className="t-quote">{`“${q.text}”`}</p><span className="t-small num">{`Day ${D(q.day)}`}</span></div>)}
             </>}
           </section>
           <section className="panel panel--tight" aria-label="Talk it through">

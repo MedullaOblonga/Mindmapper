@@ -11,13 +11,13 @@ it('day 112: eight weeks, family detail, three quotes', () => {
   const weeks = screen.getByRole('region', { name: 'Weeks' });
   const labels = within(weeks).getAllByText(/^Days \d+ to \d+$/);
   expect(labels).toHaveLength(8);
-  expect(labels[0]).toHaveTextContent('Days 57 to 63');
-  expect(labels[7]).toHaveTextContent('Days 106 to 112');
+  expect(labels[0]).toHaveTextContent('Days 181 to 187');
+  expect(labels[7]).toHaveTextContent('Days 230 to 236');
   expect(screen.getByText('About 1 in 10 of your entries in the first of these eight weeks. About 1 in 3 now.')).toBeInTheDocument();
   const detail = screen.getByRole('region', { name: 'Family detail' });
   const days = within(detail).getAllByText(/^Day \d+$/).map(e => +e.textContent!.slice(4));
   expect(days).toHaveLength(3);
-  expect(days[0]).toBe(109);
+  expect(days[0]).toBe(233);
 });
 
 it('day 10 says the picture starts later', () => {

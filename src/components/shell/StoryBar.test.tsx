@@ -9,7 +9,7 @@ it('chapter chip sets the day, route and caption', async () => {
   const u = userEvent.setup();
   window.location.hash = '#/journal';
   render(<HashRouter><App /></HashRouter>);
-  await u.click(screen.getByRole('button', { name: 'Day 42 · It gets one wrong' }));
+  await u.click(screen.getByRole('button', { name: 'Day 166 · It gets one wrong' }));
   expect(appStore.getState().day).toBe(42);
   expect(window.location.hash).toBe('#/today');
   expect(screen.getByText('The mission timeline missed three dinners, so the tool says something untrue. You correct it in two taps, and it changes.')).toBeInTheDocument();

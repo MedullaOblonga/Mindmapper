@@ -296,14 +296,9 @@ h2.t-head{margin:0}
 .check-row{display:flex;justify-content:space-between;align-items:center;gap:var(--s3)}
 .chip-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2)}
 .chip-row-label{min-width:76px}
-.trend-section{display:flex;flex-direction:column;gap:var(--s2);padding-top:var(--s4);border-top:1px solid var(--line);scroll-margin-top:var(--s4)}
 .trend-section-head{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s3)}
 .trend-section-title{font-size:18px;margin:0}
 .trend-card h3{margin:0}
-.trend-card--wide{grid-column:1/-1}
-.co2-pair{display:grid;grid-template-columns:1fr 1fr;gap:var(--s5)}
-.co2-half{display:flex;flex-direction:column;gap:var(--s2)}
-@media (max-width:699px){.co2-pair{grid-template-columns:1fr}}
 /* simulated wristband */
 .band{position:relative;display:flex;flex-direction:column;align-items:center;margin:0 auto;width:72px}
 .band-strap{display:block;width:40px;height:22px;background:var(--line);border:1px solid var(--border)}
@@ -324,3 +319,18 @@ h2.t-head{margin:0}
 /* safety line */
 .relief{display:flex;flex-direction:column;gap:var(--s2);margin-top:var(--s2);padding-top:var(--s2);border-top:1px dashed var(--line)}
 .earlier-sum .tag{margin-left:var(--s2);text-transform:none;letter-spacing:.02em}
+.trend-group{gap:var(--s3)}
+.trend-group .trend-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s3)}
+.trend-card{display:flex;flex-direction:column;gap:6px;padding:var(--s3);border:1px solid var(--line);border-radius:var(--r-sm);background:var(--bg);min-width:0}
+.trend-card .t-stmt-sm{font-size:17px}
+.trend-card p.t-small{display:none}
+.tc svg{max-height:120px}
+.tc-line--2{stroke:var(--c-sleep);stroke-dasharray:5 3}
+.key-line{display:inline-block;width:18px;border-top:2px solid var(--t-body)}
+.key-line--2{border-top:2px dashed var(--c-sleep)}
+@media (max-width:1023px){.trend-group .trend-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:699px){.trend-group .trend-grid{grid-template-columns:1fr}}
+.act-chip .mood{width:10px;height:10px}
+.chip-row{min-width:0}
+.chip-row .btn{max-width:100%}
+.trend-card .trend-range{display:none}

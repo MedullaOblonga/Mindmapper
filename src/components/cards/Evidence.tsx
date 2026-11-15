@@ -1,4 +1,5 @@
 import { fmtClock } from '../../lib/time';
+import { D } from '../../config';
 import { MarkRow, UsualBar, cssVars, topicVar } from '../ui';
 import type { CardEvidence } from '../../types';
 
@@ -33,7 +34,7 @@ export function Evidence({ ev, label }: { ev: CardEvidence; label?: string }) {
     <div className="evidence">
       {ev.rows.map(r => (
         <div className="evidence-row" key={r.day}>
-          <div>Night of day {r.day - 1}</div>
+          <div>Night of day {D(r.day - 1)}</div>
           <span className="t-body num">{`Started ${fmtClock(r.onsetMin)}. Your usual ${fmtClock(r.usualMin)}.`}</span>
         </div>
       ))}

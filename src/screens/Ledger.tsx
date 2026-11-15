@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { D } from '../config';
 import { useView } from '../state/useView';
 import { useUI } from '../state/ui';
 import { appStore } from '../state/store';
@@ -62,7 +63,7 @@ export function Ledger() {
       <div className="page-head"><div><h2 className="t-title section-title">This week, against your usual</h2>
         <p className="t-lede">Each item sits next to your own usual, marked with a tick. Nothing is added up into one number, and away from your usual is not a verdict.</p></div>
         <Tag data="sim" /></div>
-      {(before15 || items.some(i => i.key !== 'copingDone' && i.usual === null)) && <p className="t-small">Your usual appears after day 14.</p>}
+      {(before15 || items.some(i => i.key !== 'copingDone' && i.usual === null)) && <p className="t-small">Your usual appears after day 138.</p>}
       <div className="cols">
         <div className="col col--half"><Column title="Away from your usual" items={away} empty="Everything is at or near your usual this week." before15={before15} /></div>
         <div className="col col--half"><Column title="At or near your usual" items={near} before15={before15} /></div>
@@ -89,7 +90,7 @@ export function Ledger() {
         </section>
         <section className="panel panel--tight col" aria-label="Lines agreed before launch">
           <div className="t-head">Agreed before launch</div>
-          <p className="t-body">{`You and your flight surgeon set what is shared automatically. ${v.lineCrossed ? `One line was crossed on day ${v.lineCrossed.day}.` : 'Nothing this week has crossed it.'}`}</p>
+          <p className="t-body">{`You and your flight surgeon set what is shared automatically. ${v.lineCrossed ? `One line was crossed on day ${D(v.lineCrossed.day)}.` : 'Nothing this week has crossed it.'}`}</p>
           <a href="#/profile/sharing" className="t-head link-tap" onClick={e => { e.preventDefault(); nav('/profile/sharing'); }}>See the rules</a>
         </section>
       </div>

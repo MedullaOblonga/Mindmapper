@@ -1,26 +1,29 @@
 import { useState, type PointerEvent } from 'react';
+import { D } from '../config';
 import { fmt, WINDOW_DAYS, type Point, type Reading } from '../logic/body';
 
 const W = 320, H = 136, L = 38, R = 12, T = 12, B = 22;
 
-export const dayLabel = (p: Point) => (Number.isInteger(p.day) ? `Day ${p.day}` : `Day ${Math.floor(p.day)}, evening`);
+export const dayLabel = (p: Point) => (Number.isInteger(p.day) ? `Day ${D(p.day)}` : `Day ${D(Math.floor(p.day))}, evening`);
 
 /** 28-day line chart of one measure. The shaded band is the inside of its line; ringed points sit outside it.
     Colour never carries status here: outside is a ring, inside is a dot. */
-export function TrendChart({ r, day }: { r: Reading; day: number }) {
+export function TrendChart({ r, day, r2, names }: { r: Reading; day: number; r2?: Reading; names?: [string, string] }) {
   const [hover, setHover] = useState<number | null>(null);
   const pts = r.points;
   const d0 = Math.max(1, day - WINDOW_DAYS + 1), d1 = Math.max(day + 0.5, d0 + 1);
   if (!pts.length) return <p className="t-small tc-empty">No readings in the last 28 days.</p>;
 
+  const pts2 = r2?.points ?? [];
   const edges = [r.lo, r.hi, r.usual].filter((x): x is number => x !== null);
-  let lo = Math.min(...pts.map(p => p.v), ...edges), hi = Math.max(...pts.map(p => p.v), ...edges);
+  let lo = Math.min(...pts.map(p => p.v), ...pts2.map(p => p.v), ...edges), hi = Math.max(...pts.map(p => p.v), ...pts2.map(p => p.v), ...edges);
   const pad = (hi - lo) * 0.12 || Math.max(1, Math.abs(hi) * 0.05);
   lo -= pad; hi += pad;
   const X = (d: number) => L + ((d - d0) / (d1 - d0)) * (W - L - R);
   const Y = (v: number) => T + (1 - (v - lo) / (hi - lo)) * (H - T - B);
   const bandTop = r.hi === null ? T : Math.max(T, Y(r.hi)), bandBot = r.lo === null ? H - B : Math.min(H - B, Y(r.lo));
-  const path = pts.map((p, i) => `${i ? 'L' : 'M'}${X(p.day).toFixed(1)} ${Y(p.v).toFixed(1)}`).join(' ');
+  const line = (ps: Point[]) => ps.map((p, i) => `${i ? 'L' : 'M'}${X(p.day).toFixed(1)} ${Y(p.v).toFixed(1)}`).join(' ');
+  const path = line(pts), path2 = line(pts2);
   const lastIdx = pts.length - 1;
   const shown = hover ?? lastIdx;
 
@@ -33,7 +36,10 @@ export function TrendChart({ r, day }: { r: Reading; day: number }) {
     setHover(best);
   };
   const p = pts[shown];
-  const label = `${r.def.name}, last 28 days. Latest ${fmt(r, pts[lastIdx].v)} ${r.def.unit}. ${r.statusText}.`;
+  const label = r2 && names
+    ? `${names[0]} and ${names[1]}, last 28 days. Latest ${fmt(r, pts[lastIdx].v)} and ${pts2.length ? fmt(r2, pts2[pts2.length - 1].v) : 'none'} ${r.def.unit}.`
+    : `${r.def.name}, last 28 days. Latest ${fmt(r, pts[lastIdx].v)} ${r.def.unit}. ${r.statusText}.`;
+  const p2 = r2 ? pts2.find(q => Math.floor(q.day) === Math.floor(p.day)) : undefined;
 
   return (
     <div className="tc">
@@ -44,15 +50,20 @@ export function TrendChart({ r, day }: { r: Reading; day: number }) {
         {r.hi !== null && <line className="tc-limit" x1={L} x2={W - R} y1={Y(r.hi)} y2={Y(r.hi)} />}
         {r.usual !== null && <line className="tc-usual" x1={L} x2={W - R} y1={Y(r.usual)} y2={Y(r.usual)} />}
         <path className="tc-line" d={path} />
+        {r2 && <path className="tc-line tc-line--2" d={path2} />}
+        {r2 && pts2.map(q => r2.out(q) && <circle key={`b${q.day}`} className="tc-out" cx={X(q.day)} cy={Y(q.v)} r={3.5} />)}
         {pts.map((q, i) => (r.out(q) || i === lastIdx || i === hover)
           && <circle key={q.day} className={r.out(q) ? 'tc-out' : 'tc-dot'} cx={X(q.day)} cy={Y(q.v)} r={i === lastIdx || i === hover ? 4.5 : 3.5} />)}
         {hover !== null && <line className="tc-cross" x1={X(p.day)} x2={X(p.day)} y1={T} y2={H - B} />}
         {r.lo !== null && <text className="tc-ax" x={L - 5} y={Y(r.lo) + 3.5} textAnchor="end">{fmt(r, r.lo)}</text>}
         {r.hi !== null && <text className="tc-ax" x={L - 5} y={Y(r.hi) + 3.5} textAnchor="end">{fmt(r, r.hi)}</text>}
-        <text className="tc-ax" x={L} y={H - 6}>{`Day ${d0}`}</text>
-        <text className="tc-ax" x={W - R} y={H - 6} textAnchor="end">{`Day ${day}`}</text>
+        <text className="tc-ax" x={L} y={H - 6}>{`Day ${D(d0)}`}</text>
+        <text className="tc-ax" x={W - R} y={H - 6} textAnchor="end">{`Day ${D(day)}`}</text>
       </svg>
-      <div className="tc-readout t-small num" aria-hidden="true">{`${dayLabel(p)}: ${fmt(r, p.v)} ${r.def.unit}${r.out(p) ? `, outside ${r.def.lineName}` : ''}`}</div>
+      <div className="tc-readout t-small num" aria-hidden="true">{r2 && names
+        ? `${dayLabel(p)}: ${names[0].toLowerCase()} ${fmt(r, p.v)}${p2 ? `, ${names[1].toLowerCase()} ${fmt(r2, p2.v)}` : ''} ${r.def.unit}`
+        : `${dayLabel(p)}: ${fmt(r, p.v)} ${r.def.unit}${r.out(p) ? `, outside ${r.def.lineName}` : ''}`}</div>
+      {r2 && names && <div className="legend legend--sm"><span><i className="key-line" />{names[0]}</span><span><i className="key-line key-line--2" />{names[1]}</span></div>}
     </div>
   );
 }

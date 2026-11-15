@@ -64,5 +64,6 @@ it('activity tabs above the entry box insert the activity and its time', async (
   open();
   const acts = screen.getByRole('group', { name: 'Insert an activity' });
   await u.click(within(acts).getByRole('button', { name: 'Suit prep' }));
-  expect((screen.getByLabelText(/private diary/i) as HTMLTextAreaElement).value).toBe('During suit prep (08:00 to 13:00): ');
+  expect((screen.getByLabelText(/private diary/i) as HTMLTextAreaElement).value).toBe('During suit prep (08:00 to 13:00), pressed low at 10:47: ');
+  expect(screen.queryByRole('group', { name: 'Insert a wrist press' })).toBeNull();
 });

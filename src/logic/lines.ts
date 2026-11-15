@@ -1,4 +1,5 @@
 import { params } from '../data/params';
+import { D } from '../config';
 import { bodySeries, CO2_LIMIT } from './body';
 import { pastMidnightRun } from './signs';
 import { withThreshold } from './rules';
@@ -33,7 +34,7 @@ export function co2Runs(s: Scenario, day: number): number[] {
 
 export interface Crossing { day: number; message: string; ruleId: string; fixed: boolean; }
 
-export const entryNote = (day: number) => `Safety note agreed before launch: a diary entry on day ${day} matched the safety line for risk to self or others. The crew medical officer has been told. No diary content is included.`;
+export const entryNote = (day: number) => `Safety note agreed before launch: a diary entry on day ${D(day)} matched the safety line for risk to self or others. The crew medical officer has been told. No diary content is included.`;
 
 /** Every note the agreed lines have sent up to `day`, and the most recent one from the last 7 days. */
 export function lineNotes(s: Scenario, day: number, evs: AppEvent[], ignoreNights: number[], entries: Entry[] = []): { log: ShareLogEntry[]; latest: Crossing | null } {

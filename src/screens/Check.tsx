@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { D } from '../config';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useView } from '../state/useView';
 import { useApp, appStore } from '../state/store';
@@ -142,7 +143,7 @@ function ReactionCheck() {
   return (
     <div className="check">
       <header className="check-top">
-        <span className="t-label">{`${only ? 'Reaction speed test' : 'Scheduled check'} · day ${v.day} · ${slot === 'am' ? 'morning' : 'evening'}`}</span>
+        <span className="t-label">{`${only ? 'Reaction speed test' : 'Scheduled check'} · day ${D(v.day)} · ${slot === 'am' ? 'morning' : 'evening'}`}</span>
         <a href="#/today" className="t-head link-tap" onClick={e => { e.preventDefault(); nav('/today'); }}>Leave</a>
       </header>
       <main className="check-main">
@@ -188,7 +189,7 @@ function Questionnaire({ def }: { def: CheckDef }) {
   return (
     <div className="check">
       <header className="check-top">
-        <span className="t-label">{`${def.title} · day ${v.day}`}</span>
+        <span className="t-label">{`${def.title} · day ${D(v.day)}`}</span>
         <a href="#/today" className="t-head link-tap" onClick={e => { e.preventDefault(); nav('/today'); }}>Leave</a>
       </header>
       <main className="check-main">

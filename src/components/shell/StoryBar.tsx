@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { D } from '../../config';
 import { useNavigate } from 'react-router-dom';
 import { params } from '../../data/params';
 import { useApp, appStore } from '../../state/store';
@@ -37,7 +38,8 @@ export function StoryBar({ branch }: { branch: Branch }) {
   const prev = useHoldRepeat(() => appStore.getState().setDay(appStore.getState().day - 1));
   const next = useHoldRepeat(() => appStore.getState().setDay(appStore.getState().day + 1));
   const ch = params.chapters.find(c => c.day === day);
-  const caption = ch ? (ch.caption ?? (branch === 'A' ? ch.captionA : ch.captionB)) : DEFAULT_CAPTION;
+  const shift = (t: string) => t.replace(/\b([Dd]ays?) (\d+)/g, (_, w: string, n: string) => `${w} ${D(+n)}`);
+  const caption = shift(ch ? (ch.caption ?? (branch === 'A' ? ch.captionA : ch.captionB)) ?? '' : DEFAULT_CAPTION);
   if (hidden) return (
     <nav className="storybar storybar--hidden" aria-label="Demo story">
       <button className="btn btn--quiet btn--strip" onClick={() => st.setStoryHidden(false)} aria-expanded="false">Demo story</button>
@@ -50,7 +52,7 @@ export function StoryBar({ branch }: { branch: Branch }) {
       <div className="story-chips">
         {params.chapters.map(c => (
           <button key={c.id} className="story-chip" aria-current={c.day === day ? 'true' : undefined}
-            onClick={() => { st.setDay(c.day); nav(c.route); }}>{c.label}</button>
+            onClick={() => { st.setDay(c.day); nav(c.route); }}>{shift(c.label)}</button>
         ))}
         {ch?.id === 'followed' && (['A', 'B'] as const).map(b => (
           <button key={b} className="story-chip story-chip--branch" aria-pressed={branch === b}
@@ -59,7 +61,7 @@ export function StoryBar({ branch }: { branch: Branch }) {
       </div>
       <span className="story-step">
         <button className="btn btn--sm" aria-label="Previous day" disabled={day <= 1} {...prev}>‹</button>
-        <span className="t-small num story-day" aria-live="polite">Day {day}</span>
+        <span className="t-small num story-day" aria-live="polite">Day {D(day)}</span>
         <button className="btn btn--sm" aria-label="Next day" disabled={day >= params.mission.lastDay} {...next}>›</button>
         <button className="btn btn--sm btn--quiet" onClick={() => st.setStoryHidden(true)} aria-expanded="true">Hide</button>
       </span>

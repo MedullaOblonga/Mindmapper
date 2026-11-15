@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { D } from '../../config';
 import { useView } from '../../state/useView';
 import { useUI } from '../../state/ui';
 import { appStore } from '../../state/store';
@@ -25,7 +26,7 @@ function RuleSheet({ rule, v, onClose }: { rule: ShareRule; v: View; onClose: ()
   const ui = useUI();
   const save = () => {
     const newText = text === cur.text ? withThreshold(cur.text, cur.atLeast, n) : text.trim();
-    appStore.getState().add({ type: 'rule-change', ruleId: rule.id, atLeast: n, text: `Rule changed on day ${v.day}: ${cur.text} → ${newText}` });
+    appStore.getState().add({ type: 'rule-change', ruleId: rule.id, atLeast: n, text: `Rule changed on day ${D(v.day)}: ${cur.text} → ${newText}` });
     onClose();
     ui.showToast('Saved. The change is in your share log.');
   };
@@ -116,7 +117,7 @@ export function Sharing() {
                     <span className="t-small">{r.fixed
                       ? 'Fixed. The same limit to confidentiality as on Earth. It is crossed when you report it, when your crew medical officer does, or when something you write matches a word check on this device. Your words are never sent.'
                       : r.auto ? 'Automatic, to your flight surgeon' : 'Asks you first. Tells nobody for you.'}</span></td>
-                  <td className="t-small num">{r.fixed ? (rep ? `${rep.source === 'entry' ? 'Crossed' : 'Reported'} on day ${rep.day}` : 'Not reported')
+                  <td className="t-small num">{r.fixed ? (rep ? `${rep.source === 'entry' ? 'Crossed' : 'Reported'} on day ${D(rep.day)}` : 'Not reported')
                     : now >= cur.atLeast ? `Crossed (${now} of ${cur.atLeast})` : now > 0 ? `At ${now} of ${cur.atLeast}` : 'Not crossed'}</td>
                   <td>{r.auto && r.message ? <p className="t-quote">{`\u201c${r.fixed ? (rep?.text ?? r.message) : withThreshold(r.message, r.atLeast, cur.atLeast)}\u201d`}</p> : <span className="t-small">Nothing is sent.</span>}</td>
                   <td>{r.fixed
