@@ -4,7 +4,7 @@ NASA Space Apps 2026 · Challenge: *Create Health Monitoring Software for Astron
 
 A private self-check for astronauts on long missions. It notices slow change against **your own usual**, asks before it assumes ("Does this match?"), and never gives you a score. Every card ends in something you can do, or in telling the tool it is wrong, and the tool visibly changes when you do.
 
-**Public URL:** _to be added after deployment_
+**Public URL:** https://mindmapper-taupe.vercel.app/
 
 ## Try it in 60 seconds
 
