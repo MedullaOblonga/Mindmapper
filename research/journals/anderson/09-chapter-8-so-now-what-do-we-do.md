@@ -1,0 +1,20 @@
+# Chapter 8: “So Now What Do We Do?!”
+
+- Author: Clayton Anderson
+- Mission: ISS Expedition 15 (Jun to Nov 2007)
+- Entry: 9 of 15 (08)
+- Words: 614
+- Original page: http://www.nasa.gov/mission_pages/station/expeditions/expedition15/journal_anderson_08.html
+- Archived copy: https://webarchive.library.unt.edu/web/2012/http://www.nasa.gov/mission_pages/station/expeditions/expedition15/journal_anderson_08.html
+
+No more spacewalks; no more robotic arm operations. So what do we do now? Well, that’s an easy question to answer. Lots of stuff is happening onboard the International Space Station (ISS) and there is even more to come.
+
+We’re in the home stretch, but it’s no time to become complacent. Very soon we’ll begin preparations for a “re-docking” of our Soyuz spacecraft. This will allow the upcoming expedition crew to be able to dock their Soyuz where ours was, on the bottom of the Functional Cargo Block module, or ФГБ (“feh geh beh”) placed essentially in the “middle” of the Station. We will move our Soyuz to the aft (back) end docking port from where my Expedition 15 crewmates Fyodor Yurchikhin and Oleg Kotov will take it home, leaving the “fresh” one on orbit. Soyuz spacecraft typically have a “life expectancy” of around 170 days and once they leave, the aft end port will be ready to accept another Progress supply ship. Having the Soyuz placed near the middle of the Station helps during emergency situations, providing crew members a “life boat” within reach from either end of the Station. More important is the fact that having the Progress aft on the Station aids in our ability to raise our orbit when needed by using her engines.
+
+We have also recently installed and upgraded our local area network (LAN) onboard. We used to have a system using coaxial cables, but these had to be pulled through the hatches, making them troublesome in the event of an emergency situation when we would need to expeditiously close a hatch. Now the Station is set up more like your office computer environment; there are multiple Ethernet (computer) jacks allowing you to more freely move computers around or add new ones to the mix. In light of the soon to be added modules of Node 2 (Harmony) and the European’s Columbus and the Japanese’s JEM, we will need this type of connectivity and flexibility.
+
+Our onboard scientific research has also ratcheted up a bit. We continue to perform experiments growing plants and small animals (worms!) to help us learn how microgravity affects the growth and evolutionary processes. We are also monitoring our bodies by analyzing the food we eat and how it affects our blood and body chemistry to determine the effects on our bones and muscles. For that long trip to Mars (6-9 months one way…wow!), we will need to know how our bodies will change and how we might be able to effectively provide and enhance our own sustenance through agriculture (recall from Jr. High science that plants absorb carbon dioxide and give off oxygen!), while also potentially reducing the amount of supplies that we need to carry with us. Less weight means better performance for our spacecraft. In addition, we recently kicked off two new experiments, SAME (Smoke and Aerosol Measurement Experiment) and ANITA (Analyzing Interferometer for Ambient Air). SAME evaluates the combustion process for different materials which will lead to the design of more effective smoke detection…in space and on Earth! ANITA provides a constant check of the air composition onboard to give us early indications of harmful contaminants. This technology could also have ground-based applications; for example, it could help coal miners know when the air becomes dangerous deep underground.
+
+Oh, and let’s not forget that we will have more visitors! First the Expedition 16 crew will arrive to begin their six-month stay on orbit. That will be followed a short time later with STS-120 and Discovery. We all know what her most important function is…to carry me back home to my family!
+
+I must admit…that is starting to sound mighty nice!

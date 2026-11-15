@@ -1,0 +1,18 @@
+# Chapter 1: “…And Then There Were Three!”
+
+- Author: Clayton Anderson
+- Mission: ISS Expedition 15 (Jun to Nov 2007)
+- Entry: 2 of 15 (01)
+- Words: 600
+- Original page: http://www.nasa.gov/mission_pages/station/expeditions/expedition15/journal_anderson_01.html
+- Archived copy: https://webarchive.library.unt.edu/web/2012/http://www.nasa.gov/mission_pages/station/expeditions/expedition15/journal_anderson_01.html
+
+Wow! I can’t believe it…here I am, safely on orbit, living onboard the International Space Station (ISS). The last eleven days have seemed like a Category 5 hurricane to me. Once Atlantis docked to ISS, we were greeted by a fire alarm, loss of attitude control and the failure of all 6 of the Russian command and control computers! And that was in the first two days! Now, with the Station in a more normal configuration with all computers functioning and the STS-117 crew and Atlantis safely undocked and on their way back to Florida, I feel a sense of calm, as if I am poised in the “eye” of the storm, provided by a couple of much needed days off. Yet, I am certain that the eye will pass over us and we will encounter the “backside” of the storm in a day or two as life on the ISS begins in earnest.
+
+My first week in space seemed like something right out of a NASA simulator. Launch was right on time, June 8, 2007, on my father’s birthday. As I sat in the mid-deck and felt the anticipation of the final countdown and start of the Shuttle’s main engines I could feel my heart rate increasing. The ride was spectacular, the rumble of the engines and solid rocket motors intense and rough. Once the solids dropped off it smoothed out tremendously and the ride was easier. Easier that is, until we hit 3 g’s at which time my parachute harness felt like the weight of the world on my chest. Yet once the Shuttle main engines cut off (MECO) we were in zero g and I was weightless! I sat in my seat for a bit, contemplating the events of the last few (emotional) days and tried to figure out what I should do next. Everything was floating around (tied down of course!) and I figured it was time to exit my seat and get to work. I was in space!
+
+Docking with ISS occurred on Shuttle Flight Day 3. The view of the ISS as the Shuttle approached was, in short, awe-inspiring. Photos and video cannot do it justice. As the sun reflected its rays from the metallic structures and gold and blue solar arrays, it glistened as if on fire. With hatches opened we arrived in my new home and I felt a tinge of “I have been here before”; undoubtedly from my training in Houston and Star City, Russia. We embraced, shook hands excitedly and then settled down for 10 days of serious joint work; Shuttle and Station crews united as one.
+
+The Astronaut Class of 1998, the Penguins, was well represented on STS-117 and Expedition 15. John “Danny” Olivas, Steve “Swanee” Swanson, Lee “Bru” Archambault, Sunita “Suni” Williams and I were able to spend some time together and reminisce about the past 9 years and our journey to our first space flights. But mostly, we worked…while having fun! The Atlantis crew, with our help, performed 4 critical spacewalks and installed and deployed a Station truss segment housing a new solar array. And then, in what seemed like the blink of an eye, it was time to say good-bye. Their departure was too quick and the Station seemed so empty. In the midst of it all, the fire alarm, losses of attitude control and the Russian computer failures, we pressed on and in the end, we were ALL successful, with the Shuttle safely departing and the Station safe and sound.
+
+Here we are…just three crew onboard…and I am honored to be one of those three!

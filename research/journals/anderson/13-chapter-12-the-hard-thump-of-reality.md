@@ -1,0 +1,18 @@
+# Chapter 12: “The Hard Thump of Reality…!”
+
+- Author: Clayton Anderson
+- Mission: ISS Expedition 15 (Jun to Nov 2007)
+- Entry: 13 of 15 (12)
+- Words: 610
+- Original page: http://www.nasa.gov/mission_pages/station/expeditions/expedition15/journal_anderson_12.html
+- Archived copy: https://webarchive.library.unt.edu/web/2012/http://www.nasa.gov/mission_pages/station/expeditions/expedition15/journal_anderson_12.html
+
+When I was about 8 years old, my parents woke my brother and sister and me up in the middle of the night, on Christmas Eve of 1968. Mom and Dad were always very good about having us “witness history” when they knew that a special moment was imminent. On this cold, dark and crystal clear Nebraska night, three American astronauts were, for the first time in history, to fly around the back side of the moon on the mission of Apollo 8. As the (my) story plays out, this was the moment that my “life’s dream” truly began to take shape and I set my heart on becoming an astronaut. A dream that would ultimately take me on the journey of a lifetime, culminating with five memorable months onboard the International Space Station (ISS)!
+
+As my duties onboard ISS are quickly coming to an end, I have been trying to piece together free moments so that I find some much needed time to reflect on this absolutely awesome experience. It has flown by in an instant, so much so that I feel like I just arrived. Yet, five highly productive months have passed and it’s now time to come home, home to what may be the hard “thump” of reality.
+
+For five straight months, I have been off of the planet, free from the tugging bond of gravity. My muscles, bones and brain have become adapted to this environment and I think they really like it! I have flown like Superman (even hummed the “theme song”!), flipped and twisted like a gymnast and even whacked my head on a handrail once or twice! But now, in a few short days, when the Shuttle re-enters our beautiful blue blanket of atmosphere, the reality of gravity may jump on my body like ticks jump on a dog! How my mind and body react to this “new found re-acquaintance” with the powerful force of nature will go a long way in determining how fast I will recover. It is my hope (and this may be a fantasy on my part) that I will be able to exit from the Shuttle (with help of course!) and after some time of relaxation and fluid/food ingestion, be able to perform the “walk-around” that most of the Shuttle crew members will do. Since their flight was only two weeks long, their bodies may adapt more quickly. I, on the other hand, have been living in space for nearly one half of a year, so it’s liable to be much tougher for me. Then again, it may not. I may stagger, I may stumble, I may even fall down. We will just have to wait and see. My head may spin like a top and I may be so dizzy that I will have to stay seated. I just don’t know what will happen. I have been exercising for about 2.5 hours every single day of my stay up here, trying to keep my bones and muscles strong and functional and my heart pumping strongly. We use a treadmill and a stationary bike for aerobic activity and a “resistive exercise device (RED, a cable and pulley set up)” as our weight/strength training. I have really been ramping up my fitness training in the last few weeks to make that big push for the goal line! I am hoping all of that work will pay off. But, no matter what happens when I step off of the Space Shuttle Discovery, I will have on my face the biggest smile that I can muster!
+
+You know…dreams really can come true…but I wish they didn’t have to end.
+
+Safe travels!
