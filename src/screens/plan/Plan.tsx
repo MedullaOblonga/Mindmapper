@@ -7,9 +7,9 @@ import { Helped } from './Helped';
 
 export const PLAN_TABS = [
   { id: 'signs', label: 'Early signs' },
-  { id: 'reminders', label: 'Wrist reminders' },
+  { hidden: true, id: 'reminders', label: 'Wrist reminders' },
   { id: 'sharing', label: 'Sharing' },
-  { id: 'helped', label: 'What has helped' },
+  { hidden: true, id: 'helped', label: 'What has helped' },
 ];
 
 export function Plan() {
@@ -18,7 +18,7 @@ export function Plan() {
   if (!PLAN_TABS.some(t => t.id === tab)) return <Navigate to="/plan/signs" replace />;
   return (
     <>
-      <Tabs label="My plan" tabs={PLAN_TABS} current={tab} onPick={id => nav(`/plan/${id}`)} />
+      <Tabs label="My plan" tabs={PLAN_TABS.filter(t => !('hidden' in t))} current={tab} onPick={id => nav(`/plan/${id}`)} />
       {tab === 'signs' && <Signs />}
       {tab === 'reminders' && <Reminders />}
       {tab === 'sharing' && <Sharing />}
