@@ -203,3 +203,12 @@ h2.t-head{margin:0}
 .earlier-tag .mark{width:12px;height:12px}
 @media (max-width:1023px){.builder-grid{grid-template-columns:1fr}}
 @media (max-width:699px){.wrist-dock{right:var(--s2);bottom:76px}.delay{display:none}.bedlight-bar{padding:var(--s2) var(--s4);flex-wrap:wrap}}
+.grid-days{border-collapse:collapse}
+.grid-days th,.grid-days td{padding:6px 10px;text-align:center}
+.grid-days th[scope="row"]{text-align:left}
+.mood-weeks{display:flex;flex-direction:column;gap:var(--s3)}
+.mood-week{display:grid;grid-template-columns:120px 1fr;gap:var(--s3);align-items:center}
+.mood-bars{display:flex;flex-direction:column;gap:var(--s2)}
+.mood-bar{display:grid;grid-template-columns:14px 28px 1fr;gap:var(--s2);align-items:center}
+.mood-n{text-align:right}
+.where{display:flex;flex-direction:column;gap:var(--s1)}
