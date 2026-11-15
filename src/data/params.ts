@@ -9,7 +9,7 @@ const p = raw as unknown as {
   mission: { lengthDays: number; defaultDay: number; lastDay: number; safetyCriticalBlocks: { day: number; label: string; startMin: number; endMin: number }[] };
   people: { crew: { id: string; name: string; role: string }[]; home: { id: string; name: string; role: string }[]; ground: { id: string; name: string; role: string }[] };
   groupsOrder: RealGroup[];
-  weeks: WeekRow[]; weeksBranchA: WeekRow[]; weeksBranchB: WeekRow[];
+  weeks: WeekRow[]; weeksBranchA: WeekRow[]; weeksBranchB: WeekRow[]; weeksLater: WeekRow[];
   generation: {
     seed: number;
     journalDayIndexes: { default: number[]; week16: number[] };

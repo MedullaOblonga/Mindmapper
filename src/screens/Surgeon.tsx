@@ -3,7 +3,7 @@ import { currentRule } from '../logic/rules';
 import { surgeonLog } from '../logic/lines';
 import { reliefSteps, type ReliefStep } from '../logic/safety';
 import { delayMin, delayWords, fmtDelay } from '../lib/delay';
-import { missionDay, D } from '../config';
+import { D } from '../config';
 import type { ShareLogEntry } from '../types';
 
 const NOT_SHARED = [
@@ -14,7 +14,7 @@ const NOT_SHARED = [
   'Notes to crewmates, the crew medical officer, the ground psychologist or home.',
 ];
 
-const when = (e: ShareLogEntry) => `Sent on day ${D(e.day)} · reached Earth ${fmtDelay(delayMin(missionDay(e.day)))} later`;
+const when = (e: ShareLogEntry) => `Sent on day ${D(e.day)} · reached Earth ${fmtDelay(delayMin(e.day))} later`;
 
 function Notes({ items, empty, relief }: { items: ShareLogEntry[]; empty: string; relief?: ReliefStep[] }) {
   if (!items.length) return <p className="t-small">{empty}</p>;
@@ -46,7 +46,7 @@ export function Surgeon() {
     <>
       <div className="page-head"><div><h1 className="t-title">Flight surgeon view</h1>
         <p className="t-lede">Everything that has reached Earth from this crew member, word for word. If it is not here, it was not sent.</p></div>
-        <span className="note-pill">{`You are reading the past: Earth is about ${delayWords(delayMin(missionDay(v.day)))} behind today`}</span></div>
+        <span className="note-pill">{`You are reading the past: Earth is about ${delayWords(delayMin(v.day))} behind today`}</span></div>
 
       <section className="panel" aria-label="Safety and agreed lines">
         <h2 className="t-head">Safety and agreed lines</h2>

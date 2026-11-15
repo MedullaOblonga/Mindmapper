@@ -1,14 +1,15 @@
 import { Lock, Radio, Stethoscope } from 'lucide-react';
 import type { Viewer } from '../../state/store';
-import { MISSION_LENGTH, missionDay } from '../../config';
+import { MISSION_LENGTH } from '../../config';
 import { useClock } from '../../state/clock';
 import { stardate } from '../../lib/stardate';
-import { delayMin, fmtDelay } from '../../lib/delay';
+import { delayMin, distanceMillionKm, fmtDelay } from '../../lib/delay';
 
 export function TopBar({ day, shared, onOpenLog, due, viewer = 'astronaut' }: { day: number; shared: number; onOpenLog?: () => void; due?: React.ReactNode; viewer?: Viewer }) {
   const clock = useClock(1000);
   const pct = Math.round((day / MISSION_LENGTH) * 1000) / 10;
-  const delay = delayMin(missionDay(day) + clock / 1440);   // the delay alone uses the later cruise window
+  const now = day + clock / 1440;
+  const delay = delayMin(now);   // light time for the distance from Earth on this mission day
   return (
     <header className="topbar">
       <div className="topbar-left">
@@ -16,7 +17,7 @@ export function TopBar({ day, shared, onOpenLog, due, viewer = 'astronaut' }: { 
         <div className="mission-meter" role="img" aria-label={`Mission day ${day} of ${MISSION_LENGTH}, ${pct} percent complete`}>
           <i style={{ width: `${pct}%` }} />
         </div>
-        <span className="t-label num topbar-delay" title="One-way light time, computed for this mission day from the orbits of Earth and Mars">
+        <span className="t-label num topbar-delay" title={`One-way light time. On mission day ${day} the spacecraft is about ${Math.round(distanceMillionKm(now))} million km from Earth, on a minimum-energy transfer to Mars`}>
           <Radio size={14} aria-hidden="true" /><span className="topbar-wide">Delay to </span>{`Earth ${fmtDelay(delay)}`}<span className="topbar-wide"> one way</span>
         </span>
       </div>

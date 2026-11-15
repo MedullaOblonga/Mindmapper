@@ -104,8 +104,10 @@ export const SYSTEMS: { id: System | 'all'; label: string }[] = [
 /* ---------- series ---------- */
 const HASH: Record<string, number> = { rhr: 11, mass: 23, sbp: 37, glucose: 41, temp: 53, co2day: 67, co2sleep: 79 };
 /** One standard-normal draw, fixed for a measure and day. */
+const CONTINUATION_SEED = 500009;
 function noise(id: string, day: number): number {
-  const r = mulberry32(HASH[id] * 100003 + day * 7919);
+  // Days after the story (127 on) draw from a second stream, chosen so the quiet continuation stays inside its lines.
+  const r = mulberry32(HASH[id] * 100003 + day * 7919 + (day > 126 ? CONTINUATION_SEED : 0));
   let u = 0; while (!u) u = r();
   return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * r());
 }

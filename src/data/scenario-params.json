@@ -3,7 +3,7 @@
  "mission": {
   "lengthDays": 520,
   "defaultDay": 112,
-  "lastDay": 126,
+  "lastDay": 250,
   "settlingDays": 14,
   "usualFromWeeks": [
    3,
@@ -759,6 +759,120 @@
     "stress": 4,
     "sleepiness": 3
    }
+  },
+  {
+   "week": 19,
+   "days": [
+    127,
+    133
+   ],
+   "segments": {
+    "work": 9,
+    "home": 4,
+    "crew": 4,
+    "body": 2,
+    "timeoff": 1,
+    "self": 1,
+    "space": 0
+   },
+   "homeFelt": {
+    "good": 3,
+    "mixed": 1,
+    "hard": 0
+   },
+   "sleepMeanMin": 424,
+   "onsetMeanMin": -48,
+   "ledger": {
+    "suitPrepLong": 1,
+    "daysSinceRest": 6,
+    "callsMissed": 0,
+    "noisyNights": 0,
+    "gym": 4,
+    "greenhouse": 2,
+    "dinners": 5,
+    "callsSam": 3,
+    "callsMom": 2
+   },
+   "dials": {
+    "stress": 4,
+    "sleepiness": 3
+   }
+  },
+  {
+   "week": 20,
+   "days": [
+    134,
+    140
+   ],
+   "segments": {
+    "work": 9,
+    "home": 3,
+    "crew": 5,
+    "body": 2,
+    "timeoff": 1,
+    "self": 0,
+    "space": 1
+   },
+   "homeFelt": {
+    "good": 3,
+    "mixed": 0,
+    "hard": 0
+   },
+   "sleepMeanMin": 428,
+   "onsetMeanMin": -50,
+   "ledger": {
+    "suitPrepLong": 1,
+    "daysSinceRest": 5,
+    "callsMissed": 0,
+    "noisyNights": 0,
+    "gym": 4,
+    "greenhouse": 2,
+    "dinners": 5,
+    "callsSam": 3,
+    "callsMom": 2
+   },
+   "dials": {
+    "stress": 3,
+    "sleepiness": 3
+   }
+  },
+  {
+   "week": 21,
+   "days": [
+    141,
+    147
+   ],
+   "segments": {
+    "work": 9,
+    "home": 2,
+    "crew": 5,
+    "body": 2,
+    "timeoff": 1,
+    "self": 1,
+    "space": 0
+   },
+   "homeFelt": {
+    "good": 2,
+    "mixed": 0,
+    "hard": 0
+   },
+   "sleepMeanMin": 430,
+   "onsetMeanMin": -50,
+   "ledger": {
+    "suitPrepLong": 1,
+    "daysSinceRest": 6,
+    "callsMissed": 0,
+    "noisyNights": 0,
+    "gym": 4,
+    "greenhouse": 2,
+    "dinners": 5,
+    "callsSam": 3,
+    "callsMom": 2
+   },
+   "dials": {
+    "stress": 3,
+    "sleepiness": 3
+   }
   }
  ],
  "weeksBranchB": [
@@ -837,8 +951,695 @@
     "stress": 7,
     "sleepiness": 7
    }
+  },
+  {
+   "week": 19,
+   "days": [
+    127,
+    133
+   ],
+   "segments": {
+    "work": 8,
+    "home": 4,
+    "crew": 4,
+    "body": 3,
+    "timeoff": 1,
+    "self": 1,
+    "space": 0
+   },
+   "homeFelt": {
+    "good": 2,
+    "mixed": 2,
+    "hard": 0
+   },
+   "sleepMeanMin": 372,
+   "onsetMeanMin": -14,
+   "ledger": {
+    "suitPrepLong": 1,
+    "daysSinceRest": 4,
+    "callsMissed": 0,
+    "noisyNights": 0,
+    "gym": 4,
+    "greenhouse": 2,
+    "dinners": 3,
+    "callsSam": 2,
+    "callsMom": 2
+   },
+   "dials": {
+    "stress": 5,
+    "sleepiness": 5
+   }
+  },
+  {
+   "week": 20,
+   "days": [
+    134,
+    140
+   ],
+   "segments": {
+    "work": 9,
+    "home": 3,
+    "crew": 4,
+    "body": 2,
+    "timeoff": 1,
+    "self": 1,
+    "space": 0
+   },
+   "homeFelt": {
+    "good": 2,
+    "mixed": 1,
+    "hard": 0
+   },
+   "sleepMeanMin": 398,
+   "onsetMeanMin": -30,
+   "ledger": {
+    "suitPrepLong": 1,
+    "daysSinceRest": 6,
+    "callsMissed": 0,
+    "noisyNights": 0,
+    "gym": 4,
+    "greenhouse": 2,
+    "dinners": 4,
+    "callsSam": 3,
+    "callsMom": 2
+   },
+   "dials": {
+    "stress": 4,
+    "sleepiness": 4
+   }
+  },
+  {
+   "week": 21,
+   "days": [
+    141,
+    147
+   ],
+   "segments": {
+    "work": 9,
+    "home": 2,
+    "crew": 5,
+    "body": 2,
+    "timeoff": 1,
+    "self": 0,
+    "space": 1
+   },
+   "homeFelt": {
+    "good": 2,
+    "mixed": 0,
+    "hard": 0
+   },
+   "sleepMeanMin": 418,
+   "onsetMeanMin": -44,
+   "ledger": {
+    "suitPrepLong": 1,
+    "daysSinceRest": 6,
+    "callsMissed": 0,
+    "noisyNights": 0,
+    "gym": 4,
+    "greenhouse": 2,
+    "dinners": 5,
+    "callsSam": 3,
+    "callsMom": 2
+   },
+   "dials": {
+    "stress": 3,
+    "sleepiness": 3
+   }
   }
  ],
+ "weeksLater": [
+  {
+   "week": 22,
+   "days": [
+    148,
+    154
+   ],
+   "segments": {
+    "work": 9,
+    "home": 2,
+    "crew": 5,
+    "body": 2,
+    "timeoff": 1,
+    "self": 1,
+    "space": 0
+   },
+   "homeFelt": {
+    "good": 2,
+    "mixed": 0,
+    "hard": 0
+   },
+   "sleepMeanMin": 430,
+   "onsetMeanMin": -50,
+   "ledger": {
+    "suitPrepLong": 1,
+    "daysSinceRest": 6,
+    "callsMissed": 0,
+    "noisyNights": 0,
+    "gym": 4,
+    "greenhouse": 2,
+    "dinners": 5,
+    "callsSam": 3,
+    "callsMom": 2
+   },
+   "dials": {
+    "stress": 3,
+    "sleepiness": 3
+   }
+  },
+  {
+   "week": 23,
+   "days": [
+    155,
+    161
+   ],
+   "segments": {
+    "work": 9,
+    "home": 2,
+    "crew": 5,
+    "body": 2,
+    "timeoff": 1,
+    "self": 0,
+    "space": 1
+   },
+   "homeFelt": {
+    "good": 2,
+    "mixed": 0,
+    "hard": 0
+   },
+   "sleepMeanMin": 428,
+   "onsetMeanMin": -50,
+   "ledger": {
+    "suitPrepLong": 1,
+    "daysSinceRest": 5,
+    "callsMissed": 0,
+    "noisyNights": 0,
+    "gym": 4,
+    "greenhouse": 2,
+    "dinners": 5,
+    "callsSam": 3,
+    "callsMom": 2
+   },
+   "dials": {
+    "stress": 3,
+    "sleepiness": 3
+   }
+  },
+  {
+   "week": 24,
+   "days": [
+    162,
+    168
+   ],
+   "segments": {
+    "work": 9,
+    "home": 2,
+    "crew": 5,
+    "body": 2,
+    "timeoff": 1,
+    "self": 1,
+    "space": 0
+   },
+   "homeFelt": {
+    "good": 2,
+    "mixed": 0,
+    "hard": 0
+   },
+   "sleepMeanMin": 432,
+   "onsetMeanMin": -50,
+   "ledger": {
+    "suitPrepLong": 1,
+    "daysSinceRest": 6,
+    "callsMissed": 0,
+    "noisyNights": 0,
+    "gym": 4,
+    "greenhouse": 2,
+    "dinners": 5,
+    "callsSam": 3,
+    "callsMom": 2
+   },
+   "dials": {
+    "stress": 3,
+    "sleepiness": 3
+   }
+  },
+  {
+   "week": 25,
+   "days": [
+    169,
+    175
+   ],
+   "segments": {
+    "work": 9,
+    "home": 2,
+    "crew": 5,
+    "body": 2,
+    "timeoff": 1,
+    "self": 0,
+    "space": 1
+   },
+   "homeFelt": {
+    "good": 2,
+    "mixed": 0,
+    "hard": 0
+   },
+   "sleepMeanMin": 430,
+   "onsetMeanMin": -50,
+   "ledger": {
+    "suitPrepLong": 1,
+    "daysSinceRest": 6,
+    "callsMissed": 0,
+    "noisyNights": 0,
+    "gym": 4,
+    "greenhouse": 2,
+    "dinners": 5,
+    "callsSam": 3,
+    "callsMom": 2
+   },
+   "dials": {
+    "stress": 3,
+    "sleepiness": 3
+   }
+  },
+  {
+   "week": 26,
+   "days": [
+    176,
+    182
+   ],
+   "segments": {
+    "work": 9,
+    "home": 2,
+    "crew": 5,
+    "body": 2,
+    "timeoff": 1,
+    "self": 1,
+    "space": 0
+   },
+   "homeFelt": {
+    "good": 2,
+    "mixed": 0,
+    "hard": 0
+   },
+   "sleepMeanMin": 427,
+   "onsetMeanMin": -50,
+   "ledger": {
+    "suitPrepLong": 1,
+    "daysSinceRest": 5,
+    "callsMissed": 0,
+    "noisyNights": 0,
+    "gym": 4,
+    "greenhouse": 2,
+    "dinners": 5,
+    "callsSam": 3,
+    "callsMom": 2
+   },
+   "dials": {
+    "stress": 3,
+    "sleepiness": 3
+   }
+  },
+  {
+   "week": 27,
+   "days": [
+    183,
+    189
+   ],
+   "segments": {
+    "work": 9,
+    "home": 2,
+    "crew": 5,
+    "body": 2,
+    "timeoff": 1,
+    "self": 0,
+    "space": 1
+   },
+   "homeFelt": {
+    "good": 2,
+    "mixed": 0,
+    "hard": 0
+   },
+   "sleepMeanMin": 431,
+   "onsetMeanMin": -50,
+   "ledger": {
+    "suitPrepLong": 1,
+    "daysSinceRest": 6,
+    "callsMissed": 0,
+    "noisyNights": 0,
+    "gym": 4,
+    "greenhouse": 2,
+    "dinners": 5,
+    "callsSam": 3,
+    "callsMom": 2
+   },
+   "dials": {
+    "stress": 3,
+    "sleepiness": 3
+   }
+  },
+  {
+   "week": 28,
+   "days": [
+    190,
+    196
+   ],
+   "segments": {
+    "work": 9,
+    "home": 2,
+    "crew": 5,
+    "body": 2,
+    "timeoff": 1,
+    "self": 1,
+    "space": 0
+   },
+   "homeFelt": {
+    "good": 2,
+    "mixed": 0,
+    "hard": 0
+   },
+   "sleepMeanMin": 430,
+   "onsetMeanMin": -50,
+   "ledger": {
+    "suitPrepLong": 1,
+    "daysSinceRest": 6,
+    "callsMissed": 0,
+    "noisyNights": 0,
+    "gym": 4,
+    "greenhouse": 2,
+    "dinners": 5,
+    "callsSam": 3,
+    "callsMom": 2
+   },
+   "dials": {
+    "stress": 3,
+    "sleepiness": 3
+   }
+  },
+  {
+   "week": 29,
+   "days": [
+    197,
+    203
+   ],
+   "segments": {
+    "work": 9,
+    "home": 2,
+    "crew": 5,
+    "body": 2,
+    "timeoff": 1,
+    "self": 0,
+    "space": 1
+   },
+   "homeFelt": {
+    "good": 2,
+    "mixed": 0,
+    "hard": 0
+   },
+   "sleepMeanMin": 429,
+   "onsetMeanMin": -50,
+   "ledger": {
+    "suitPrepLong": 1,
+    "daysSinceRest": 5,
+    "callsMissed": 0,
+    "noisyNights": 0,
+    "gym": 4,
+    "greenhouse": 2,
+    "dinners": 5,
+    "callsSam": 3,
+    "callsMom": 2
+   },
+   "dials": {
+    "stress": 3,
+    "sleepiness": 3
+   }
+  },
+  {
+   "week": 30,
+   "days": [
+    204,
+    210
+   ],
+   "segments": {
+    "work": 9,
+    "home": 2,
+    "crew": 5,
+    "body": 2,
+    "timeoff": 1,
+    "self": 1,
+    "space": 0
+   },
+   "homeFelt": {
+    "good": 2,
+    "mixed": 0,
+    "hard": 0
+   },
+   "sleepMeanMin": 432,
+   "onsetMeanMin": -50,
+   "ledger": {
+    "suitPrepLong": 1,
+    "daysSinceRest": 6,
+    "callsMissed": 0,
+    "noisyNights": 0,
+    "gym": 4,
+    "greenhouse": 2,
+    "dinners": 5,
+    "callsSam": 3,
+    "callsMom": 2
+   },
+   "dials": {
+    "stress": 3,
+    "sleepiness": 3
+   }
+  },
+  {
+   "week": 31,
+   "days": [
+    211,
+    217
+   ],
+   "segments": {
+    "work": 9,
+    "home": 2,
+    "crew": 5,
+    "body": 2,
+    "timeoff": 1,
+    "self": 0,
+    "space": 1
+   },
+   "homeFelt": {
+    "good": 2,
+    "mixed": 0,
+    "hard": 0
+   },
+   "sleepMeanMin": 430,
+   "onsetMeanMin": -50,
+   "ledger": {
+    "suitPrepLong": 1,
+    "daysSinceRest": 6,
+    "callsMissed": 0,
+    "noisyNights": 0,
+    "gym": 4,
+    "greenhouse": 2,
+    "dinners": 5,
+    "callsSam": 3,
+    "callsMom": 2
+   },
+   "dials": {
+    "stress": 3,
+    "sleepiness": 3
+   }
+  },
+  {
+   "week": 32,
+   "days": [
+    218,
+    224
+   ],
+   "segments": {
+    "work": 9,
+    "home": 2,
+    "crew": 5,
+    "body": 2,
+    "timeoff": 1,
+    "self": 1,
+    "space": 0
+   },
+   "homeFelt": {
+    "good": 2,
+    "mixed": 0,
+    "hard": 0
+   },
+   "sleepMeanMin": 428,
+   "onsetMeanMin": -50,
+   "ledger": {
+    "suitPrepLong": 1,
+    "daysSinceRest": 6,
+    "callsMissed": 0,
+    "noisyNights": 0,
+    "gym": 4,
+    "greenhouse": 2,
+    "dinners": 5,
+    "callsSam": 3,
+    "callsMom": 2
+   },
+   "dials": {
+    "stress": 3,
+    "sleepiness": 3
+   }
+  },
+  {
+   "week": 33,
+   "days": [
+    225,
+    231
+   ],
+   "segments": {
+    "work": 9,
+    "home": 2,
+    "crew": 5,
+    "body": 2,
+    "timeoff": 1,
+    "self": 0,
+    "space": 1
+   },
+   "homeFelt": {
+    "good": 2,
+    "mixed": 0,
+    "hard": 0
+   },
+   "sleepMeanMin": 431,
+   "onsetMeanMin": -50,
+   "ledger": {
+    "suitPrepLong": 1,
+    "daysSinceRest": 5,
+    "callsMissed": 0,
+    "noisyNights": 0,
+    "gym": 4,
+    "greenhouse": 2,
+    "dinners": 5,
+    "callsSam": 3,
+    "callsMom": 2
+   },
+   "dials": {
+    "stress": 3,
+    "sleepiness": 3
+   }
+  },
+  {
+   "week": 34,
+   "days": [
+    232,
+    238
+   ],
+   "segments": {
+    "work": 9,
+    "home": 2,
+    "crew": 5,
+    "body": 2,
+    "timeoff": 1,
+    "self": 1,
+    "space": 0
+   },
+   "homeFelt": {
+    "good": 2,
+    "mixed": 0,
+    "hard": 0
+   },
+   "sleepMeanMin": 430,
+   "onsetMeanMin": -50,
+   "ledger": {
+    "suitPrepLong": 1,
+    "daysSinceRest": 6,
+    "callsMissed": 0,
+    "noisyNights": 0,
+    "gym": 4,
+    "greenhouse": 2,
+    "dinners": 5,
+    "callsSam": 3,
+    "callsMom": 2
+   },
+   "dials": {
+    "stress": 3,
+    "sleepiness": 3
+   }
+  },
+  {
+   "week": 35,
+   "days": [
+    239,
+    245
+   ],
+   "segments": {
+    "work": 9,
+    "home": 2,
+    "crew": 5,
+    "body": 2,
+    "timeoff": 1,
+    "self": 0,
+    "space": 1
+   },
+   "homeFelt": {
+    "good": 2,
+    "mixed": 0,
+    "hard": 0
+   },
+   "sleepMeanMin": 429,
+   "onsetMeanMin": -50,
+   "ledger": {
+    "suitPrepLong": 1,
+    "daysSinceRest": 6,
+    "callsMissed": 0,
+    "noisyNights": 0,
+    "gym": 4,
+    "greenhouse": 2,
+    "dinners": 5,
+    "callsSam": 3,
+    "callsMom": 2
+   },
+   "dials": {
+    "stress": 3,
+    "sleepiness": 3
+   }
+  },
+  {
+   "week": 36,
+   "days": [
+    246,
+    250
+   ],
+   "segments": {
+    "work": 9,
+    "home": 2,
+    "crew": 5,
+    "body": 2,
+    "timeoff": 1,
+    "self": 1,
+    "space": 0
+   },
+   "homeFelt": {
+    "good": 2,
+    "mixed": 0,
+    "hard": 0
+   },
+   "sleepMeanMin": 430,
+   "onsetMeanMin": -50,
+   "ledger": {
+    "suitPrepLong": 1,
+    "daysSinceRest": 5,
+    "callsMissed": 0,
+    "noisyNights": 0,
+    "gym": 4,
+    "greenhouse": 2,
+    "dinners": 5,
+    "callsSam": 3,
+    "callsMom": 2
+   },
+   "dials": {
+    "stress": 3,
+    "sleepiness": 3
+   }
+  }
+ ],
+ "weeksLaterNote": "Weeks 22 to 36 (days 148 to 250), the same in both branches: a quiet continuation at the early-mission usual. Weeks 19 to 21 sit in the branch tables, where branch B recovers and branch A stays level. SIMULATED.",
  "branchRule": "After day 112: branch A if at least one of the day-112 cards has status 'acted' by the end of day 112, else branch B. The story bar can force either branch.",
  "generation": {
   "seed": 520,
@@ -1685,6 +2486,13 @@
    "route": "/today",
    "captionA": "You acted. The ledger refilled, and the tool logged what followed.",
    "captionB": "You did nothing, which is allowed. On day 114 a line you set before launch was crossed, and your flight surgeon was told only that."
+  },
+  {
+   "id": "quiet",
+   "day": 203,
+   "label": "Day 203 \u00b7 Quiet weeks",
+   "route": "/today",
+   "caption": "Eleven weeks on. Nothing is far from your usual, so the tool has nothing to say. Earth is further away every day: watch the delay in the header."
   }
  ],
  "moodMarks": {

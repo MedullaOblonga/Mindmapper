@@ -903,3 +903,11 @@ This supersedes the earlier statement that the fixed line is never inferred from
 **Relief steps.** `reliefSteps` builds three from the pre-launch profile: the crew medical officer comes now, one coping item from the crew member's own list that fits low mood, and a second checker on safety-critical work. They are supports, not treatment, and are shown to the flight surgeon under the note.
 
 **Wording.** UI text says "matched the safety line"; the guard test still bans "flagged" and "detected". The diary's privacy lines now name the one exception.
+
+## Addendum: days 127 to 250, and the delay from real distance
+
+**Day numbers.** The number on screen is the mission day. Days 1 to 126 are the story and are pinned by a checksum test (`src/data/continuation.test.ts`). The earlier +124 display offset is removed.
+
+**Continuation.** `scenario-params.json` gains weeks 19 to 21 in each branch table and `weeksLater` for weeks 22 to 36 (to day 250). Branch A stays level; branch B recovers over weeks 19 to 21; both then sit at the early-mission usual. Diary text for these weeks comes from `LATER_SENTENCES`, under separate counters, so earlier days read as before. Reaction tests from day 128 replay the next real sessions of the NASA record in order. Simulated body measures use a second random stream after day 126, chosen so they stay inside their lines. One chapter is added: day 203, "Quiet weeks".
+
+**Delay.** `distanceAu(day)` gives the Earth to spacecraft distance on a mission day for a minimum-energy transfer leaving on day 0 and arriving on day 259; `delayMin` is that distance at the speed of light. Every screen uses the mission day directly.

@@ -187,6 +187,117 @@ export const SENTENCES: Record<RealGroup, Record<Felt, string[]>> = {
 };
 
 /** Default NASA category for generated sentences of each group. */
+/* Sample sentences for the quiet continuation, days 127 to 250 (origin 'ai-sample'). Same voice rules.
+   Kept apart from SENTENCES so that the diary of days 1 to 126 does not change. */
+export const LATER_SENTENCES: Record<RealGroup, Record<Felt, string[]>> = {
+  work: {
+    good: [
+      'Approach checklist, first read-through. Fewer questions than I expected.',
+      'Ana and I finished the lander stowage audit a day early.',
+      'The navigation star sightings matched the computer to the last digit.',
+      'Filter swap, pump check, sample log. All done before lunch.',
+      'Ran the descent sim twice. Clean both times.',
+    ],
+    mixed: [
+      'Descent sim took three tries. The third was fine.',
+      'Stowage audit turned up two bags nobody had labelled. Sorted now.',
+      'The antenna pointing drifted again. Twenty minutes to bring it back.',
+      'Long checklist day. Nothing broke, nothing was quick.',
+      'Reply from the ground came after I had already done it my way. It worked.',
+    ],
+    hard: [
+      'The cooling loop alarm went at 03:00. False, but I was up for it.',
+      'Lost the afternoon to a stuck hatch seal.',
+      'Redid the stowage map because the first one was wrong.',
+      'Three procedures changed in one upload. Read them all twice.',
+    ],
+  },
+  home: {
+    good: [
+      'Sam’s message took eleven minutes to get here. Worth each one.',
+      'Mom sent the garden, one photo a week. The beans are up.',
+      'Recorded a long message for Sam. Said the ordinary things.',
+      'Sam read me the neighbour’s letter. I laughed out loud.',
+    ],
+    mixed: [
+      'The delay is too long for a call now. We trade recordings instead.',
+      'Message from home arrived late and out of order. Still good to have.',
+      'Wrote to Mom. Kept it short so it would go tonight.',
+    ],
+    hard: [
+      'No message window today. The antenna was needed for navigation.',
+      'Sam’s recording cut off halfway. The rest comes tomorrow.',
+    ],
+  },
+  crew: {
+    good: [
+      'Ravi taught everyone his card game. Jonas still does not get the rules.',
+      'Crew dinner ran long. Nobody wanted to be first to leave.',
+      'Mei cut everyone’s hair in one sitting. We look like a team again.',
+      'Ana and I split the audit without having to talk about it.',
+      'Jonas put Mars on the big screen. We all just looked for a while.',
+    ],
+    mixed: [
+      'Quiet dinner. Everyone is saving words for the approach.',
+      'Ravi and I disagreed about the stowage order. Settled it with a coin.',
+      'Jonas ran the briefing fast. I asked him to slow down, and he did.',
+    ],
+    hard: [
+      'Short tempers at handover. It passed by dinner.',
+      'Someone left the galley a mess again. I cleaned it and said so.',
+    ],
+  },
+  body: {
+    good: [
+      'Slept straight through. First alarm, not the third.',
+      'Good run today. Legs felt like they did before launch.',
+      'Seven hours and no dreams I remember.',
+    ],
+    mixed: [
+      'Slept fine, woke stiff. Stretched before the checks.',
+      'Run felt heavy for ten minutes, then fine.',
+      'Up once in the night. Back down quickly.',
+    ],
+    hard: [
+      'Sore shoulder from the hatch work. Skipped the weights.',
+      'Woke at 04:00 and stayed up. Paid for it by afternoon.',
+    ],
+  },
+  timeoff: {
+    good: [
+      'Sketched Mars from the window. It has a shape now, not just a colour.',
+      'Greenhouse hour. Picked the first of the second crop.',
+      'Film night. Ravi chose. It was better than last time.',
+      'Read forty pages without looking at the clock.',
+    ],
+    mixed: [
+      'Free hour went on laundry. Fair enough.',
+      'Started a sketch and did not finish it.',
+    ],
+    hard: ['Meant to rest. Fixed the galley drawer instead.'],
+  },
+  self: {
+    good: ['I know this ship now. I can find things in the dark.'],
+    mixed: [
+      'The days are alike again. That is not a complaint this time.',
+      'Mars is bigger each week. It makes the middle months feel shorter.',
+      'Routine holds me up more than I thought it would.',
+    ],
+    hard: [
+      'Restless today for no reason I can name.',
+      'Long stretch between things to look forward to.',
+    ],
+  },
+  space: {
+    good: ['Rearranged my bunk shelf. Small, but it is mine.'],
+    mixed: [
+      'Same corridor, same panels. I have stopped minding.',
+      'The node is crowded with landing gear now. We step around it.',
+    ],
+    hard: ['Nowhere to be alone this week except the greenhouse.'],
+  },
+};
+
 export const GROUP_CATEGORY: Record<RealGroup, string> = {
   work: 'Work', home: 'Outside Communications', crew: 'Group Interaction', body: 'Sleep',
   timeoff: 'Recreation/Leisure', self: 'Adjustment', space: 'Privacy/Personal Space',

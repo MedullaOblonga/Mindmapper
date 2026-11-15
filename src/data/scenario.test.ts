@@ -5,8 +5,8 @@ import type { Scenario } from '../types';
 
 const A = buildScenario('A'), B = buildScenario('B');
 const segs = (s: Scenario, w: number) => s.entries.flatMap(e => e.segments).filter(x => weekOf(x.day) === w);
-it('has 126 days and is deterministic', () => {
-  expect(A.days).toHaveLength(126);
+it('has 250 days and is deterministic', () => {
+  expect(A.days).toHaveLength(250);
   expect(JSON.stringify(buildScenario('A'))).toBe(JSON.stringify(A));
 });
 it('matches the weekly tables exactly', () => {

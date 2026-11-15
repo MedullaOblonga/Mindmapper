@@ -8,13 +8,14 @@ A private self-check for astronauts on long missions. It notices slow change aga
 
 ## Try it in 60 seconds
 
-Use the **Demo story** bar at the top. It drives a simulated 126-day mission:
+Use the **Demo story** bar at the top. It drives a simulated mission of 250 days. Days 1 to 126 are the story; days 127 to 250 are a quiet continuation:
 
 1. **Day 12 · Settling in.** For the first 14 days the tool only watches.
 2. **Day 42 · It gets one wrong.** Tap *That's not right* → *The data is wrong* → *Tell the tool*. The tool changes.
 3. **Day 98 · A quiet drift.** Patterns → On your mind: family takes a widening share of the diary. One week is not a pattern, so no card is raised. But that night's diary entry matches the one fixed safety line: open Journal to see the notice, the exact note that was sent, and the relief steps. Switch to Flight surgeon view to see what Earth received.
 4. **Day 112 · Three things noticed.** Three cards, each with actions you choose.
 5. **Day 119 · What followed.** Choose *If you acted* or *If you didn't*. If you didn't, a line you set before launch was crossed and the exact message is shown.
+6. **Day 203 · Quiet weeks.** Nothing is far from the astronaut's usual, so the tool says nothing. Step on to day 250 and watch the delay to Earth grow.
 
 ## Body trends, the reaction speed test and the delay to Earth
 
@@ -35,7 +36,20 @@ The collar CO2 readings are modelled on NASA's Personal CO2 Monitor and are simu
 
 **Today** always offers the reaction speed test. Every fourth day it is part of the scheduled check; on other days it can be taken by itself.
 
-**Header.** Every tab shows the one-way delay to Earth for the mission day, computed from the orbits of Earth and Mars with a minimum-energy outbound transfer (`src/lib/delay.ts`). It replaces the fixed 18 minutes used before: day 112 is 2 min 35 s.
+**Header.** Every tab shows the one-way delay to Earth for the mission day. It is the light time for the distance between Earth and the spacecraft on that day, with the spacecraft on a minimum-energy (Hohmann) transfer that reaches Mars on day 259 and Earth moving on along its own orbit (`src/lib/delay.ts`). No offset is applied. Hover the delay for the distance.
+
+| Mission day | Distance from Earth | One-way delay |
+|---|---|---|
+| 12 | 3 million km | 10 s |
+| 42 | 10 million km | 34 s |
+| 98 | 35 million km | 1 min 57 s |
+| 112 | 47 million km | 2 min 35 s |
+| 203 | 161 million km | 8 min 58 s |
+| 250 | 227 million km | 12 min 37 s |
+
+Orbits are taken as circular and in one plane, so a real trajectory would differ by a few minutes.
+
+**Days 127 to 250.** A quiet continuation, all simulated except the reaction tests. Both story branches return to the early-mission usual (branch B recovers over weeks 19 to 21). There are diary entries, sleep, the daily timeline, ledger counts and body trends for every day, and no cards or notes to Earth. The reaction tests on every fourth day are the next real sessions from the NASA bed-rest record, in recorded order; where two real tests in a row are slow, Body trends lists reaction speed for a few days. Days 1 to 126 are unchanged, and a test pins them with a checksum.
 
 ## Flight surgeon view, and what breaks confidentiality
 

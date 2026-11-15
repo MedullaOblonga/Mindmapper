@@ -1,15 +1,17 @@
 import { params } from './params';
 import history from './nasa/check_history.json';
-import { SENTENCES, GROUP_CATEGORY, DAY_TEXTS } from './sentences';
+import { SENTENCES, LATER_SENTENCES, GROUP_CATEGORY, DAY_TEXTS } from './sentences';
 import { mulberry32 } from '../lib/prng';
 import { dayIndex, weekOf } from '../lib/time';
 import type { Block, BlockKind, Branch, CheckSession, DayRecord, Entry, Felt, MoodMark, RealGroup, Scenario, Segment, WeekRow } from '../types';
 
 const G = params.generation;
 const LAST = params.mission.lastDay;
+/** The original story ends on day 126 (week 18). Everything after it is the quiet continuation. */
+export const STORY_LAST_WEEK = 18;
 
 export function weeksFor(branch: Branch): WeekRow[] {
-  return [...params.weeks, ...(branch === 'A' ? params.weeksBranchA : params.weeksBranchB)];
+  return [...params.weeks, ...(branch === 'A' ? params.weeksBranchA : params.weeksBranchB), ...params.weeksLater];
 }
 
 function onsetFor(day: number, row: WeekRow, branch: Branch): number {
@@ -113,9 +115,10 @@ function buildEntries(branch: Branch, weeks: WeekRow[]): Entry[] {
   const rand = mulberry32(G.seed);
   const cyc: Record<string, number> = {};
   const used: Record<string, number> = {};
-  const pickText = (g: RealGroup, f: Felt) => {
-    const list = SENTENCES[g][f];
-    const k = `${g}.${f}`;
+  const pickText = (g: RealGroup, f: Felt, later = false) => {
+    // The continuation draws on its own sentences first, under its own counters, so days 1 to 126 read exactly as before.
+    const list = later ? [...LATER_SENTENCES[g][f], ...SENTENCES[g][f]] : SENTENCES[g][f];
+    const k = `${later ? 'later:' : ''}${g}.${f}`;
     const base = used[k] ?? Math.floor(rand() * list.length);
     used[k] = base + 1;
     return list[base % list.length];
@@ -128,7 +131,7 @@ function buildEntries(branch: Branch, weeks: WeekRow[]): Entry[] {
   for (const row of weeks) {
     const w = row.week;
     const idx = w === 16 ? G.journalDayIndexes.week16 : G.journalDayIndexes.default;
-    const jdays = idx.map(i => 7 * w - 7 + i);
+    const jdays = idx.map(i => 7 * w - 7 + i).filter(d => w <= STORY_LAST_WEEK || d <= LAST);
     const remaining: Record<RealGroup, number> = { ...row.segments };
     const homeLeft = { ...row.homeFelt };
     const anchors = params.anchorEntries.filter(a => weekOf(a.day) === w && (!a.branch || a.branch === branch));
@@ -149,7 +152,7 @@ function buildEntries(branch: Branch, weeks: WeekRow[]): Entry[] {
         queue.push({ group: g, felt: cycle[c % cycle.length] });
       }
     }
-    queue.forEach((q, k) => push(jdays[k % jdays.length], { text: pickText(q.group, q.felt), category: GROUP_CATEGORY[q.group], group: q.group, felt: q.felt }));
+    queue.forEach((q, k) => push(jdays[k % jdays.length], { text: pickText(q.group, q.felt, w > STORY_LAST_WEEK), category: GROUP_CATEGORY[q.group], group: q.group, felt: q.felt }));
   }
   for (const [d, texts] of Object.entries(DAY_TEXTS)) {
     const list = byDay.get(+d);
@@ -179,6 +182,8 @@ function buildChecks(branch: Branch): CheckSession[] {
     else out.push(mk(day, slot, { meanRtMs: 262 + G.checks.rtPatternB[j], lapses: 3 + G.checks.lapsePatternB[j], falseStarts: 0, trials: 46 }, 'sim'));
     j++;
   }
+  // Quiet continuation: both branches go back to replaying the volunteer's real sessions, in recorded order.
+  for (let day = 128; day <= LAST; day += 4) for (const slot of ['am', 'pm'] as const) if (k < sessions.length) out.push(mk(day, slot, sessions[k++], 'nasa-replay'));
   return out;
 }
 

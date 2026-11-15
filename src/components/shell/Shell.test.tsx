@@ -9,7 +9,7 @@ it('renders the three navigation regions', () => {
   expect(screen.getByText(/Stays on this device/)).toBeInTheDocument();
   expect(screen.getByText(/^STARDATE 473\d\d\.\d$/)).toBeInTheDocument();
   expect(screen.getByRole('img', { name: /Mission day 112 of 520/ })).toBeInTheDocument();
-  expect(screen.getByTitle(/One-way light time/)).toHaveTextContent(/Delay to Earth 11 min \d\d s one way/);
+  expect(screen.getByTitle(/One-way light time/)).toHaveTextContent(/Delay to Earth 2 min \d\d s one way/);   // day 112: about 47 million km from Earth
 });
 
 it('a light at the top pulses until tonight\'s entry is written', async () => {

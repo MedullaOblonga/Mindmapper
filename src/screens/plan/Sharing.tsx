@@ -6,7 +6,6 @@ import { appStore } from '../../state/store';
 import { pastMidnightRun } from '../../logic/signs';
 import { currentRule, withThreshold } from '../../logic/rules';
 import { delayMin, delayWords } from '../../lib/delay';
-import { missionDay } from '../../config';
 import { CMO_NAME, co2Runs } from '../../logic/lines';
 import { Sheet } from '../../components/ui';
 import { ShareLogList } from '../../components/shell/ShareLogDrawer';
@@ -59,7 +58,7 @@ function ReportSheet({ rule, v, onClose }: { rule: ShareRule; v: View; onClose: 
   return (
     <Sheet title="Report an imminent risk" onClose={onClose} width={560}>
       <p className="t-body">Use this if you, or someone on board, is in immediate danger of serious harm.</p>
-      <p className="t-body">{`${CMO_NAME}, your crew medical officer, is told now and comes to you. Your flight surgeon is sent the note below. It takes about ${delayWords(delayMin(missionDay(v.day)))} to reach Earth, so ${CMO_NAME} is your first support.`}</p>
+      <p className="t-body">{`${CMO_NAME}, your crew medical officer, is told now and comes to you. Your flight surgeon is sent the note below. It takes about ${delayWords(delayMin(v.day))} to reach Earth, so ${CMO_NAME} is your first support.`}</p>
       <p className="t-quote">{`\u201c${rule.message}\u201d`}</p>
       <p className="t-small">This is the one line that cannot be changed or switched off. It is the same limit to confidentiality that applies on Earth.</p>
       <div className="btn-row">
@@ -89,7 +88,7 @@ export function Sharing() {
     <>
       <div className="page-head"><div><h1 className="t-title">What leaves this device, and when</h1>
         <p className="t-lede">Three levels. You agreed all of them before launch, and you can read every word that has ever been sent.</p></div>
-        <span className="note-pill">{`Earth is about ${delayWords(delayMin(missionDay(v.day)))} away today, each way`}</span></div>
+        <span className="note-pill">{`Earth is about ${delayWords(delayMin(v.day))} away today, each way`}</span></div>
       <ol className="levels">
         {LEVELS.map(l => (
           <li key={l.n} className={`panel panel--tight level ${l.n === 3 ? 'panel--act' : ''}`}>

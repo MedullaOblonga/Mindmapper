@@ -10,7 +10,7 @@ it('ignores data from an older version', () => {
 });
 it('persists events and clamps the day', () => {
   const s = createStoreForTest();
-  s.getState().setDay(500); expect(s.getState().day).toBe(126);
+  s.getState().setDay(500); expect(s.getState().day).toBe(250);
   s.getState().add({ type: 'dismiss', what: 'tonight' });
   expect(createStoreForTest().getState().events).toHaveLength(1);
 });
