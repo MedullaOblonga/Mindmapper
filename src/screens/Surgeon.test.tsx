@@ -37,54 +37,76 @@ it('shows only notes addressed to the flight surgeon, never the diary or notes t
   expect(text).not.toMatch(/\bAt \d+ of \d+\b/);   // never how close a line is
 });
 
-it('lists the fixed and negotiable lines with the notes they sent', async () => {
+it('shows no alert section and no agreed lines until a line has actually sent a note', async () => {
+  const u = userEvent.setup();
+  open(60);
+  await toSurgeon(u);
+  expect(screen.queryByRole('region', { name: 'Safety and agreed lines' })).toBeNull();
+  const text = document.querySelector('main')!.textContent!;
+  expect(text).not.toMatch(/past midnight|write nothing for 10 days|imminent risk to my life/i);   // uncrossed lines are not mentioned
+  expect(text).not.toMatch(/CO2 at my collar/);
+  expect(screen.getByRole('group', { name: 'SBAR for day 60' })).toBeInTheDocument();
+});
+
+it('day 98: the imminent-risk alert sits on top, short, with the detail folded away', async () => {
+  const u = userEvent.setup();
+  open(98);
+  await toSurgeon(u);
+  const alerts = screen.getByRole('region', { name: 'Safety and agreed lines' });
+  expect(within(alerts).getByRole('img', { name: 'Imminent-risk alert' })).toBeInTheDocument();
+  expect(within(alerts).getByText('Imminent risk to self or others')).toBeInTheDocument();
+  expect(within(alerts).getByText('Day 98 · reached Earth 1 min 57 s later')).toBeInTheDocument();
+  expect(within(alerts).getByText('Exact note and what was offered on board').closest('details')).not.toHaveAttribute('open');
+  const sbar = screen.getByRole('group', { name: 'SBAR for day 98' });
+  expect(within(sbar).getByText('Imminent-risk note received today.')).toBeInTheDocument();
+  expect(within(sbar).getByText(/raised by a word check of the diary\. Not confirmed\./)).toBeInTheDocument();
+  expect(within(sbar).getByText(/Confirm with Mei, the crew medical officer/)).toBeInTheDocument();
+  expect(document.querySelector('main')!.textContent).not.toContain('better off without me');
+});
+
+it('a confirmed negotiable alert is one short row with a cue; older ones fold away', async () => {
   const u = userEvent.setup();
   open(119);
   await toSurgeon(u);
-  const lines = screen.getByRole('region', { name: 'Safety and agreed lines' });
-  const rows = within(lines).getAllByRole('row').slice(1);
-  expect(rows).toHaveLength(3);                     // the "ask me first" line is not the surgeon's to see
-  expect(within(rows[0]).getByText(/imminent risk to my life or to someone else/)).toBeInTheDocument();
-  expect(within(rows[0]).getByText(/^Fixed\./)).toBeInTheDocument();
-  expect(within(rows[0]).getByText(/Sent on day 98/)).toBeInTheDocument();
-  expect(within(rows[1]).getByText(/Sent on day 114/)).toBeInTheDocument();
-  expect(within(rows[2]).getByText(/Sent on day 100 · reached Earth 2 min 02 s later/)).toBeInTheDocument();
-  expect(within(lines).queryByText(/write nothing for 10 days/)).toBeNull();
+  const alerts = screen.getByRole('region', { name: 'Safety and agreed lines' });
+  expect(within(alerts).getByText('Sleep past midnight, 5 nights running')).toBeInTheDocument();
+  expect(within(alerts).getByText(/Day 114 · reached Earth/)).toBeInTheDocument();
+  expect(within(alerts).getByRole('img', { name: 'Worth a look' })).toBeInTheDocument();
+  expect(within(alerts).queryByText(/Automatic note agreed before launch/)).toBeNull();     // the long note is not printed
+  expect(within(alerts).queryByText(/Negotiable|Fixed\./)).toBeNull();
+  expect(screen.getByText('Earlier alerts (2)')).toBeInTheDocument();                       // day 98 risk and day 100 CO2
 });
 
-it('reporting a risk tells the medical officer and reaches the surgeon view', async () => {
-  const u = userEvent.setup();
-  open(60, '#/profile/sharing');
-  expect(screen.getByText('Not reported')).toBeInTheDocument();
-  await u.click(screen.getByRole('button', { name: 'Report a risk now' }));
-  expect(screen.getByText(/Mei, your crew medical officer, is told now and comes to you\./)).toBeInTheDocument();
-  await u.click(screen.getByRole('button', { name: 'Tell them now' }));
-  expect(screen.getByText('Reported on day 60')).toBeInTheDocument();
-  const to = appStore.getState().events.filter(e => e.type === 'safety');
-  expect(to).toHaveLength(1);
-  await toSurgeon(u);
-  const row = within(screen.getByRole('region', { name: 'Safety and agreed lines' })).getAllByRole('row')[1];
-  expect(within(row).getByText(/Sent on day 60/)).toBeInTheDocument();
-  expect(within(row).getByText(/an imminent risk to self or others was reported on board/)).toBeInTheDocument();
-});
-
-it('body trends are always open to the flight surgeon, in their voice and without the diary', async () => {
+it('one page: the daily SBAR sits above the body trends, and any of the last 14 days can be picked', async () => {
   const u = userEvent.setup();
   open(112);
   await toSurgeon(u);
-  const rail = screen.getByRole('navigation', { name: 'Flight surgeon' });
-  await u.click(within(rail).getByRole('button', { name: 'Body trends' }));
-  expect(screen.getByRole('heading', { name: 'Body trends' })).toBeInTheDocument();
-  expect(screen.getByText(/shared with you as routine medical monitoring/)).toBeInTheDocument();
+  expect(within(screen.getByRole('navigation', { name: 'Flight surgeon' })).getAllByRole('button')).toHaveLength(1);
+  const sbar = screen.getByRole('group', { name: 'SBAR for day 112' });
+  expect(within(sbar).getByText('2 measures outside their lines: sleep and reaction speed.')).toBeInTheDocument();
+  expect(within(sbar).getByText(/Two or more measures have moved together/)).toBeInTheDocument();
+  expect(within(sbar).getByText('Protect the sleep period for the next 7 nights.')).toBeInTheDocument();
   expect(screen.getAllByRole('img', { name: /last 28 days/ }).length).toBeGreaterThanOrEqual(9);
-  const look = screen.getByRole('region', { name: 'Worth a second look' });
-  expect(within(look).getByText(/Sleep: .* h\. Outside the NASA line on 3 of the last 5 nights\./)).toBeInTheDocument();
-  expect(within(look).queryByRole('button')).toBeNull();          // nothing to send: it is already shared
+  expect(sbar.compareDocumentPosition(screen.getByRole('region', { name: 'Sleep, temperature and reaction speed' })) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  const strip = screen.getByRole('group', { name: 'Last 14 days' });
+  expect(within(strip).getAllByRole('button')).toHaveLength(14);
+  await u.click(within(strip).getByRole('button', { name: 'Day 104: Imminent-risk alert' }));
+  expect(within(screen.getByRole('group', { name: 'SBAR for day 104' })).getByText(/Imminent-risk note received 6 days ago\./)).toBeInTheDocument();
   const text = document.querySelector('main')!.textContent!;
-  expect(text).not.toMatch(/\b[Yy]our\b/);                        // addressed to the surgeon, about the crew member
+  expect(text).not.toMatch(/\b[Yy]our\b/);
   for (const s of buildScenario('B').entries.flatMap(e => e.segments)) expect(text).not.toContain(s.text);
-  await u.click(within(rail).getByRole('button', { name: 'Received' }));
-  expect(screen.getByRole('heading', { name: 'Flight surgeon view' })).toBeInTheDocument();
+});
+
+it('reporting a risk from the Sharing page reaches the dashboard as a reported alert', async () => {
+  const u = userEvent.setup();
+  open(60, '#/profile/sharing');
+  await u.click(screen.getByRole('button', { name: 'Report a risk now' }));
+  await u.click(screen.getByRole('button', { name: 'Tell them now' }));
+  expect(screen.getByText('Reported on day 60')).toBeInTheDocument();
+  await toSurgeon(u);
+  const alerts = screen.getByRole('region', { name: 'Safety and agreed lines' });
+  expect(within(alerts).getByText('Reported on board.')).toBeInTheDocument();
+  expect(within(screen.getByRole('group', { name: 'SBAR for day 60' })).getByText('Risk to self or others, reported on board.')).toBeInTheDocument();
 });
 
 it('the astronaut is told that body trends are shared and the diary is not', () => {

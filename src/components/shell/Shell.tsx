@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import { TopBar } from './TopBar';
 import { StoryBar } from './StoryBar';
@@ -12,10 +12,9 @@ import { useView } from '../../state/useView';
 import { useUI } from '../../state/ui';
 import { BedtimeLight, EntryDueChip } from './BedtimeLight';
 import { WristDock } from '../Wrist';
-import { Stethoscope, Activity } from 'lucide-react';
+import { Stethoscope } from 'lucide-react';
 import { useApp } from '../../state/store';
 import { Surgeon } from '../../screens/Surgeon';
-import { Body } from '../../screens/patterns/Body';
 
 export function Footer() {
   const source = useApp(s => s.source);
@@ -42,17 +41,15 @@ export function Shell({ children }: { children: ReactNode }) {
   const ui = useUI();
   const loc = useLocation();
   const viewer = useApp(s => s.viewer);
-  const [page, setPage] = useState<'notes' | 'body'>('notes');   // flight surgeon view only
   if (viewer === 'surgeon') return (
     <div className="app">
       <TopBar day={v.day} shared={0} viewer="surgeon" />
       <StoryBar branch={v.branch} />
       <nav className="rail" aria-label="Flight surgeon">
-        <button className="rail-item" aria-current={page === 'notes' ? 'page' : undefined} onClick={() => setPage('notes')}><Stethoscope size={22} strokeWidth={1.8} aria-hidden="true" />Received</button>
-        <button className="rail-item" aria-current={page === 'body' ? 'page' : undefined} onClick={() => setPage('body')}><Activity size={22} strokeWidth={1.8} aria-hidden="true" />Body trends</button>
+        <button className="rail-item" aria-current="page"><Stethoscope size={22} strokeWidth={1.8} aria-hidden="true" />Dashboard</button>
       </nav>
       <main className="page">
-        {page === 'body' ? <Body surgeon /> : <Surgeon />}
+        <Surgeon />
         <Footer />
       </main>
       <Toast />

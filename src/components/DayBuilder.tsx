@@ -44,7 +44,7 @@ export function DayBuilder({ v }: { v: View }) {
   return (
     <section className="panel builder" aria-label="Rebuild your day">
       <div className="panel-title-row"><h2 className="t-head">{`Your day ${D(v.day)}`}</h2>
-        {lowCue.length > 0 && <span className="t-small cue">{`You pressed low at ${fmtClock(lowCue[0].min)} during ${blocks[cueIdx].label}.`}</span>}</div>
+        {lowCue.length > 0 && <span className="t-small builder-cue">{`You pressed low at ${fmtClock(lowCue[0].min)} during ${blocks[cueIdx].label}.`}</span>}</div>
       <div className="builder-grid">
         <DayRing blocks={ringBlocks} marks={marks} selected={sel} onSelect={setSel} title={`Day ${D(v.day)}`} sub={`${b.label} · ${blockRange(b)}`} />
         <div className="flip-wrap">

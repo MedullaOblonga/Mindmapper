@@ -14,6 +14,7 @@ import { Ledger } from './Ledger';
 import { dueChecks } from '../logic/checks';
 import { bodySeries, measure, readMeasure } from '../logic/body';
 import { SafetyNotice } from '../components/SafetyNotice';
+import { recentSafetyNotes } from '../logic/safety';
 import type { View } from '../state/view';
 
 
@@ -57,7 +58,7 @@ function LineCrossed({ v }: { v: View }) {
   const c = v.lineCrossed;
   return (
     <>
-      <SafetyNotice v={v} />
+      <SafetyNotice v={v} calm />
       {c && !c.fixed && (
         <section className="panel panel--act" aria-label="Agreed before launch">
           <div className="t-label act-text">Agreed before launch</div>
@@ -185,7 +186,9 @@ export function Today() {
     wide = <><LineCrossed v={v} /><WhatTheToolDid v={v} /></>;
   } else {
     head = <Head title="On your usual pattern" pill={pill}
-      lede="Nothing this week looks different from your own usual. The tool stays quiet until something does." />;
+      lede={recentSafetyNotes(v.shareLog, v.day).length
+        ? 'Your week looks like your own usual.'      // the safety notice below speaks for itself
+        : 'Nothing this week looks different from your own usual. The tool stays quiet until something does.'} />;
     wide = <><LineCrossed v={v} /><WhatTheToolDid v={v} /></>;
   }
   return (
