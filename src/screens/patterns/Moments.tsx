@@ -8,6 +8,7 @@ import { weekOf, fmtClock } from '../../lib/time';
 import { MoodGlyph } from '../../components/DayRing';
 import { Tag } from '../../components/ui';
 import type { MoodMark } from '../../types';
+import { pressLook, fewerPressesText, pct } from '../../logic/presses';
 
 function where(marks: MoodMark[], mood: 'high' | 'low'): [string, number][] {
   const c = new Map<string, number>();
@@ -75,6 +76,8 @@ export function Moments() {
     const d = from + i, ms = marksFor(v.scenario, v.events, d);
     return { day: d, high: ms.filter(m => m.mood === 'high').length, low: ms.filter(m => m.mood === 'low').length };
   });
+  const pl = pressLook(v);
+  const fewer = fewerPressesText(pl);
   const weekMarks = Array.from({ length: now.days }, (_, i) => marksFor(v.scenario, v.events, 7 * Wk - 6 + i)).flat();
   return (
     <>
@@ -89,12 +92,19 @@ export function Moments() {
                 : `This week so far: ${now.high} high, ${now.low} low. Your usual week: ${uhW} high, ${ulW} low.`}</p>
               <button className="btn btn--sm" aria-pressed={table} onClick={() => setTable(t => !t)}>{table ? 'Show as chart' : 'Show as table'}</button>
             </div>
+            {fewer && (
+              <div className="press-note" role="note" aria-label="Fewer presses overall">
+                <p className="t-body">{fewer}</p>
+                <p className="t-small">This is about the wrist, not about you. While presses are down, read the bars as a mix, not as counts.</p>
+              </div>
+            )}
             {table ? (
               <div className="table-scroll"><table className="real-table num">
                 <thead><tr><th scope="col" className="t-label">Day</th><th scope="col" className="t-label">High</th><th scope="col" className="t-label">Low</th></tr></thead>
                 <tbody>{[...rows].reverse().map(r => <tr key={r.day}><th scope="row">{`Day ${D(r.day)}`}</th><td>{r.high}</td><td>{r.low}</td></tr>)}</tbody>
               </table></div>
             ) : <DailyChart rows={rows} uh={uhW === null ? null : uhW / 7} ul={ulW === null ? null : ulW / 7} />}
+            {pl.usual && !fewer && <p className="t-small num">{`Last two weeks: about ${pl.perWeek.total} presses a week, ${pct(pl.lowShare)} of them low. Your usual week: ${pl.usual.total} presses, ${pct(pl.usualLowShare)} low.`}</p>}
             <p className="t-small">{`The dashed lines are your usual day, from ${USUAL_DAYS}. More low presses is not a verdict: it is a place to look.`}</p>
           </section>
         </div>

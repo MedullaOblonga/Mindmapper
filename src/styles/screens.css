@@ -334,3 +334,9 @@ h2.t-head{margin:0}
 .chip-row{min-width:0}
 .chip-row .btn{max-width:100%}
 .trend-card .trend-range{display:none}
+
+/* Retention: fewer presses overall, walk-through counts, from earlier in your diary */
+.press-note{display:flex;flex-direction:column;gap:var(--s2);padding:var(--s3) var(--s4);margin:var(--s3) 0;border:1px solid var(--border);border-left:3px solid var(--border-strong);border-radius:var(--r-md, 8px);background:var(--sunk)}
+.press-note p{margin:0}
+.recorded-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s3);margin-top:var(--s3)}
+.from-earlier .t-quote .swatch{margin-right:8px;vertical-align:middle}

@@ -15,6 +15,8 @@ import { bedtimeOf, withFreeTime } from '../logic/ring';
 import { SafetyNotice } from '../components/SafetyNotice';
 import { entryMatches } from '../logic/safety';
 import { MoodGlyph, BLOCK_VAR } from '../components/DayRing';
+import { resurface } from '../logic/resurface';
+import type { View } from '../state/view';
 
 interface JournalState { prefill?: string; focus?: boolean; filter?: { group: Group; ids: string[]; from: number; to: number; topic: string } }
 const FELTS: { f: Felt; label: string }[] = [{ f: 'good', label: 'Good' }, { f: 'mixed', label: 'Mixed' }, { f: 'hard', label: 'Difficult' }];
@@ -171,6 +173,24 @@ function Earlier({ entries, day, filter, clearFilter, matched }: { entries: Entr
   );
 }
 
+/** One sentence from at least four weeks ago, so the diary gives something back. */
+function FromEarlier({ v, api }: { v: View; api: React.MutableRefObject<ComposerApi | null> }) {
+  const [hidden, setHidden] = useState(false);
+  const r = useMemo(() => resurface(v), [v]);
+  if (!r || hidden) return null;
+  return (
+    <section className="panel panel--tight from-earlier" aria-label="From earlier in your diary">
+      <div className="panel-title-row"><h2 className="t-head">From earlier in your diary</h2><Tag data={r.seg.origin} /></div>
+      <p className="t-small">{r.why}</p>
+      <div className="quote-row"><p className="t-quote"><i className="swatch" style={{ background: topicVar(r.group) }} />{`“${r.seg.text}”`}</p><span className="t-small num">{`Day ${D(r.seg.day)}`}</span></div>
+      <div className="btn-row">
+        <button className="btn btn--sm" onClick={() => api.current?.insert(`Thinking back to day ${D(r.seg.day)}: `)}>Write about it</button>
+        <button className="btn btn--sm btn--quiet" onClick={() => setHidden(true)}>Not now</button>
+      </div>
+    </section>
+  );
+}
+
 export function Journal() {
   const v = useView();
   const loc = useLocation();
@@ -190,6 +210,7 @@ export function Journal() {
       <DayBuilder v={v} />
       <div className="cols">
         <div className="col col--wide">
+          <FromEarlier v={v} api={api} />
           <Composer key={`${v.day}-${loc.key}`} day={v.day} marks={v.marksToday} blocks={withFreeTime(v.blocksToday, v.scenario.days[v.day - 1].wakeMin, bedtimeOf(v.scenario, v.day), v.day).filter(b => b.kind !== 'sleep' && (b.kind !== 'free' || v.marksToday.some(m => m.min >= b.startMin && m.min < b.endMin)))} text={text} setText={setText} focus={!!st.focus || !!st.prefill} apiRef={api} />
           {latest && <TaggedEntry entry={latest} />}
         </div>

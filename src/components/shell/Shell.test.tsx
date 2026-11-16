@@ -12,13 +12,13 @@ it('renders the three navigation regions', () => {
   expect(screen.getByTitle(/One-way light time/)).toHaveTextContent(/Delay to Earth 2 min \d\d s one way/);   // day 112: about 47 million km from Earth
 });
 
-it('a light at the top pulses until tonight\'s entry is written', async () => {
+it('a light at the top pulses until today is recorded', async () => {
   const { default: userEvent } = await import('@testing-library/user-event');
   const u = userEvent.setup();
   render(<HashRouter><App /></HashRouter>);
-  expect(screen.getByRole('status')).toHaveTextContent('Tonight’s entry is not written yet');
+  expect(screen.getByRole('status')).toHaveTextContent('Today is not recorded yet');
   expect(screen.queryByRole('button', { name: 'At the bunk' })).toBeNull();
-  await u.click(screen.getByRole('button', { name: /Tonight’s entry is not written yet/ }));
+  await u.click(screen.getByRole('button', { name: /Today is not recorded yet/ }));
   expect(window.location.hash).toBe('#/journal');
   await u.type(screen.getByLabelText(/private diary/i), 'Long day of suit prep.');
   await u.click(screen.getByRole('button', { name: 'Save entry' }));

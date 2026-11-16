@@ -9,6 +9,7 @@ import { BLOCK_VAR, DayRing, MoodGlyph } from './DayRing';
 import { Mark } from './ui';
 import type { Block, Felt, MoodMark } from '../types';
 import type { View } from '../state/view';
+import { recordedToday } from '../logic/recorded';
 
 const FELTS: { f: Felt; label: string }[] = [{ f: 'good', label: 'Good' }, { f: 'mixed', label: 'Mixed' }, { f: 'hard', label: 'Difficult' }];
 export const inBlock = (m: MoodMark, b: Block) => m.min >= b.startMin && m.min < b.endMin;
@@ -38,6 +39,7 @@ export function DayBuilder({ v }: { v: View }) {
   const late = rec.onsetMin - usualOnset(s);
   const cueOff = v.events.some(e => e.type === 'dismiss' && e.what === 'cue');
   const lowCue = lowCounts[cueIdx] > 0 ? marks.filter(m => m.mood === 'low' && inBlock(m, blocks[cueIdx])) : [];
+  const rec2 = recordedToday(v);
   const ringBlocks = blocks.map(x => (x.id === b.id ? { ...x, felt: guess } : x.felt === null || !tapped.has(x.id) ? { ...x, felt: feltFromPresses(marks.filter(m => inBlock(m, x))) ?? x.felt } : x));
   return (
     <section className="panel builder" aria-label="Rebuild your day">
@@ -64,6 +66,12 @@ export function DayBuilder({ v }: { v: View }) {
             {free.length > 0 && <p className="t-small">{`Your wrist offers: ${free.map(f => f.label.toLowerCase()).join(', ')}.`}</p>}
             <span className="t-foot flip-hint">Tap the card for the next part of the day</span>
           </article>
+          <div className="recorded-row" aria-live="polite">
+            {rec2 === 'walkthrough' ? <p className="t-small"><b>Today is recorded from your walk-through.</b> Writing below is optional.</p>
+              : rec2 === 'entry' ? <p className="t-small">Today is recorded: your entry is written.</p>
+              : <><button className="btn btn--sm" onClick={() => appStore.getState().add({ type: 'walkthrough' })}>Count today, no writing</button>
+                <span className="t-small">The walk-through alone counts. Words are optional.</span></>}
+          </div>
           {!cueOff && late >= 60 && (
             <p className="t-small">{`Asked because your sleep started ${fmtLater(late)} later than your usual. `}
               <button className="link-btn" onClick={() => appStore.getState().add({ type: 'dismiss', what: 'cue' })}>Turn this cue off</button></p>

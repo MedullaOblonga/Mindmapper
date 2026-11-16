@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { recordedToday } from '../logic/recorded';
 import { D } from '../config';
 import { useNavigate } from 'react-router-dom';
 import { useView } from '../state/useView';
@@ -103,9 +104,13 @@ function Tonight({ v }: { v: View }) {
       )}
       {entry ? (
         <p className="t-body">{`Tonight’s entry is written: ${entry.segments.length} ${entry.segments.length === 1 ? 'thing' : 'things'}, tagged.`}</p>
+      ) : recordedToday(v) === 'walkthrough' ? (
+        <div className="btn-row"><p className="t-body">Today is recorded from your walk-through. Add words any time, or don’t.</p>
+          <button className="btn" onClick={() => nav('/journal', { state: { focus: true } })}>Add words</button></div>
       ) : (
         <div className="btn-row">
-          <button className="btn btn--primary" onClick={() => nav('/journal', { state: { focus: true } })}>Write tonight’s entry</button>
+          <button className="btn btn--primary" onClick={() => nav('/journal')}>Walk through today</button>
+          <button className="btn" onClick={() => nav('/journal', { state: { focus: true } })}>Write tonight’s entry</button>
           {!dismissed && <button className="btn btn--quiet" onClick={() => add({ type: 'dismiss', what: 'tonight' })}>Not tonight</button>}
         </div>
       )}

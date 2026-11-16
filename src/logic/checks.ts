@@ -1,6 +1,7 @@
 import { ledgerNow } from './drafts';
 import { usualOnset } from './cards';
 import { moodWeek } from '../state/view';
+import { pressLook } from './presses';
 import { median } from '../lib/stats';
 import type { View } from '../state/view';
 
@@ -69,6 +70,9 @@ function reasonFor(v: View, kind: CheckKind): string | null {
   if (kind === 'mood') {
     const w = Math.ceil(v.day / 7), usual = median([3, 4, 5, 6, 7, 8].filter(x => 7 * x <= v.day).map(x => moodWeek(v.scenario, v.events, x, v.day).low));
     const now = moodWeek(v.scenario, v.events, w, v.day);
+    const pl = pressLook(v);
+    if (pl.fewerOverall) return pl.lowShare !== null && pl.usualLowShare !== null && pl.lowShare >= 1.5 * pl.usualLowShare
+      ? 'You are pressing less overall, but more of your presses are low than your usual.' : null;
     return now.days && usual && now.low / now.days >= 1.5 * (usual / 7) ? 'You have pressed low more often than your usual this week.' : null;
   }
   if (kind === 'workload') return far('suitPrepLong') ? 'You have had more long suit-prep days than your usual.' : null;
