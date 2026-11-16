@@ -334,3 +334,25 @@ h2.t-head{margin:0}
 .chip-row{min-width:0}
 .chip-row .btn{max-width:100%}
 .trend-card .trend-range{display:none}
+
+/* flight surgeon dashboard: shape and icon carry status; --act is the one attention colour */
+.cue{flex:none;display:inline-flex;align-items:center;color:var(--ink-muted)}
+.cue--look,.cue--alert{color:var(--act)}
+.alert-row{display:flex;align-items:flex-start;gap:var(--s3)}
+.alert-row+.alert-row{padding-top:var(--s3);border-top:1px solid var(--line)}
+.alert-main{min-width:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--s1) var(--s4)}
+.alert-row--risk .alert-main{flex-direction:column;gap:var(--s2)}
+.alert-facts{display:flex;flex-wrap:wrap;gap:var(--s1) var(--s4)}
+.day-strip{display:flex;gap:var(--s1);overflow-x:auto;padding-bottom:var(--s1)}
+.day-cell{flex:1 0 44px;min-height:var(--tap);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:1px solid transparent;border-radius:var(--r-sm);background:transparent}
+.day-cell:hover{border-color:var(--border)}
+.day-cell[aria-pressed="true"]{border-color:var(--ink);background:var(--raised)}
+.sbar{display:flex;flex-direction:column;gap:var(--s3)}
+.sbar-head{display:flex;align-items:center;gap:var(--s2)}
+.sbar-grid{margin:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--s4)}
+.sbar-grid dd{margin:var(--s2) 0 0}
+.sbar-line{display:block}
+.sbar-line+.sbar-line{margin-top:var(--s1)}
+.lines-fold{padding:0 var(--s2)}
+@media (max-width:1023px){.sbar-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:699px){.sbar-grid{grid-template-columns:minmax(0,1fr)}}

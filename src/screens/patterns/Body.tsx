@@ -107,35 +107,47 @@ export function Body({ surgeon = false }: { surgeon?: boolean }) {
   const talk = (route: string) => ui.openTalk({ route, draft: bodyDraft(all, v.day) });
   return (
     <>
-      <div className="page-head"><div><h1 className="t-title">Body trends</h1>
-        <p className="t-lede">{surgeon
-          ? 'Measured values for this crew member, shared with you as routine medical monitoring. Nothing here is written or rated by them, and nothing is added up into one number.'
-          : 'Things that are measured, not rated by you. Each one sits against its own line, and nothing is added up into one number.'}</p>
-        {!surgeon && <p className="t-small">Your flight surgeon sees these measures as routine medical monitoring. Your diary is not part of it.</p>}</div>
-        {surgeon ? <span className="note-pill">{`As received: Earth is about ${delayWords(delayMin(v.day))} behind today`}</span> : <Tag data="sim" />}</div>
+      {surgeon ? (
+        <div className="trend-tools">
+          <h2 className="t-head trend-section-title">Body trends, last 28 days</h2>
+          <div className="legend legend--sm" aria-label="Key">
+            <span><i className="pt pt--in" />inside its line</span><span><i className="pt pt--out" />outside</span><span><i className="key-line key-line--2" />own usual</span>
+          </div>
+          <button className="btn btn--sm" onClick={() => setTable(t => !t)}>{table ? 'Show charts' : 'Show as table'}</button>
+        </div>
+      ) : (
+        <>
+        <div className="page-head"><div><h1 className="t-title">Body trends</h1>
+          <p className="t-lede">{surgeon
+            ? 'Measured values for this crew member, shared with you as routine medical monitoring. Nothing here is written or rated by them, and nothing is added up into one number.'
+            : 'Things that are measured, not rated by you. Each one sits against its own line, and nothing is added up into one number.'}</p>
+          {!surgeon && <p className="t-small">Your flight surgeon sees these measures as routine medical monitoring. Your diary is not part of it.</p>}</div>
+          {surgeon ? <span className="note-pill">{`As received: Earth is about ${delayWords(delayMin(v.day))} behind today`}</span> : <Tag data="sim" />}</div>
 
-      <section className={`panel panel--tight ${far.length ? 'panel--act' : ''}`} aria-label="Worth a second look">
-        <div className="t-label">Worth a second look</div>
-        {far.length === 0
-          ? <p className="t-stmt-sm">Everything measured here is inside its line.</p>
-          : <ul className="plain-list">{far.map(r => <li key={r.def.id} className="t-stmt-sm">{`${r.def.name}: ${fmt(r, r.last!.v)} ${r.def.unit}. ${r.statusText}.`}</li>)}</ul>}
-        {once.length > 0 && <p className="t-small">{`Left alone for now: ${once.map(r => r.def.name.toLowerCase()).join(', ')}. One reading outside a line is not a pattern.`}</p>}
-        {surgeon && far.length > 0 && <p className="t-small">Outside a line is not a verdict. The crew member sees the same list and can add a note in their own words.</p>}
-        {!surgeon && far.length > 0 && (
-          <>
-            <p className="t-small">Outside a line is not a verdict. Your flight surgeon already sees these numbers. You can add a note in your own words; you see and edit it first.</p>
-            <div className="btn-row">
-              <button className="btn btn--primary" onClick={() => talk('body')}>Crew medical officer</button>
-              <button className="btn" onClick={() => talk('sharing')}>Flight surgeon</button>
-            </div>
-          </>
-        )}
-      </section>
+        <section className={`panel panel--tight ${far.length ? 'panel--act' : ''}`} aria-label="Worth a second look">
+          <div className="t-label">Worth a second look</div>
+          {far.length === 0
+            ? <p className="t-stmt-sm">Everything measured here is inside its line.</p>
+            : <ul className="plain-list">{far.map(r => <li key={r.def.id} className="t-stmt-sm">{`${r.def.name}: ${fmt(r, r.last!.v)} ${r.def.unit}. ${r.statusText}.`}</li>)}</ul>}
+          {once.length > 0 && <p className="t-small">{`Left alone for now: ${once.map(r => r.def.name.toLowerCase()).join(', ')}. One reading outside a line is not a pattern.`}</p>}
+          {surgeon && far.length > 0 && <p className="t-small">Outside a line is not a verdict. The crew member sees the same list and can add a note in their own words.</p>}
+          {!surgeon && far.length > 0 && (
+            <>
+              <p className="t-small">Outside a line is not a verdict. Your flight surgeon already sees these numbers. You can add a note in your own words; you see and edit it first.</p>
+              <div className="btn-row">
+                <button className="btn btn--primary" onClick={() => talk('body')}>Crew medical officer</button>
+                <button className="btn" onClick={() => talk('sharing')}>Flight surgeon</button>
+              </div>
+            </>
+          )}
+        </section>
 
-      <div className="trend-tools">
-        <p className="t-small">{`Last 28 days. The shaded band is the inside of each line; the dashed line is ${surgeon ? 'the crew member’s' : 'your'} own usual. A ring marks a reading outside its line. Hover or tap a chart for values.`}</p>
-        <button className="btn btn--sm" onClick={() => setTable(t => !t)}>{table ? 'Show charts' : 'Show as table'}</button>
-      </div>
+        <div className="trend-tools">
+          <p className="t-small">{`Last 28 days. The shaded band is the inside of each line; the dashed line is ${surgeon ? 'the crew member’s' : 'your'} own usual. A ring marks a reading outside its line. Hover or tap a chart for values.`}</p>
+          <button className="btn btn--sm" onClick={() => setTable(t => !t)}>{table ? 'Show charts' : 'Show as table'}</button>
+        </div>
+        </>
+      )}
 
       {table ? <TableView rs={all} day={v.day} /> : SECTIONS.map(sec => {
         const rs = sec.ids.map(id => all.find(r => r.def.id === id)).filter((r): r is Reading => !!r);
@@ -156,8 +168,9 @@ export function Body({ surgeon = false }: { surgeon?: boolean }) {
         );
       })}
 
-      <section className="panel" aria-label="Where each line comes from">
-        <h2 className="t-head">Where each line comes from</h2>
+      {surgeon ? (
+        <details className="numbers lines-fold">
+          <summary className="t-head link-tap">Where each line comes from</summary>
         <div className="table-scroll">
           <table className="real-table">
             <thead><tr><th className="t-label" scope="col">Measure</th><th className="t-label" scope="col">Worth a second look when</th><th className="t-label" scope="col">Taken from</th><th className="t-label" scope="col"> </th></tr></thead>
@@ -170,7 +183,24 @@ export function Body({ surgeon = false }: { surgeon?: boolean }) {
         </div>
         <p className="t-small">{`How the reaction line was set: in NASA’s bed-rest records ${NASA.people} healthy volunteers took ${NASA.sessions} tests after their own usual was fixed. Nobody was unwell, so every crossing is a false alert. A single test crossed the line in ${pct(NASA.single)} of tests (95% interval ${ci(NASA.singleCI)}); two in a row did in ${pct(NASA.twoInRow, 1)} (${ci(NASA.twoInRowCI, 1)}). Replayed on one volunteer’s ${NASA.aresSessions} simple reaction tests, the same line gave ${pct(NASA.aresSingle, 1)} and ${pct(NASA.aresTwoInRow, 1)}. These records show how often the line fires in well people. They cannot show how often it catches a real change.`}</p>
         <p className="t-small">The collar-worn monitor is modelled on NASA’s Personal CO2 Monitor, flown as a technology demonstration on the ISS. No published figure was found for how far worn readings sit above cabin readings, so the values here are illustrative. 3.0 mmHg is about 3,900 parts per million at sea-level cabin pressure.</p>
-      </section>
+        </details>
+      ) : (
+        <section className="panel" aria-label="Where each line comes from">
+          <h2 className="t-head">Where each line comes from</h2>
+          <div className="table-scroll">
+            <table className="real-table">
+              <thead><tr><th className="t-label" scope="col">Measure</th><th className="t-label" scope="col">Worth a second look when</th><th className="t-label" scope="col">Taken from</th><th className="t-label" scope="col"> </th></tr></thead>
+              <tbody>
+                {all.map(r => (
+                  <tr key={r.def.id}><th scope="row" className="t-body">{r.def.name}</th><td className="t-body">{r.def.rule}</td><td className="t-small">{r.def.from}</td><td><Tag>{BASIS_LABEL[r.def.basis]}</Tag></td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="t-small">{`How the reaction line was set: in NASA’s bed-rest records ${NASA.people} healthy volunteers took ${NASA.sessions} tests after their own usual was fixed. Nobody was unwell, so every crossing is a false alert. A single test crossed the line in ${pct(NASA.single)} of tests (95% interval ${ci(NASA.singleCI)}); two in a row did in ${pct(NASA.twoInRow, 1)} (${ci(NASA.twoInRowCI, 1)}). Replayed on one volunteer’s ${NASA.aresSessions} simple reaction tests, the same line gave ${pct(NASA.aresSingle, 1)} and ${pct(NASA.aresTwoInRow, 1)}. These records show how often the line fires in well people. They cannot show how often it catches a real change.`}</p>
+          <p className="t-small">The collar-worn monitor is modelled on NASA’s Personal CO2 Monitor, flown as a technology demonstration on the ISS. No published figure was found for how far worn readings sit above cabin readings, so the values here are illustrative. 3.0 mmHg is about 3,900 parts per million at sea-level cabin pressure.</p>
+        </section>
+      )}
     </>
   );
 }

@@ -53,10 +53,12 @@ Orbits are taken as circular and in one plane, so a real trajectory would differ
 
 ## Flight surgeon view, and what breaks confidentiality
 
-The Demo story bar has a switch: **Astronaut view / Flight surgeon view**. The flight surgeon view has two pages.
+The Demo story bar has a switch: **Astronaut view / Flight surgeon view**. The flight surgeon view is one page, a dashboard, read top to bottom:
 
-- **Received:** every note addressed to the flight surgeon, the lines agreed before launch with any note each one sent, and a list of what is not shared.
-- **Body trends:** always open to the flight surgeon. The same measured charts the astronaut sees, worded for the surgeon, with no send buttons because nothing needs sending.
+1. **Alerts, only when confirmed.** The section appears only when a line has actually sent a note in the last 7 days. An imminent-risk alert gets a shield icon, one line of facts, and the exact note folded away. A crossed negotiable line is one short row with a triangle icon. Lines that have not been crossed are never mentioned.
+2. **Daily SBAR.** A strip of the last 14 days, each with an icon (tick: nothing to act on; triangle: worth a look; shield: imminent-risk alert). Picking a day shows its Situation, Background, Assessment and Recommendation. The text comes from fixed prototype rules over the body trends and the notes received, never from the diary.
+3. **Body trends.** The same measured charts the astronaut sees, always shared, with a small key and no explanatory text.
+4. **Folded at the bottom:** earlier alerts, changes to agreed lines, and what is not shared.
 
 What is shared, and when:
 
