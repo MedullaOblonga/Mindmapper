@@ -55,7 +55,7 @@ export function Shell({ children }: { children: ReactNode }) {
       <Toast />
     </div>
   );
-  if (loc.pathname.startsWith('/check')) return <>{children}<Overlays /></>;
+  if (loc.pathname.startsWith('/check') || loc.pathname.startsWith('/cbt')) return <>{children}<Overlays /></>;   // focused, full-screen flows
   return (
     <div className="app">
       <BedtimeLight v={v} />

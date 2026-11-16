@@ -4,7 +4,7 @@ import { bodySeries, CO2_LIMIT } from './body';
 import { pastMidnightRun } from './signs';
 import { withThreshold } from './rules';
 import type { AppEvent } from '../state/events';
-import { entryMatches } from './safety';
+import { CONCERN_WORDS, entryConcern, type Concern } from './safety';
 import type { Entry, Scenario, ShareLogEntry, ShareRule } from '../types';
 
 /* Lines agreed before launch (sharing level 3).
@@ -34,25 +34,25 @@ export function co2Runs(s: Scenario, day: number): number[] {
 
 export interface Crossing { day: number; message: string; ruleId: string; fixed: boolean; }
 
-export const entryNote = (day: number) => `Safety note agreed before launch: a diary entry on day ${D(day)} matched the safety line for risk to self or others. The crew medical officer has been told. No diary content is included.`;
+export const entryNote = (day: number, concern: Concern = 'self') => `Safety note agreed before launch: a diary entry on day ${D(day)} matched the safety line for ${CONCERN_WORDS[concern]}. The crew medical officer has been told. No diary content is included.`;
 
 /** Every note the agreed lines have sent up to `day`, and the most recent one from the last 7 days. */
 export function lineNotes(s: Scenario, day: number, evs: AppEvent[], ignoreNights: number[], entries: Entry[] = []): { log: ShareLogEntry[]; latest: Crossing | null } {
   const log: ShareLogEntry[] = [];
   let latest: Crossing | null = null;
-  const note = (rule: ShareRule, d: number, id: string, message: string, source?: ShareLogEntry['source']) => {
-    log.push({ id, day: d, to: FLIGHT_SURGEON, text: message, auto: true, kind: 'line', ruleId: rule.id, fixed: !!rule.fixed, source });
+  const note = (rule: ShareRule, d: number, id: string, message: string, source?: ShareLogEntry['source'], concern?: Concern) => {
+    log.push({ id, day: d, to: FLIGHT_SURGEON, text: message, auto: true, kind: 'line', ruleId: rule.id, fixed: !!rule.fixed, source, concern });
     if (day - d < 7 && (!latest || d >= latest.day)) latest = { day: d, message, ruleId: rule.id, fixed: !!rule.fixed };
   };
   const co2 = co2Runs(s, day);
   for (const rule of s.profile.shareRules.filter(r => r.auto)) {
     if (rule.metric === 'safetyReport') {
-      const both = (d: number, id: string, message: string, source: ShareLogEntry['source']) => {
-        log.push({ id: `${id}-cmo`, day: d, to: CMO, text: message, auto: true, kind: 'line', ruleId: rule.id, fixed: true, source });
-        note(rule, d, id, message, source);
+      const both = (d: number, id: string, message: string, source: ShareLogEntry['source'], concern?: Concern) => {
+        log.push({ id: `${id}-cmo`, day: d, to: CMO, text: message, auto: true, kind: 'line', ruleId: rule.id, fixed: true, source, concern });
+        note(rule, d, id, message, source, concern);
       };
       for (const e of evs) if (e.type === 'safety' && e.ruleId === rule.id) both(e.day, e.id, rule.message ?? '', 'report');
-      for (const e of entries) if (e.day <= day && entryMatches(e)) both(e.day, `auto-${rule.id}-${e.id}`, entryNote(e.day), 'entry');
+      for (const e of entries) { const c = e.day <= day ? entryConcern(e) : null; if (c) both(e.day, `auto-${rule.id}-${e.id}`, entryNote(e.day, c), 'entry', c); }
       continue;
     }
     const runOn = rule.metric === 'pastMidnightRun' ? (d: number) => pastMidnightRun(s.days, d, ignoreNights).run

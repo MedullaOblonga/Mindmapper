@@ -19,6 +19,7 @@ const REAL: { feature: string; data: DataTag | null; evidence: EvidenceTag | nul
   { feature: 'Body trends: wearable, cuff, blood and collar CO2 values', data: 'sim', evidence: null },
   { feature: 'Body trends: the reaction speed line, set from NASA bed-rest test records', data: 'nasa-method', evidence: 'exp' },
   { feature: 'Word check of diary entries for the one fixed safety line', data: null, evidence: 'exp' },
+  { feature: 'Guided CBT for thoughts of self-harm: preset text only, no AI; prototype wording not yet reviewed by a clinician', data: null, evidence: 'earth' },
   { feature: 'Flight surgeon view (demo switch): built only from notes addressed to the flight surgeon', data: 'sim', evidence: null },
   { feature: 'Delay to Earth in the header, computed from the orbits of Earth and Mars', data: 'sim', evidence: null },
   { feature: 'Your early signs and steps', data: 'sim', evidence: 'analog' },
@@ -37,12 +38,14 @@ const RESOURCES: { name: string; use: string; href?: string }[] = [
   { name: 'NASA-STD-3001 Volume 2 and the OCHMO technical brief on carbon dioxide; Law et al. 2014', use: 'The 3.0 mmHg line for CO2, set from ISS crew headache reports.', href: 'https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-004-carbon-dioxide.pdf' },
   { name: 'NASA Nutritional Status Assessment on the ISS (SMO 016E)', use: 'The body mass line: crews lose 2 to 5% of body mass early in flight, so more than 5% is outside that range.' },
   { name: 'NASA planetary fact sheets (NSSDCA)', use: 'Orbit sizes and periods of Earth and Mars, for the delay to Earth in the header.', href: 'https://nssdc.gsfc.nasa.gov/planetary/factsheet/' },
+  { name: 'Safety Planning Intervention (Stanley and Brown 2012; Stanley et al., JAMA Psychiatry 2018) and internet-based CBT for suicidal thoughts (Büscher et al., JAMA Network Open 2020)', use: 'The shape of the guided CBT: a six-part safety plan, and self-guided steps. Earth evidence only: the 2020 review of six trials found a small effect.', href: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC7189224' },
   { name: 'Acoustic noise chamber data (L04)', use: 'Background for the “Noisy nights” item.', href: 'https://doi.org/10.83263/z56c-ea13' },
 ];
 
 const NOT_CLAIMED = [
   'It does not diagnose anything or detect any condition.',
-  'Its word check for risk to self or others is a stand-in. It will miss real risk and match harmless sentences, and it has not been validated.',
+  'The guided CBT is not treatment and has not been tested in spaceflight. Its wording was written for this demo and has not been reviewed by a clinician.',
+  'Its word check for thoughts of self-harm, and for harm to others, is a stand-in. It will miss real risk and match harmless sentences, and it has not been validated.',
   'It does not prevent anything. It helps you notice a change early and choose what to do.',
   'It has not been tested on astronauts or in an analog mission.',
   'Its thresholds are placeholders. NASA lists validated thresholds as an open research gap.',

@@ -54,12 +54,13 @@ it('day 98: the imminent-risk alert sits on top, short, with the detail folded a
   await toSurgeon(u);
   const alerts = screen.getByRole('region', { name: 'Safety and agreed lines' });
   expect(within(alerts).getByRole('img', { name: 'Imminent-risk alert' })).toBeInTheDocument();
-  expect(within(alerts).getByText('Imminent risk to self or others')).toBeInTheDocument();
+  expect(within(alerts).getByText('Thoughts of self-harm')).toBeInTheDocument();
   expect(within(alerts).getByText('Day 98 · reached Earth 1 min 57 s later')).toBeInTheDocument();
   expect(within(alerts).getByText('Exact note and what was offered on board').closest('details')).not.toHaveAttribute('open');
   const sbar = screen.getByRole('group', { name: 'SBAR for day 98' });
-  expect(within(sbar).getByText('Imminent-risk note received today.')).toBeInTheDocument();
-  expect(within(sbar).getByText(/raised by a word check of the diary\. Not confirmed\./)).toBeInTheDocument();
+  expect(within(sbar).getByText('Thoughts of self-harm: alert received today.')).toBeInTheDocument();
+  expect(within(sbar).getByText('Preset guided CBT and a safety plan were offered on board.')).toBeInTheDocument();
+  expect(within(sbar).getByText('Possible thoughts of self-harm, raised by a word check of the diary. Not confirmed.')).toBeInTheDocument();
   expect(within(sbar).getByText(/Confirm with Mei, the crew medical officer/)).toBeInTheDocument();
   expect(document.querySelector('main')!.textContent).not.toContain('better off without me');
 });
@@ -91,7 +92,7 @@ it('one page: the daily SBAR sits above the body trends, and any of the last 14 
   const strip = screen.getByRole('group', { name: 'Last 14 days' });
   expect(within(strip).getAllByRole('button')).toHaveLength(14);
   await u.click(within(strip).getByRole('button', { name: 'Day 104: Imminent-risk alert' }));
-  expect(within(screen.getByRole('group', { name: 'SBAR for day 104' })).getByText(/Imminent-risk note received 6 days ago\./)).toBeInTheDocument();
+  expect(within(screen.getByRole('group', { name: 'SBAR for day 104' })).getByText(/Thoughts of self-harm: alert received 6 days ago\./)).toBeInTheDocument();
   const text = document.querySelector('main')!.textContent!;
   expect(text).not.toMatch(/\b[Yy]our\b/);
   for (const s of buildScenario('B').entries.flatMap(e => e.segments)) expect(text).not.toContain(s.text);

@@ -16,6 +16,7 @@ export type AppEvent = { id: string; day: number } & (
   | { type: 'activity'; key: 'dinners' | 'greenhouse' | 'gym' | 'other'; label: string }
   | { type: 'rule-change'; ruleId: string; text: string; atLeast: number }
   | { type: 'safety'; ruleId: string }
+  | { type: 'cbt'; before: { thoughts: number; safe: number }; after: { thoughts: number; safe: number }; plan: { thought: string; balance: string[]; parts: Record<string, string[]> } }
   | { type: 'dismiss'; what: 'tonight' | 'cue' }
   | { type: 'walkthrough' }
   | { type: 'questionnaire'; kind: string; answers: number[] }

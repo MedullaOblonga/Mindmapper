@@ -12,11 +12,11 @@ export type Level = 'ok' | 'look' | 'alert';
 export const LEVEL_LABEL: Record<Level, string> = { ok: 'Nothing to act on', look: 'Worth a look', alert: 'Imminent-risk alert' };
 export const ACTIVE_DAYS = 7;
 
-export interface Alert { id: string; day: number; ruleId: string; fixed: boolean; label: string; text: string; source?: ShareLogEntry['source']; }
+export interface Alert { id: string; day: number; ruleId: string; fixed: boolean; label: string; text: string; source?: ShareLogEntry['source']; concern?: ShareLogEntry['concern']; }
 
 /** A short name for a line that sent a note. Lines that have not sent one are never shown to the flight surgeon. */
 function alertLabel(rule: ShareRule | undefined, e: ShareLogEntry): string {
-  if (e.fixed) return 'Imminent risk to self or others';
+  if (e.fixed) return e.concern === 'self' ? 'Thoughts of self-harm' : e.concern === 'others' ? 'Risk of harm to others' : 'Imminent risk to self or others';
   const n = e.text.match(/\b(\d+) (?:nights|days)/)?.[1] ?? String(rule?.atLeast ?? '');
   if (rule?.metric === 'pastMidnightRun') return `Sleep past midnight, ${n} nights running`;
   if (rule?.metric === 'co2Run') return `Collar CO2 at or above 3.0 mmHg, ${n} in a row`;
@@ -26,7 +26,7 @@ function alertLabel(rule: ShareRule | undefined, e: ShareLogEntry): string {
 /** Confirmed alerts only: notes that an agreed line actually sent to the flight surgeon, up to `day`. Newest first. */
 export function alertsUpTo(log: ShareLogEntry[], rules: ShareRule[], day: number): Alert[] {
   return surgeonLog(log).filter(e => e.kind === 'line' && e.day <= day)
-    .map(e => ({ id: e.id, day: e.day, ruleId: e.ruleId ?? '', fixed: !!e.fixed, label: alertLabel(rules.find(r => r.id === e.ruleId), e), text: e.text, source: e.source }))
+    .map(e => ({ id: e.id, day: e.day, ruleId: e.ruleId ?? '', fixed: !!e.fixed, label: alertLabel(rules.find(r => r.id === e.ruleId), e), text: e.text, source: e.source, concern: e.concern }))
     .sort((a, b) => b.day - a.day || Number(b.fixed) - Number(a.fixed));
 }
 export const isActive = (a: Alert, day: number) => day - a.day < ACTIVE_DAYS;
@@ -57,7 +57,7 @@ export function sbarFor(day: number, readings: Reading[], alerts: Alert[], messa
   const level: Level = risk ? 'alert' : far.length || agreed.length ? 'look' : 'ok';
 
   const parts: string[] = [];
-  if (risk) parts.push(`Imminent-risk note received ${ago(day - risk.day)}.`);
+  if (risk) parts.push(`${risk.label}: alert received ${ago(day - risk.day)}.`);
   if (far.length) parts.push(`${far.length} ${far.length === 1 ? 'measure' : 'measures'} outside ${far.length === 1 ? 'its line' : 'their lines'}: ${list(names)}.`);
   for (const a of agreed) parts.push(`${a.label} (day ${D(a.day)}).`);
   if (!parts.length) parts.push('All measures inside their lines. No alerts.');
@@ -69,7 +69,7 @@ export function sbarFor(day: number, readings: Reading[], alerts: Alert[], messa
   if (recent) background.push(`${recent} ${recent === 1 ? 'note' : 'notes'} from the crew member this week.`);
 
   const assessment = risk
-    ? (risk.source === 'entry' ? 'Possible risk to self or others, raised by a word check of the diary. Not confirmed.' : 'Risk to self or others, reported on board.')
+    ? (risk.source === 'entry' ? `Possible ${risk.concern === 'others' ? 'risk of harm to others' : 'thoughts of self-harm'}, raised by a word check of the diary. Not confirmed.` : 'Risk to self or others, reported on board.')
     : far.length >= 2 ? 'Two or more measures have moved together. This is a pattern, not a single reading.'
     : far.length === 1 ? 'One measure is outside its line. Nothing else has moved with it.'
     : agreed.length ? 'An agreed line was crossed. Measures are otherwise inside their lines.'
@@ -78,6 +78,7 @@ export function sbarFor(day: number, readings: Reading[], alerts: Alert[], messa
 
   const recommendation: string[] = [];
   if (risk) recommendation.push(`Confirm with ${CMO_NAME}, the crew medical officer, who is with the crew member. A reply takes ${fmtDelay(delayMin(day))} each way.`);
+  if (risk && risk.concern === 'self') recommendation.push('Preset guided CBT and a safety plan were offered on board.');
   for (const r of far) { const t = ADVICE[r.def.id]; if (t && !recommendation.includes(t)) recommendation.push(t); }
   if (agreed.some(a => a.ruleId === 'co2collar') && !far.some(r => r.def.id.startsWith('co2'))) recommendation.push(ADVICE.co2sleep!);
   if (agreed.some(a => a.ruleId === 'midnight5') && !far.some(r => r.def.id === 'sleep')) recommendation.push(ADVICE.sleep!);
