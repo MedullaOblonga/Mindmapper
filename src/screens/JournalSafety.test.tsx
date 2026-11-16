@@ -26,10 +26,11 @@ it('the astronaut can add their own words, which reach the flight surgeon view',
   await u.type(draft, 'I was worn out. Mei and I have talked.');
   await u.click(screen.getByRole('button', { name: 'Send' }));
   await u.click(screen.getByRole('switch', { name: 'Flight surgeon view' }));
-  const fixed = within(screen.getByRole('region', { name: 'Safety and agreed lines' })).getAllByRole('row')[1];
-  expect(within(fixed).getByText(/Sent on day 98/)).toBeInTheDocument();
-  expect(within(fixed).getByText('Offered on board, automatically')).toBeInTheDocument();
-  expect(within(fixed).getByText(/Raised by an on-device word check of the diary/)).toBeInTheDocument();
+  const alerts = screen.getByRole('region', { name: 'Safety and agreed lines' });
+  expect(within(alerts).getByText('Imminent risk to self or others')).toBeInTheDocument();
+  expect(within(alerts).getByText(/Day 98 · reached Earth/)).toBeInTheDocument();
+  expect(within(alerts).getByText('Diary word check. Not confirmed.')).toBeInTheDocument();
+  expect(within(alerts).getByText(/Mei, the crew medical officer, comes to talk now/)).toBeInTheDocument();   // inside the fold
   expect(within(screen.getByRole('region', { name: 'Sent by the crew member' })).getByText(/I was worn out\. Mei and I have talked\./)).toBeInTheDocument();
   expect(document.querySelector('main')!.textContent).not.toContain('better off without me');
 });

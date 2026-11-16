@@ -922,3 +922,15 @@ This supersedes "nothing leaves this device unless you send it".
 - **Still private:** diary topics and how things felt, cards and answers, wrist presses, the ledger, and notes to other people.
 
 Wording changed to match: the top bar reads "Your diary stays on this device. Only you can read it."; Sharing level 1 is "Always: what is measured" and level 2 is "Your diary: only when you choose"; the share log says it lists notes, not the routine body data. The day 98 chapter is renamed "Day 98 · Imminent risk reported" and opens the Journal.
+
+## Addendum: flight surgeon dashboard, one page, with a daily SBAR
+
+This replaces the two-page flight surgeon view and its table of agreed lines.
+
+**Order on the page.** (1) "Safety and agreed lines", rendered only when a line sent a note in the last 7 days. (2) "Daily overview": a 14-day strip of status icons and one SBAR card for the picked day. (3) Notes the crew member chose to send, only if there are any. (4) Body trends, compact: a heading, a three-item key, the charts. (5) Folded: earlier alerts, rule changes, what is not shared, where each line comes from.
+
+**Alerts.** `alertsUpTo` in `src/logic/sbar.ts` lists only notes that an agreed line actually sent. A line that has not been crossed is never shown to the flight surgeon. Each alert has a short label; the long note text sits behind a fold (imminent risk) or in a tooltip (negotiable lines).
+
+**Visual cues.** Status is carried by icon shape: tick, triangle, shield. The triangle and shield use `--act`, the design system's one attention colour; no new colour is added. This is a deliberate exception to "colour never carries status", limited to the flight surgeon view.
+
+**SBAR.** `sbarFor(day, readings, alerts, messages)` returns a level (`ok`, `look`, `alert`) and four short texts from fixed prototype rules: imminent-risk alert active → alert; any measure sustained outside its line or a negotiable alert active → look; otherwise ok. It reads only body trends and notes addressed to the flight surgeon.
