@@ -361,3 +361,15 @@ h2.t-head{margin:0}
 .lines-fold{padding:0 var(--s2)}
 @media (max-width:1023px){.sbar-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:699px){.sbar-grid{grid-template-columns:minmax(0,1fr)}}
+
+/* Today: the calm safety notice. No attention colour; people use the crew topic colour. */
+.calm{gap:var(--s4)}
+.calm-path{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s3);position:relative}
+.calm-path::before{content:"";position:absolute;left:16.6%;right:16.6%;top:21px;border-top:2px dashed var(--border)}
+.calm-path>li{display:flex;flex-direction:column;align-items:center;gap:var(--s1);text-align:center;position:relative}
+.calm-node{width:var(--tap);height:var(--tap);border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--raised);border:1px solid var(--border);color:var(--ink)}
+.calm-node--crew{background:var(--t-crew);border-color:var(--t-crew);color:var(--bg)}
+.calm-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s3)}
+.calm-steps>li{display:flex;flex-direction:column;align-items:flex-start;gap:var(--s2);padding:var(--s3) var(--s4);border-radius:var(--r-sm);background:var(--raised);color:var(--ink-muted)}
+.calm-steps>li .t-body{color:var(--ink)}
+@media (max-width:699px){.calm-steps{grid-template-columns:minmax(0,1fr)}.calm-steps>li{flex-direction:row;align-items:center}}

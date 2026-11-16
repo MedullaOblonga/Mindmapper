@@ -934,3 +934,15 @@ This replaces the two-page flight surgeon view and its table of agreed lines.
 **Visual cues.** Status is carried by icon shape: tick, triangle, shield. The triangle and shield use `--act`, the design system's one attention colour; no new colour is added. This is a deliberate exception to "colour never carries status", limited to the flight surgeon view.
 
 **SBAR.** `sbarFor(day, readings, alerts, messages)` returns a level (`ok`, `look`, `alert`) and four short texts from fixed prototype rules: imminent-risk alert active → alert; any measure sustained outside its line or a negotiable alert active → look; otherwise ok. It reads only body trends and notes addressed to the flight surgeon.
+
+## Addendum: the calm safety notice on Today
+
+Today shows the fixed-line notice in a short, visual form (`<SafetyNotice calm />`); the Journal keeps the full wording beside the entry.
+
+- One sentence: "{crew medical officer} knows, and is coming to talk."
+- A three-stop path with icons: You → crew medical officer (told at once) → Flight surgeon (short note, with the delay).
+- "What helps now" as three icon tiles from `reliefSteps(...).short`.
+- The exact note, the word-check caveat, the share log and the lines sit behind "What was sent, word for word".
+- One button: "Add your own words".
+
+It is a plain panel, not `panel--act`. The crew medical officer's stop uses the crew topic colour; no attention colour is used, and the words risk, alert and imminent do not appear until the fold is opened. While the notice is up, Today's lede reads "Your week looks like your own usual." so the page does not also say the tool is staying quiet.

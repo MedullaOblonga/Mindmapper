@@ -42,6 +42,26 @@ it('sharing, day 98: the fixed line reads crossed and the note is in the share l
   expect(within(log).getAllByText(/a diary entry on day 98 matched the safety line/)).toHaveLength(2);   // medical officer and flight surgeon
 });
 
+it('today says it calmly: few words, who was told, what helps, and the exact note one tap away', async () => {
+  const u = userEvent.setup();
+  open(98, '#/today');
+  const n = screen.getByRole('region', { name: 'Safety line' });
+  expect(within(n).getByText('Mei knows, and is coming to talk.')).toBeInTheDocument();
+  const path = within(n).getByRole('list', { name: 'Who was told' });
+  expect(within(path).getAllByRole('listitem').map(li => li.textContent)).toEqual(['Youwrote, day 98', 'Meitold at once', 'Flight surgeonshort note, 1 min 57 s away']);
+  for (const t of ['Mei comes to talk', 'Greenhouse time, 15 min', 'Ana double-checks your work']) expect(within(n).getByText(t)).toBeInTheDocument();
+  expect(n.className).not.toContain('panel--act');
+  const fold = within(n).getByText('What was sent, word for word').closest('details')!;
+  expect(fold).not.toHaveAttribute('open');
+  const face = n.cloneNode(true) as HTMLElement;                                              // what is on show before the fold is opened
+  face.querySelectorAll('details > :not(summary)').forEach(el => el.remove());
+  expect(face.textContent).not.toMatch(/risk|harm|danger|alert|imminent/i);                   // nothing alarming on the face of it
+  expect(face.textContent!.split(/\s+/).length).toBeLessThan(60);
+  expect(screen.queryByText(/The tool stays quiet until something does/)).toBeNull();
+  await u.click(within(n).getByRole('button', { name: 'Add your own words' }));
+  expect((screen.getByLabelText(/Your message/) as HTMLTextAreaElement).value).toBe('About the safety note sent on day 98: ');
+});
+
 it('today shows the notice for 7 days, then goes quiet again', () => {
   const r = open(98, '#/today');
   expect(screen.getByRole('region', { name: 'Safety line' })).toBeInTheDocument();
