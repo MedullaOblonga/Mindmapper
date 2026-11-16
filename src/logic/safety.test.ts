@@ -19,8 +19,8 @@ it('day 98: the note goes to the medical officer and the flight surgeon, without
   const v = buildView(98, [], null);
   expect(v.shareLog.map(e => e.to).sort()).toEqual(['Crew medical officer (Mei)', FLIGHT_SURGEON]);
   const note = surgeonLog(v.shareLog)[0];
-  expect(note).toMatchObject({ day: 98, auto: true, kind: 'line', ruleId: 'risk', fixed: true, source: 'entry' });
-  expect(note.text).toBe('Safety note agreed before launch: a diary entry on day 98 matched the safety line for risk to self or others. The crew medical officer has been told. No diary content is included.');
+  expect(note).toMatchObject({ day: 98, auto: true, kind: 'line', ruleId: 'risk', fixed: true, source: 'entry', concern: 'self' });
+  expect(note.text).toBe('Safety note agreed before launch: a diary entry on day 98 matched the safety line for thoughts of self-harm. The crew medical officer has been told. No diary content is included.');
   const words = v.entries.find(e => e.day === 98)!.segments.map(s => s.text);
   for (const w of words) expect(v.shareLog.map(e => e.text).join(' ')).not.toContain(w);
   expect(v.lineCrossed).toMatchObject({ day: 98, fixed: true });

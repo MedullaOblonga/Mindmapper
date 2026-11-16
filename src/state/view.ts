@@ -156,7 +156,9 @@ export function buildView(day: number, events: AppEvent[], override: Branch | nu
   const checks = baseChecks.map(c => (fxAll.uncounted.includes(`c${c.day}`) ? { ...c, counts: false } : c));
 
   // Lines agreed before launch (level 3), checked daily.
-  const lines = lineNotes(s, day, evs, fxAll.ignoreNights, entries);
+  // A real astronaut's published journal is never run through the self-harm word check: only the demo story and the user's own entries are.
+  const checkable = source === 'demo' ? entries : entries.filter(e => e.origin === 'user');
+  const lines = lineNotes(s, day, evs, fxAll.ignoreNights, checkable);
   const shareLog: ShareLogEntry[] = lines.log;
   const lineCrossed: View['lineCrossed'] = lines.latest;
   for (const e of evs) {

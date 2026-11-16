@@ -4,6 +4,7 @@ import { D } from '../config';
 import { useUI } from '../state/ui';
 import { CMO_NAME } from '../logic/lines';
 import { recentSafetyNotes, reliefSteps, type ReliefStep } from '../logic/safety';
+import { CBT_MINUTES } from '../data/cbt';
 import { delayMin, delayWords, fmtDelay } from '../lib/delay';
 import { Tag } from './ui';
 import type { View } from '../state/view';
@@ -18,6 +19,7 @@ function CalmNotice({ v }: { v: View }) {
   const note = recentSafetyNotes(v.shareLog, v.day)[0];
   if (!note) return null;
   const fromEntry = note.source === 'entry';
+  const selfHarm = note.concern === 'self', hasPlan = v.events.some(e => e.type === 'cbt');
   const steps = reliefSteps(v.scenario.profile);
   return (
     <section className="panel calm" aria-label="Safety line">
@@ -40,7 +42,11 @@ function CalmNotice({ v }: { v: View }) {
           <button className="btn btn--sm btn--quiet" onClick={() => nav('/profile/sharing')}>See the lines</button>
         </div>
       </details>
-      <div className="btn-row"><button className="btn" onClick={() => ui.openTalk({ route: 'sharing', draft: `About the safety note sent on day ${D(note.day)}: ` })}>Add your own words</button></div>
+      <div className="btn-row">
+        {selfHarm && <button className="btn btn--primary" onClick={() => nav('/cbt')}>{hasPlan ? 'Open my plan' : 'Start guided CBT'}</button>}
+        <button className="btn" onClick={() => ui.openTalk({ route: 'sharing', draft: `About the safety note sent on day ${D(note.day)}: ` })}>Add your own words</button>
+      </div>
+      {selfHarm && !hasPlan && <p className="t-small">{`About ${CBT_MINUTES} minutes. Preset steps, written in advance. No AI.`}</p>}
     </section>
   );
 }
@@ -62,7 +68,7 @@ function FullNotice({ v }: { v: View }) {
     <section className="panel panel--act" aria-label="Safety line">
       <div className="panel-title-row"><div className="t-label act-text">Safety line · agreed before launch</div>{fromEntry && <Tag evidence="exp" />}</div>
       <p className="t-stmt-sm">{fromEntry
-        ? `Something you wrote on day ${D(note.day)} matched the safety line for risk to yourself or to others.`
+        ? `Something you wrote on day ${D(note.day)} matched the safety line for ${note.concern === 'others' ? 'a risk of harm to others' : 'thoughts of self-harm'}.`
         : `On day ${D(note.day)} an imminent risk was reported.`}</p>
       <p className="t-body">{`${CMO_NAME}, your crew medical officer, was told at once. Your flight surgeon was sent this, and only this:`}</p>
       <p className="t-quote">{`“${note.text}”`}</p>
@@ -71,7 +77,8 @@ function FullNotice({ v }: { v: View }) {
       <ol className="steps t-body">{steps.map(s => <li key={s.id}>{s.text.replace('the crew member’s own list', 'your own list')}</li>)}</ol>
       <p className="t-small">{`These are supports, not treatment. ${CMO_NAME} decides the next step with you.`}</p>
       <div className="btn-row">
-        <button className="btn btn--primary" onClick={() => ui.openTalk({ route: 'sharing', draft: `About the safety note sent on day ${D(note.day)}: ` })}>Add your own words for the flight surgeon</button>
+        {note.concern === 'self' && <button className="btn btn--primary" onClick={() => nav('/cbt')}>Start guided CBT</button>}
+        <button className="btn" onClick={() => ui.openTalk({ route: 'sharing', draft: `About the safety note sent on day ${D(note.day)}: ` })}>Add your own words for the flight surgeon</button>
         <button className="btn" onClick={() => ui.openShareLog(true)}>Open share log</button>
         <button className="btn btn--quiet" onClick={() => nav('/profile/sharing')}>See the lines</button>
       </div>

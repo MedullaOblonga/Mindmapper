@@ -12,9 +12,9 @@ const day = (d: number, b: 'A' | 'B' = 'B') => {
 
 it('alerts are only lines that sent a note, with short labels', () => {
   expect(day(60).alerts).toEqual([]);
-  expect(day(98).alerts.map(a => a.label)).toEqual(['Imminent risk to self or others']);
+  expect(day(98).alerts.map(a => a.label)).toEqual(['Thoughts of self-harm']);
   expect(day(119).alerts.map(a => [a.day, a.label])).toEqual([
-    [114, 'Sleep past midnight, 5 nights running'], [100, 'Collar CO2 at or above 3.0 mmHg, 2 in a row'], [98, 'Imminent risk to self or others']]);
+    [114, 'Sleep past midnight, 5 nights running'], [100, 'Collar CO2 at or above 3.0 mmHg, 2 in a row'], [98, 'Thoughts of self-harm']]);
 });
 it('levels: quiet, pattern, alert', () => {
   expect(day(60).sbar).toMatchObject({ level: 'ok', situation: 'All measures inside their lines. No alerts.', assessment: 'On the usual pattern.', recommendation: ['No action. Routine review.'] });

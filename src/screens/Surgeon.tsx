@@ -39,7 +39,7 @@ function RiskAlert({ a, v }: { a: Alert; v: View }) {
         <details className="numbers">
           <summary className="t-head link-tap">Exact note and what was offered on board</summary>
           <p className="t-quote pre">{a.text}</p>
-          <ul className="plain-list t-small">{reliefSteps(v.scenario.profile).map(s => <li key={s.id}>{s.text}</li>)}</ul>
+          <ul className="plain-list t-small">{reliefSteps(v.scenario.profile).map(s => <li key={s.id}>{s.text}</li>)}{a.concern === 'self' && <li>Preset self-guided CBT with a safety plan. No AI writes any of it.</li>}</ul>
         </details>
       </div>
     </div>

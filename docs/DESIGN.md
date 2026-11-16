@@ -946,3 +946,18 @@ Today shows the fixed-line notice in a short, visual form (`<SafetyNotice calm /
 - One button: "Add your own words".
 
 It is a plain panel, not `panel--act`. The crew medical officer's stop uses the crew topic colour; no attention colour is used, and the words risk, alert and imminent do not appear until the fold is opened. While the notice is up, Today's lede reads "Your week looks like your own usual." so the page does not also say the tool is staying quiet.
+
+## Addendum: thoughts of self-harm, and preset guided CBT
+
+**The concern is named.** The word check (`concernIn` in `src/logic/safety.ts`) returns `self` (thoughts of self-harm) or `others`. The note, the flight surgeon's alert label and the SBAR use it: "Thoughts of self-harm". Both the crew medical officer and the flight surgeon are told. A person's own report from the Sharing screen keeps the general wording. Entries from real astronauts' published journals (`origin: 'nasa-journal'`) are excluded from the check.
+
+**Guided CBT — `#/cbt`.** Full-screen, like the scheduled check. Opened from "Start guided CBT" on the Today notice (and the Journal notice) when the concern is `self`.
+
+- All text is fixed, in `src/data/cbt.ts`. No language model is called anywhere in the flow.
+- Steps: check-in (two 0 to 10 dials), six breaths (skippable), name the thought, weigh it (three fixed balancing statements per thought), safety plan (Stanley and Brown's six parts, pre-filled from the profile, plus a reason to keep going), second check-in, saved plan.
+- `CBT_URGENT`: thoughts 8 or more, or able-to-stay-safe 3 or less, shows a fixed message pointing to the crew medical officer. Placeholder values.
+- "I need {crew medical officer} now" is on every step and sends one line to the crew medical officer.
+- The result is one `cbt` event (ratings before and after, and the plan). It stays on the device. "Share my plan" sends the plan text to the crew medical officer only. The flight surgeon sees that CBT was offered, not whether it was done.
+- The Today notice keeps its calm face: the button reads "Start guided CBT", then "Open my plan" once a plan exists.
+
+The content is prototype wording and needs clinical review before any use beyond a demo.

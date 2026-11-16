@@ -79,6 +79,19 @@ The flight surgeon view never shows the diary, its topics, cards, wrist presses,
 
 A change to a negotiable line is itself sent to the flight surgeon.
 
+**Thoughts of self-harm, and the guided CBT.** In the demo the day 98 entry is a case of thoughts of self-harm. The crew medical officer and the flight surgeon are both told. Today shows a calm notice with a **Start guided CBT** button, which opens a full-screen, self-guided flow (`#/cbt`):
+
+1. Check in: how strong the thoughts are, and how able the astronaut feels to stay safe (0 to 10 each). A high answer points to the crew medical officer before any more steps.
+2. Six slow breaths, which can be skipped.
+3. Name the loudest thought, from a short list or in their own words.
+4. Weigh it: fixed balancing statements for that thought, or their own.
+5. A safety plan in the six parts of the Stanley and Brown Safety Planning Intervention, pre-filled from the astronaut's pre-launch profile, plus one reason to keep going.
+6. Check in again, then the saved plan.
+
+Every word in it is fixed text in `src/data/cbt.ts`. No language model is called, so nothing unplanned can be said during a crisis. An "I need Mei now" button is on every step. Answers stay on the device; the astronaut can choose to share the finished plan with the crew medical officer. The flight surgeon sees only that guided CBT was offered. The wording is a prototype and has not been reviewed by a clinician. The evidence is from Earth: a 2020 review of six trials of internet-based CBT found a small reduction in suicidal thoughts (SMD −0.29, 95% CI −0.40 to −0.19).
+
+Real astronauts' published journals in the other simulations are never run through this check; only the demo story and entries the user types are.
+
 **The word check.** `src/logic/safety.ts` holds a short list of phrases. It is a stand-in, like the topic tagger: it will miss real risk and match harmless sentences, and it has not been validated. When an entry matches, the astronaut sees a notice on Journal and Today for 7 days with the exact note that was sent, three relief steps built from their own pre-launch plan (the crew medical officer comes now; one item from their own list; a second checker on safety-critical work), and a button to add their own words for the flight surgeon. The flight surgeon view shows the note and the same relief steps, and says the match can be wrong.
 
 ## Run it locally

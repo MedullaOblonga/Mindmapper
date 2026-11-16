@@ -5,7 +5,7 @@ import type { Entry, Profile, ShareLogEntry } from '../types';
    A stand-in, like the keyword tagger. It runs on the device and only says "this entry matches".
    It will miss real risk and it will match harmless sentences; it has not been validated.
    The entry's words are never sent. Only the fact of a match is. */
-const PHRASES = [
+const SELF = [
   /\bbetter off without me\b/i,
   /\b(no|can(?:no|\u2019|')?t see (?:the|any)) point in (?:going on|living|any of (?:it|this))\b/i,
   /\bnot worth living\b/i,
@@ -13,10 +13,19 @@ const PHRASES = [
   /\bwish I (?:was|were) dead\b/i,
   /\b(?:end|ending) (?:it all|my life)\b/i,
   /\bsuicid/i,
-  /\b(?:kill|hurt|harm) (?:myself|him|her|them|someone)\b/i,
+  /\b(?:kill|hurt|harm) myself\b/i,
 ];
-export function matchesSafetyLine(text: string): boolean { return PHRASES.some(re => re.test(text)); }
-export function entryMatches(e: Entry): boolean { return e.segments.some(s => matchesSafetyLine(s.text)); }
+const OTHERS = [/\b(?:kill|hurt|harm) (?:him|her|them|someone)\b/i];
+/** 'self' = thoughts of self-harm; 'others' = risk of harm to someone else. Self wins when both appear. */
+export type Concern = 'self' | 'others';
+export function concernIn(text: string): Concern | null { return SELF.some(re => re.test(text)) ? 'self' : OTHERS.some(re => re.test(text)) ? 'others' : null; }
+export function matchesSafetyLine(text: string): boolean { return concernIn(text) !== null; }
+export function entryConcern(e: Entry): Concern | null {
+  const cs = e.segments.map(x => concernIn(x.text));
+  return cs.includes('self') ? 'self' : cs.includes('others') ? 'others' : null;
+}
+export function entryMatches(e: Entry): boolean { return entryConcern(e) !== null; }
+export const CONCERN_WORDS: Record<Concern, string> = { self: 'thoughts of self-harm', others: 'a risk of harm to others' };
 
 export interface ReliefStep { id: 'person' | 'own' | 'protect'; text: string; short: string; }   // short: a few words, said to the astronaut
 const nameOf = (id: string) => [...params.people.crew, ...params.people.home].find(p => p.id === id)?.name ?? id;

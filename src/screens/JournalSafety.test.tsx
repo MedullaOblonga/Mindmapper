@@ -9,7 +9,7 @@ const open = (day: number, hash: string) => { appStore.setState({ day }); window
 it('journal, day 98: the entry is marked and the notice shows what was sent and what helps', () => {
   open(98, '#/journal');
   const notice = screen.getByRole('region', { name: 'Safety line' });
-  expect(within(notice).getByText('Something you wrote on day 98 matched the safety line for risk to yourself or to others.')).toBeInTheDocument();
+  expect(within(notice).getByText('Something you wrote on day 98 matched the safety line for thoughts of self-harm.')).toBeInTheDocument();
   expect(within(notice).getByText(/a diary entry on day 98 matched the safety line.*No diary content is included\./)).toBeInTheDocument();
   expect(within(notice).getByText(/Mei, the crew medical officer, comes to talk now/)).toBeInTheDocument();
   expect(within(notice).getByText(/From your own list: greenhouse time, 15 minutes/)).toBeInTheDocument();
@@ -27,7 +27,7 @@ it('the astronaut can add their own words, which reach the flight surgeon view',
   await u.click(screen.getByRole('button', { name: 'Send' }));
   await u.click(screen.getByRole('switch', { name: 'Flight surgeon view' }));
   const alerts = screen.getByRole('region', { name: 'Safety and agreed lines' });
-  expect(within(alerts).getByText('Imminent risk to self or others')).toBeInTheDocument();
+  expect(within(alerts).getByText('Thoughts of self-harm')).toBeInTheDocument();
   expect(within(alerts).getByText(/Day 98 · reached Earth/)).toBeInTheDocument();
   expect(within(alerts).getByText('Diary word check. Not confirmed.')).toBeInTheDocument();
   expect(within(alerts).getByText(/Mei, the crew medical officer, comes to talk now/)).toBeInTheDocument();   // inside the fold

@@ -6,6 +6,7 @@ import { Patterns } from './screens/patterns/Patterns';
 import { Profile, LegacyPlan } from './screens/plan/Plan';
 import { About } from './screens/About';
 import { Check } from './screens/Check';
+import { Cbt } from './screens/Cbt';
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/plan/:tab" element={<LegacyPlan />} />
         <Route path="/about" element={<About />} />
         <Route path="/check" element={<Check />} />
+        <Route path="/cbt" element={<Cbt />} />
         <Route path="*" element={<Navigate to="/today" replace />} />
       </Routes>
     </Shell>
