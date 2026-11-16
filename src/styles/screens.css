@@ -340,3 +340,11 @@ h2.t-head{margin:0}
 .press-note p{margin:0}
 .recorded-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s3);margin-top:var(--s3)}
 .from-earlier .t-quote .swatch{margin-right:8px;vertical-align:middle}
+
+/* Simulation picker and real-journal replays */
+.story-source{display:inline-flex;flex:none}
+.story-select{min-height:32px;max-width:280px;padding:0 10px;border-radius:var(--r-pill);border:1px solid var(--line);background:var(--panel);color:var(--ink);font:500 13px/1 var(--sans)}
+.findings{display:flex;flex-direction:column;gap:var(--s3)}
+.finding p{margin:0}
+.finding .swatch{margin-right:8px;vertical-align:middle}
+.finding .tag{margin-left:8px}

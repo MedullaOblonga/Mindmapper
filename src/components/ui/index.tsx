@@ -4,7 +4,7 @@ import { groupDef } from '../../data/topics';
 import { useUI } from '../../state/ui';
 import type { DataTag, EvidenceTag, Felt, Group } from '../../types';
 
-export const DATA_TAG: Record<DataTag, string> = { 'nasa-replay': 'Replayed NASA data', 'nasa-method': 'NASA method', sim: 'Simulated', 'ai-sample': 'AI-written sample', user: 'Your entry' };
+export const DATA_TAG: Record<DataTag, string> = { 'nasa-replay': 'Replayed NASA data', 'nasa-method': 'NASA method', sim: 'Simulated', 'ai-sample': 'AI-written sample', user: 'Your entry', 'nasa-journal': 'Real astronaut journal (NASA)' };
 export const EVIDENCE_TAG: Record<EvidenceTag, string> = { 'nasa-use': 'Used by NASA crews', earth: 'Tested on Earth', analog: 'Tested in analog missions', exp: 'Experimental', placeholder: 'Placeholder threshold' };
 
 export function Tag({ data, evidence, children }: { data?: DataTag; evidence?: EvidenceTag; children?: ReactNode }) {

@@ -35,3 +35,13 @@ it('the wrist has a high and a low button', async () => {
   expect(ev && ev.type === 'mark' && ev.mood).toBe('low');
   expect(screen.queryByLabelText('Wrist device')).toBeNull();
 });
+it('the story bar switches to a real journal replay and back', async () => {
+  const { default: userEvent } = await import('@testing-library/user-event');
+  const u = userEvent.setup();
+  render(<HashRouter><App /></HashRouter>);
+  await u.selectOptions(screen.getByRole('combobox', { name: 'Simulation' }), 'williams');
+  expect(screen.getByText('Real journal · replayed')).toBeInTheDocument();
+  expect(screen.getByRole('combobox', { name: 'Jump to a journal entry' })).toBeInTheDocument();
+  await u.selectOptions(screen.getByRole('combobox', { name: 'Simulation' }), 'demo');
+  expect(screen.getByText('Demo story · simulated')).toBeInTheDocument();
+});

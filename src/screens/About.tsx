@@ -7,6 +7,7 @@ import type { DataTag, EvidenceTag } from '../types';
 
 const REAL: { feature: string; data: DataTag | null; evidence: EvidenceTag | null }[] = [
   { feature: 'Diary entries in the demo', data: 'ai-sample', evidence: null },
+  { feature: 'Diary entries in the journal replays (Sunita Williams, Clayton Anderson)', data: 'nasa-journal', evidence: null },
   { feature: 'Your own diary entries', data: 'user', evidence: null },
   { feature: 'The 24 diary topics', data: 'nasa-method', evidence: 'nasa-use' },
   { feature: 'Keyword tagger that reads each entry', data: null, evidence: 'exp' },

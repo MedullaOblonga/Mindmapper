@@ -1,5 +1,6 @@
 import { params } from '../data/params';
 import { buildScenario } from '../data/scenario';
+import { buildJournalScenario } from '../data/journalScenario';
 import { candidateCards, usualOnset, type CardContext } from '../logic/cards';
 import type { LedgerFlags } from '../logic/ledger';
 import { recentUsual } from '../logic/ledger';
@@ -9,11 +10,11 @@ import { FLIGHT_SURGEON, lineNotes, type Crossing } from '../logic/lines';
 import { T } from '../logic/thresholds';
 import { median } from '../lib/stats';
 import { weekOf } from '../lib/time';
-import type { Block, MoodMark, Branch, Card, CardKind, CheckSession, Entry, Group, LedgerKey, Resolution, Scenario, ShareLogEntry } from '../types';
+import type { Block, MoodMark, Branch, Source, Card, CardKind, CheckSession, Entry, Group, LedgerKey, Resolution, Scenario, ShareLogEntry } from '../types';
 import type { AppEvent } from './events';
 
 export interface ReminderView { id: string; text: string; wristLabel: string; buzz: ('short' | 'long')[]; on: boolean; oneOff: boolean; atMin?: number; }
-export interface View { day: number; week: number; branch: Branch; scenario: Scenario; entries: Entry[]; checks: CheckSession[];
+export interface View { day: number; week: number; source: Source; branch: Branch; scenario: Scenario; entries: Entry[]; checks: CheckSession[];
   openCards: Card[]; raisedCards: Card[]; resolutions: Resolution[]; skippedThisWeek: number; shareLog: ShareLogEntry[];
   lineCrossed: Crossing | null; flags: LedgerFlags; reminders: ReminderView[];
   marksToday: MoodMark[]; entryToday: Entry | null; blocksToday: Block[];
@@ -85,10 +86,16 @@ function applyEntries(s: Scenario, day: number, evs: AppEvent[]): Entry[] {
   return out.sort((a, b) => a.day - b.day);
 }
 
-export function buildView(day: number, events: AppEvent[], override: Branch | null): View {
+/** The scenario for a simulation: the demo story (two branches) or a real journal replayed (no branches, nothing scripted). */
+export function scenarioFor(source: Source, branch: Branch): Scenario {
+  return source === 'demo' ? buildScenario(branch) : buildJournalScenario(source);
+}
+
+export function buildView(day: number, events: AppEvent[], override: Branch | null, source: Source = 'demo'): View {
   const evs = events.filter(e => e.day <= day);
-  const branch = branchFor(evs, override);
-  const s = buildScenario(branch);
+  const branch = source === 'demo' ? branchFor(evs, override) : 'A';
+  const s = scenarioFor(source, branch);
+  const scripted = source === 'demo';
   const entries = applyEntries(s, day, evs);
   const baseChecks: CheckSession[] = [...s.checks.filter(c => c.day <= day), ...evs.flatMap(e => (e.type === 'check' ? [e.session] : []))]
     .sort((a, b) => a.day - b.day || (a.slot === 'am' ? -1 : 1));
@@ -124,7 +131,7 @@ export function buildView(day: number, events: AppEvent[], override: Branch | nu
       let res: Resolution | null = null, reason: string | undefined, resDay: number | undefined;
       if (ev) { res = { cardId: c.id, day: ev.day, status: ev.status, title: ev.title, choice: ev.choice, effect: ev.effect }; reason = ev.reason; resDay = ev.day; }
       else {
-        const sc = params.scriptedResolutions.find(x => x.day === c.day && x.cardKind === c.kind);
+        const sc = scripted ? params.scriptedResolutions.find(x => x.day === c.day && x.cardKind === c.kind) : undefined;
         if (sc && day > sc.day) { res = { cardId: c.id, day: sc.day, status: sc.status, title: c.title, choice: sc.choice, effect: sc.effect }; reason = sc.reason; resDay = sc.day; }
       }
       all.push({ card: c, res, reason, resDay });
@@ -161,7 +168,7 @@ export function buildView(day: number, events: AppEvent[], override: Branch | nu
   // Reminders
   const reminders: ReminderView[] = s.profile.reminders.filter(r => r.fromDay <= day)
     .map(r => ({ id: r.id, text: r.text, wristLabel: r.wristLabel, buzz: r.buzz as ('short' | 'long')[], on: r.on, oneOff: false, atMin: r.atMin }));
-  for (const sc of params.scriptedResolutions) if (sc.enablesReminder && day > sc.day) { const r = reminders.find(x => x.id === sc.enablesReminder); if (r) r.on = true; }
+  if (scripted) for (const sc of params.scriptedResolutions) if (sc.enablesReminder && day > sc.day) { const r = reminders.find(x => x.id === sc.enablesReminder); if (r) r.on = true; }
   for (const e of evs) if (e.type === 'reminder') {
     const r = reminders.find(x => x.id === e.reminderId);
     if (r) { if (e.on !== undefined) r.on = e.on; if (e.text) r.text = e.text; if (e.buzz) r.buzz = e.buzz; }
@@ -173,7 +180,7 @@ export function buildView(day: number, events: AppEvent[], override: Branch | nu
   const blocksToday = blocksFor(s, evs, day);
   const entryToday = [...entries].reverse().find(e => e.day === day) ?? null;
 
-  return { day, week: weekOf(day), branch, scenario: s, entries, checks, openCards, raisedCards, resolutions, skippedThisWeek, shareLog,
+  return { day, week: weekOf(day), source, branch, scenario: s, entries, checks, openCards, raisedCards, resolutions, skippedThisWeek, shareLog,
     lineCrossed, flags, reminders, marksToday, entryToday, blocksToday, movedUsual: fxAll.movedUsual, ignoreNights: fxAll.ignoreNights, events: evs };
 }
 

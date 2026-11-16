@@ -144,6 +144,7 @@ function Earlier({ entries, day, filter, clearFilter, matched }: { entries: Entr
     return [...byDay.entries()].sort((a, b) => b[0] - a[0]);
   }, [entries, day, group, filter]);
   const sampleShown = entries.some(e => e.origin === 'ai-sample');
+  const realShown = entries.some(e => e.origin === 'nasa-journal');
   return (
     <section className="panel panel--tight" aria-label="Earlier entries">
       <h2 className="t-head">Earlier entries</h2>
@@ -156,7 +157,7 @@ function Earlier({ entries, day, filter, clearFilter, matched }: { entries: Entr
           {params.groupsOrder.map(g => <button key={g} className="btn btn--sm" aria-pressed={group === g} onClick={() => setGroup(g)}>{groupShort(g)}</button>)}
         </div>
       )}
-      {sampleShown && <div><Tag data="ai-sample" /></div>}
+      {(sampleShown || realShown) && <div className="trend-tags">{sampleShown && <Tag data="ai-sample" />}{realShown && <Tag data="nasa-journal" />}</div>}
       <div className="earlier">
         {list.length === 0 && <p className="t-small">No entries yet.</p>}
         {list.slice(0, 40).map(([d, segs]) => (

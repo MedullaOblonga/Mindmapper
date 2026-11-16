@@ -18,7 +18,7 @@ export type SignStatus = { id: string; status: 'showed' | 'not' | 'unknown'; tex
 function metric(s: Scenario, m: string, day: number): number | null {
   const w = weekOf(day);
   switch (m) {
-    case 'lightOnNights': return w === 16 ? params.lightOnNights.week16 : 0;
+    case 'lightOnNights': return s.source === 'demo' && w === 16 ? params.lightOnNights.week16 : 0;   // demo story only
     case 'secondMealSkipped': return 0;
     case 'lettersUnopened': return 0;
     case 'crewTapsHard': return null;

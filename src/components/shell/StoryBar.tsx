@@ -4,7 +4,61 @@ import { useNavigate } from 'react-router-dom';
 import { params } from '../../data/params';
 import { useApp, appStore } from '../../state/store';
 import { Toggle } from '../ui';
-import type { Branch } from '../../types';
+import type { Branch, Source } from '../../types';
+import { JOURNALS, lastDayOf } from '../../data/journalScenario';
+
+const SOURCE_LABEL: Record<Source, string> = { demo: 'Demo story (simulated)', williams: 'Sunita Williams journal (real)', anderson: 'Clayton Anderson journal (real)' };
+
+/** Switch between the demo story and the real-journal replays. Each keeps its own day and choices. */
+function SourcePicker({ source }: { source: Source }) {
+  const nav = useNavigate();
+  return (
+    <label className="story-source">
+      <span className="sr-only">Simulation</span>
+      <select className="story-select" aria-label="Simulation" value={source}
+        onChange={e => { appStore.getState().setSource(e.target.value as Source); nav('/today'); }}>
+        {(Object.keys(SOURCE_LABEL) as Source[]).map(s => <option key={s} value={s}>{SOURCE_LABEL[s]}</option>)}
+      </select>
+    </label>
+  );
+}
+
+/** The story bar for a real journal: jump to any entry; the caption names the entry and what is real. */
+function JournalBar({ source }: { source: Exclude<Source, 'demo'> }) {
+  const day = useApp(s => s.day);
+  const nav = useNavigate();
+  const st = appStore.getState();
+  const prev = useHoldRepeat(() => appStore.getState().setDay(appStore.getState().day - 1));
+  const next = useHoldRepeat(() => appStore.getState().setDay(appStore.getState().day + 1));
+  const j = JOURNALS[source];
+  const flown = j.entries.filter(e => e.day !== null);
+  const here = flown.find(e => e.day === day);
+  const skipped = j.entries.length - flown.length;
+  const caption = here
+    ? `Day ${D(day)}: ${/[“”"]/.test(here.title) ? here.title : `“${here.title}”`}, ${j.author}’s journal entry ${here.n} of ${j.entries.length}. Day set from: ${here.dayFrom.charAt(0).toLowerCase()}${here.dayFrom.slice(1)}.`
+    : `Real journal text by ${j.author} (${j.mission}), replayed on the Mars timeline. The diary and reaction tests are real; sleep, wrist presses and body measures are plain simulated data. ${skipped} ${skipped === 1 ? 'entry was' : 'entries were'} written before launch or after landing and are not replayed.`;
+  return (
+    <nav className="storybar" aria-label="Demo story">
+      <span className="t-label storybar-label">Real journal · replayed</span>
+      <SourcePicker source={source} />
+      <div className="story-chips">
+        <select className="story-select" aria-label="Jump to a journal entry" value={here ? String(day) : ''}
+          onChange={e => { if (e.target.value) { st.setDay(+e.target.value); nav('/journal'); } }}>
+          <option value="">{`Jump to an entry (${flown.length})`}</option>
+          {flown.map(e => <option key={e.n} value={String(e.day)}>{`Day ${D(e.day!)} · ${e.title}`}</option>)}
+        </select>
+      </div>
+      <span className="story-step">
+        <button className="btn btn--sm" aria-label="Previous day" disabled={day <= 1} {...prev}>‹</button>
+        <span className="t-small num story-day" aria-live="polite">Day {D(day)}</span>
+        <button className="btn btn--sm" aria-label="Next day" disabled={day >= lastDayOf(source)} {...next}>›</button>
+        <button className="btn btn--sm btn--quiet" onClick={() => st.setStoryHidden(true)} aria-expanded="true">Hide</button>
+      </span>
+      <ViewSwitch />
+      <p className="story-caption">{caption}</p>
+    </nav>
+  );
+}
 
 const DEFAULT_CAPTION = 'Simulated mission. Use the chapters, or step a day at a time.';
 
@@ -32,7 +86,14 @@ function ViewSwitch() {
 }
 
 export function StoryBar({ branch }: { branch: Branch }) {
-  const day = useApp(s => s.day), hidden = useApp(s => s.storyHidden), override = useApp(s => s.branchOverride);
+  const source = useApp(s => s.source);
+  const hidden = useApp(s => s.storyHidden);
+  if (source !== 'demo' && !hidden) return <JournalBar source={source} />;
+  return <DemoBar branch={branch} />;
+}
+
+function DemoBar({ branch }: { branch: Branch }) {
+  const day = useApp(s => s.day), hidden = useApp(s => s.storyHidden), override = useApp(s => s.branchOverride), source = useApp(s => s.source);
   const nav = useNavigate();
   const st = appStore.getState();
   const prev = useHoldRepeat(() => appStore.getState().setDay(appStore.getState().day - 1));
@@ -42,13 +103,14 @@ export function StoryBar({ branch }: { branch: Branch }) {
   const caption = shift(ch ? (ch.caption ?? (branch === 'A' ? ch.captionA : ch.captionB)) ?? '' : DEFAULT_CAPTION);
   if (hidden) return (
     <nav className="storybar storybar--hidden" aria-label="Demo story">
-      <button className="btn btn--quiet btn--strip" onClick={() => st.setStoryHidden(false)} aria-expanded="false">Demo story</button>
+      <button className="btn btn--quiet btn--strip" onClick={() => st.setStoryHidden(false)} aria-expanded="false">{source === 'demo' ? 'Demo story' : 'Journal replay'}</button>
       <ViewSwitch />
     </nav>
   );
   return (
     <nav className="storybar" aria-label="Demo story">
       <span className="t-label storybar-label">Demo story · simulated</span>
+      <SourcePicker source="demo" />
       <div className="story-chips">
         {params.chapters.map(c => (
           <button key={c.id} className="story-chip" aria-current={c.day === day ? 'true' : undefined}

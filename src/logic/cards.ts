@@ -38,7 +38,7 @@ function quiet(ctx: CardContext, kind: CardKind, subject: string, reviewDay: num
 }
 
 /* ---------- 1. topic shift ---------- */
-function topicShift(_s: Scenario, week: number, ctx: CardContext, g: Group): Card | null {
+function topicShift(s: Scenario, week: number, ctx: CardContext, g: Group): Card | null {
   const usual = moved(ctx, `topic:${g}`, week) ?? usualShare(ctx.entries, g, week);
   if (usual === null) return null;
   for (let w = week - T.shareRiseWeeks + 1; w <= week; w++) {
@@ -67,7 +67,7 @@ function topicShift(_s: Scenario, week: number, ctx: CardContext, g: Group): Car
     evidence: { type: 'marks', group: g, rows: [
       { label: `Days ${D(a1)} to ${D(b1)}`, ...first },
       { label: `Days ${D(a2)} to ${D(b2)}`, ...last }] },
-    actions: dedupe(actions), whyKey: 'why.topic-shift', dataTag: 'ai-sample' };
+    actions: dedupe(actions), whyKey: 'why.topic-shift', dataTag: s.source === 'demo' ? 'ai-sample' : 'nasa-journal' };
 }
 
 /* ---------- 2. own sign ---------- */

@@ -131,7 +131,7 @@ export function bodySeries(s: Scenario, checks: CheckSession[], day: number): Re
     glucose: weekly('glucose', d => 5.1 + 0.25 * noise('glucose', d)),
     temp: weekly('temp', d => 36.9 + 0.15 * noise('temp', d)),
     co2day: daily('co2day', d => 2.2 + 0.12 * noise('co2day', d)),
-    co2sleep: daily('co2sleep', d => 2.5 + 0.12 * noise('co2sleep', d) + (POCKET[d] ?? 0)),
+    co2sleep: daily('co2sleep', d => 2.5 + 0.12 * noise('co2sleep', d) + (s.source === 'demo' ? POCKET[d] ?? 0 : 0)),   // the pocket is part of the demo story
   };
 }
 

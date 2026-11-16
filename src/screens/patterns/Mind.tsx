@@ -8,6 +8,7 @@ import { weekDays, weekOf } from '../../lib/time';
 import { params } from '../../data/params';
 import { groupDef, groupShort } from '../../data/topics';
 import { MarkRow, MarkLegend, Tag, cssVars, topicVar } from '../../components/ui';
+import { JournalFindings } from './JournalFindings';
 import type { Group, Segment } from '../../types';
 import type { View } from '../../state/view';
 
@@ -87,7 +88,7 @@ export function Mind() {
       <div className="cols">
         <div className="col col--wide">
           <section className="panel" aria-label="Weeks">
-            <div className="panel-title-row"><h2 className="t-head">Each week of your diary</h2><Tag data="ai-sample" /></div>
+            <div className="panel-title-row"><h2 className="t-head">Each week of your diary</h2><Tag data={v.source === 'demo' ? 'ai-sample' : 'nasa-journal'} /></div>
             <div className="weeks">{weeks.map(w => <WeekRow key={w} v={v} w={w} sel={sel} />)}</div>
             <div className="legend">{params.groupsOrder.map(g => <span key={g}><i className="swatch" style={{ background: topicVar(g) }} />{groupShort(g)}</span>)}
               {SHARE_GROUPS.includes('other') && v.entries.some(e => e.segments.some(s => s.group === 'other')) && <span><i className="swatch" style={{ background: topicVar('other') }} />Other</span>}</div>
@@ -96,6 +97,7 @@ export function Mind() {
               <a href="#why" className="t-head link-tap" onClick={e => { e.preventDefault(); ui.openWhy('why.topics'); }}>Where do the topics come from?</a>
             </div>
           </section>
+          {v.source !== 'demo' && <JournalFindings v={v} />}
         </div>
         <div className="col col--narrow">
           <div className="btn-row" role="group" aria-label="Topic">

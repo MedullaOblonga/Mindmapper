@@ -25,7 +25,7 @@ type BT = [string, number, number];
 const bt = (k: string) => G.blockTimes[k] as unknown as BT;
 const btList = (k: string) => G.blockTimes[k] as unknown as [string, number, number, string][];
 
-function blocksFor(day: number, row: WeekRow, onset: number, wake: number): Block[] {
+export function blocksFor(day: number, row: WeekRow, onset: number, wake: number, scripted = true): Block[] {
   const i = dayIndex(day);
   const first = (k: string, n: number) => (G.blockDayIndexes[k] ?? []).slice(0, n).includes(i);
   const counters: Partial<Record<BlockKind, number>> = {};
@@ -43,7 +43,7 @@ function blocksFor(day: number, row: WeekRow, onset: number, wake: number): Bloc
   if (first('gym', row.ledger.gym)) { const [l, s, e] = bt('gym'); add('gym', l, s, e, 'timeline'); }
   if (first('callsMom', row.ledger.callsMom)) { const [l, s, e] = bt('callMom'); add('call', l, s, e, 'messages'); }
   if (first('callsSam', row.ledger.callsSam)) { const [l, s, e] = bt(row.week === 16 ? 'callSamWeek16' : 'callSam'); add('call', l, s, e, 'messages'); }
-  for (const sc of params.mission.safetyCriticalBlocks) if (sc.day === day) {
+  if (scripted) for (const sc of params.mission.safetyCriticalBlocks) if (sc.day === day) {
     const n = (counters.work = (counters.work ?? 0) + 1);
     out.push({ id: `d${day}-work-${n}`, day, kind: 'work', label: sc.label, startMin: sc.startMin, endMin: sc.endMin, source: 'timeline', felt: null, safetyCritical: true });
   }
@@ -191,7 +191,7 @@ const cache: Partial<Record<Branch, Scenario>> = {};
 export function buildScenario(branch: Branch): Scenario {
   if (cache[branch]) return cache[branch]!;
   const weeks = weeksFor(branch);
-  const s: Scenario = { branch, days: buildDays(branch, weeks), entries: buildEntries(branch, weeks), checks: buildChecks(branch), weeks, profile: params.profile };
+  const s: Scenario = { source: 'demo', branch, days: buildDays(branch, weeks), entries: buildEntries(branch, weeks), checks: buildChecks(branch), weeks, profile: params.profile };
   cache[branch] = s;
   return s;
 }

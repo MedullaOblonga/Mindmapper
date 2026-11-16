@@ -1,6 +1,10 @@
-# Real astronaut journals (stored for reference, not used by the app)
+# Real astronaut journals
 
-Two first-person journals written by NASA astronauts during long stays on the International Space Station, kept as one Markdown file per entry. They are stored separately from the app's AI-written sample diary and are **not** shown on the website or mixed with it.
+Two first-person journals written by NASA astronauts during long stays on the International Space Station, kept as one Markdown file per entry. They are never mixed with the app's AI-written sample diary. Each journal drives its own simulation in the app (the "Simulation" picker in the story bar): the in-flight entries are replayed on their mission days and scored by the same weekly review. `to_app.py` builds `src/data/journals/*.json` from these files and records how each entry's mission day was set:
+
+```bash
+python3 -I research/journals/to_app.py research/journals src/data/journals
+```
 
 | Folder | Author | Mission | Entries | Words |
 |---|---|---|---|---|

@@ -1,8 +1,10 @@
 export type Group = 'work'|'home'|'crew'|'body'|'timeoff'|'self'|'space'|'other';
 export type Felt = 'good'|'mixed'|'hard';
-export type DataTag = 'nasa-replay'|'nasa-method'|'sim'|'ai-sample'|'user';
+export type DataTag = 'nasa-replay'|'nasa-method'|'sim'|'ai-sample'|'user'|'nasa-journal';
 export type EvidenceTag = 'nasa-use'|'earth'|'analog'|'exp'|'placeholder';
 export type Branch = 'A'|'B';
+/** Which simulation is running: the demo story, or a real NASA astronaut journal replayed on the Mars timeline. */
+export type Source = 'demo'|'williams'|'anderson';
 
 export interface Segment { id: string; day: number; text: string; category: string; group: Group;
   felt: Felt|null; feltBy: 'tool'|'you'; origin: DataTag; }
@@ -31,7 +33,7 @@ export interface LedgerItem { key: LedgerKey; side: 'draw'|'refill';
   value: number; usual: number|null; earlyUsual: number|null;   // earlyUsual differs from usual only after the astronaut moved it
   scaleMax: number; sentence: string; far: boolean; away: boolean; }   // far = costly direction (cards); away = either direction (screen)
 
-export interface Scenario { branch: Branch; days: DayRecord[]; entries: Entry[];
+export interface Scenario { source: Source; branch: Branch; days: DayRecord[]; entries: Entry[];
   checks: CheckSession[]; weeks: WeekRow[]; profile: Profile; }   // WeekRow, Profile mirror the JSON
 
 export type CardKind = 'topic-shift'|'own-sign'|'check'|'ledger'|'rhythm';

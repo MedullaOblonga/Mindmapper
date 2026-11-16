@@ -18,7 +18,9 @@ import { Surgeon } from '../../screens/Surgeon';
 import { Body } from '../../screens/patterns/Body';
 
 export function Footer() {
-  return <div className="t-foot page-foot">Sample data for illustration. Names are placeholders.</div>;
+  const source = useApp(s => s.source);
+  return <div className="t-foot page-foot">{source === 'demo' ? 'Sample data for illustration. Names are placeholders.'
+    : 'Diary: real NASA astronaut journal, as published on nasa.gov. Reaction tests: replayed NASA bed-rest data. Sleep, presses, body and profile: simulated, with placeholder names.'}</div>;
 }
 
 export function Overlays() {
